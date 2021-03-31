@@ -96,7 +96,7 @@ bool isverifyPhoneNumbe=false;
                 //   crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       new Text(
-                        "اهلاً بيك في محظوووظ",
+                     translator.translate("Welcome to Mahzoooz"),
                        // textAlign: TextAlign.right,
                         style: TextStyle(fontWeight: FontWeight.w700,
                           fontSize: 23,
@@ -104,10 +104,10 @@ bool isverifyPhoneNumbe=false;
                         ),
                       ),
                       SizedBox(height: 16,),
-                      new Text(
-                        "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد",
+                      new Text( translator.translate("Mahzoooz for"),
+                       // translator.translate("محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
+                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -189,6 +189,8 @@ bool isverifyPhoneNumbe=false;
                     isLouding?SizedBox(height: 22,): SizedBox(height: 16,),
                     isLouding?Loading(): InkWell( //networkRequest.Login(),
                       onTap: ()async{
+                        //networkRequest.CategoriesGetPaged();
+                      //  networkRequest.OffersGetPaged();
                         if(phoneNumber==null||phoneNumber.length<9){
                           Fluttertoast.showToast(
                               msg: "يجب عليك إدخال رقم الجوال",
@@ -330,6 +332,7 @@ bool isverifyPhoneNumbe=false;
     );
   }
   getUserHasAccount() async {
+   // networkRequest.OffersGetPaged();
     await  networkRequest.UserHasAccount(phoneNumber).then((value){
       setState(() {
         userHasAccount  = value['data']['hasAccount'];

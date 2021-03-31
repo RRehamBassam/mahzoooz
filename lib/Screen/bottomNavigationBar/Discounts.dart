@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:mahzoooz/Models/category.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscounts.dart';
+import 'package:mahzoooz/Widget/ViewRestaurantDiscountsLoud.dart';
+import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/Widget/tabs.dart';
 import 'package:mahzoooz/Widget/AppBarTop.dart';
 import 'package:mahzoooz/Widget/Search.dart';
 import 'package:mahzoooz/Widget/ItemCarouselSlider.dart';
+import 'package:mahzoooz/Widget/Categories.dart';
+import 'package:mahzoooz/Widget/CategoriesLoud.dart';
+import 'package:mahzoooz/Widget/ItemCarouselSliderLoud.dart';
+import 'package:mahzoooz/api/NetworkRequest.dart';
 class Discounts extends StatefulWidget {
   @override
   _DiscountsState createState() => _DiscountsState();
@@ -14,7 +21,7 @@ class _DiscountsState extends State<Discounts> {
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
   double topContainer = 0;
-
+  NetworkRequest networkRequest=new NetworkRequest();
   @override
   void initState() {
     super.initState();
@@ -59,7 +66,11 @@ class _DiscountsState extends State<Discounts> {
                               shrinkWrap: true,
                               children: <Widget>[
                                 //  SizedBox(height: 15.0),
-                                CarouselSlider(
+                              FutureBuilder<dynamic>(
+                                future: networkRequest.OffersGetPaged(true),
+                                builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                 return  CarouselSlider(
                                   options: CarouselOptions(
                                     enableInfiniteScroll: true,
                                     autoPlayAnimationDuration: Duration(milliseconds: 1000),
@@ -72,362 +83,137 @@ class _DiscountsState extends State<Discounts> {
                                   ),
 
                                   items: [
-                                    ItemCarouselSlider(),
-                                    ItemCarouselSlider(),
-                                    ItemCarouselSlider(),
-                                    ItemCarouselSlider(),
-                                    ItemCarouselSlider(),
-                                  ],),
+                                  ...snapshot.data.map((name) {
+                                    return   ItemCarouselSlider(name);
+                                  },
+                                    // ItemCarouselSlider([]),
+                                    // ItemCarouselSlider(),
+                                    // ItemCarouselSlider(),
+                                    // ItemCarouselSlider(),
+                                    // ItemCarouselSlider(),
+                                  )]) ;}
+                                          else if (snapshot.hasError) {
+                                          return Center(child: Text("تأكد من إتصال بالإنرنت"));
+                                          }
+                                          // By default, show a loading spinner.
+                                          return Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                          SizedBox(height: 30,),
+                                            CarouselSlider(
+                                                options: CarouselOptions(
+                                                  enableInfiniteScroll: true,
+                                                  autoPlayAnimationDuration: Duration(milliseconds: 1000),
+                                                  viewportFraction: 0.8,
+                                                  height: 140.0, autoPlayCurve: Curves.fastOutSlowIn,
+                                                  autoPlay: true,
+                                                  aspectRatio:  10 / 9,
+                                                  enlargeCenterPage: true,
+                                                  enlargeStrategy: CenterPageEnlargeStrategy.height,
+                                                ),
+
+                                                items: [
+                                                  ItemCarouselSliderLoud(),
+                                                  ItemCarouselSliderLoud(),
+                                                  ItemCarouselSliderLoud(),
+                                                ]),
+
+                                          //Loading(),
+                                          // Center(
+                                          //   child: PixLoader(
+                                          //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
+                                          // )
+                                          //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
+                                          ],
+                                          );}),
                                 Container(
-                                  height: 140,
+                                  height: 132,
                                   child: ListView(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     children: [
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
+                                                        FutureBuilder<dynamic>(
+                                                        future: networkRequest.CategoriesGetPaged(),
+                                                        builder: (context, snapshot) {
+                                                        if (snapshot.hasData) {
+                                                        return  ListView.builder(
+                                                        shrinkWrap: true,
+                                                            scrollDirection: Axis.horizontal,
+                                                        itemCount:snapshot.data.length,
+                                                        physics: BouncingScrollPhysics(),
+                                                        itemBuilder: (context, index) {
+                                                        double scale = 1.0;
+                                                        return Categories(snapshot.data[index],false);});}
+                                                        else if (snapshot.hasError) {
+                                                          return Center(child: Text("تأكد من إتصال بالإنرنت"));
+                                                        }
+                                                        // By default, show a loading spinner.
+                                                        return Row(
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                          children: [
+                                                            SizedBox(height: 30,),
+                                                            CategoriesLoud(snapshot.data,true),
+                                                            CategoriesLoud(snapshot.data,true),
+                                                            CategoriesLoud(snapshot.data,true),
+                                                          //  CategoriesLoud(snapshot.data,true),
+                                                          //  Loading(),
+                                                            // Center(
+                                                            //   child: PixLoader(
+                                                            //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
+                                                            // )
+                                                            //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
+                                                          ],
+                                                        );}),
+                                      // Stack(
+                                      //   children: [
+                                      //     Container(
+                                      //       width: 95,
+                                      //       height: 200,
+                                      //       margin: EdgeInsets.all(5.0),
+                                      //       decoration: BoxDecoration(
+                                      //         borderRadius: BorderRadius.circular(10.0),
+                                      //         image: DecorationImage(
+                                      //           image: AssetImage('Assets/Rectangle2.png'),
+                                      //           fit: BoxFit.cover,
+                                      //         ),
+                                      //       ),),
+                                      //     Positioned(
+                                      //       top: 0,
+                                      //       left: 0,
+                                      //       bottom: 0,
+                                      //       right: 0,
+                                      //       child: Container(
+                                      //         width: 95,
+                                      //         height: 200,
+                                      //         margin: EdgeInsets.all(5.0),
+                                      //         decoration: BoxDecoration(
+                                      //           color: Colors.black.withOpacity(0.3),
+                                      //           borderRadius: BorderRadius.circular(10.0),
+                                      //
+                                      //         ),),
+                                      //     ),
+                                      //     Positioned(
+                                      //       bottom: 25,
+                                      //       right: 8,
+                                      //       child:  Text(
+                                      //         "مأكولات\n ومشربات",
+                                      //         textAlign: TextAlign.center,
+                                      //         style: TextStyle(
+                                      //           fontWeight: FontWeight.bold,
+                                      //           fontSize: 15,
+                                      //           color:Color(0xffffffff),
+                                      //         ),
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
 
-                                              ),),
-                                          ),
-                                  Positioned(
-                                    bottom: 30,
-                                    right: 10,
-                                    child:  Text(
-                                      "محلات وخدمات",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 10,
-                                        color:Color(0xffffffff),
-                                      ),
-                                    ),
-                                  ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
 
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
 
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.5),
-                                                borderRadius: BorderRadius.circular(10.0),
 
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
 
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
-
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
-
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Stack(
-                                        children: [
-                                          Container(
-                                            width: 95,
-                                            height: 200,
-                                            margin: EdgeInsets.all(5.0),
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10.0),
-                                              image: DecorationImage(
-                                                image: AssetImage('Assets/Rectangle2.png'),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),),
-                                          Positioned(
-                                            top: 0,
-                                            left: 0,
-                                            bottom: 0,
-                                            right: 0,
-                                            child: Container(
-                                              width: 95,
-                                              height: 200,
-                                              margin: EdgeInsets.all(5.0),
-                                              decoration: BoxDecoration(
-                                                color: Colors.black.withOpacity(0.3),
-                                                borderRadius: BorderRadius.circular(10.0),
-
-                                              ),),
-                                          ),
-                                          Positioned(
-                                            bottom: 30,
-                                            right: 10,
-                                            child:  Text(
-                                              "محلات وخدمات",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
 
                                     ],
                                   ),
@@ -440,7 +226,7 @@ class _DiscountsState extends State<Discounts> {
                   ),
                   Expanded(
                     child: DraggableScrollableSheet(
-                        maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.95: 0.999,
+                        maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.999: 0.999,
                         minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.3:0.4,
                         initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.35:0.44 ,
                         builder: (BuildContext context, ScrollController scrolController){
@@ -464,22 +250,50 @@ class _DiscountsState extends State<Discounts> {
                                       controller: scrolController,
                                       // controller: controller,
                                       children: [
-                                        MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 52,):SizedBox(height: 72,),
-
-                                        ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: 20,
-                                            physics: BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) {
-                                              double scale = 1.0;
-                                              return ViewRestaurantDiscounts();
-                                            })
+                                        MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 72,):SizedBox(height: 72,),
+                                  FutureBuilder<dynamic>(
+                                  future: networkRequest.OffersGetPaged(false),
+                                  builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    print(snapshot.data.length);
+                                  return
+                                    Expanded(
+                                    child:  Container(
+                                      height: MediaQuery.of(context).size.height,
+                                      child: ListView.builder(
+                                                shrinkWrap: true,
+                                                itemCount:snapshot.data.length,
+                                                physics: BouncingScrollPhysics(),
+                                                itemBuilder: (context, index) {
+                                                  return ViewRestaurantDiscounts(snapshot.data[index]);
+                                                }),
+                                    ),
+                                  ); }
+                                  else if (snapshot.hasError) {
+                                  return Center(child: Text("تأكد من إتصال بالإنرنت"));
+                                  }
+                          // By default, show a loading spinner.
+                                      return Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                      SizedBox(height: 30,),
+                                        ViewRestaurantDiscountsLoud(),
+                                        ViewRestaurantDiscountsLoud()
+                                     // Loading(),
+                          // Center(
+                          //   child: PixLoader(
+                          //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
+                          // )
+                          //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
+                          ],
+                          );}),
                                       ],
                                     ),
                                   )),
                               Container(
                                 color:Colors.white,
-                                  child: MyTabs())
+                                  child: MyTabs(categories))
                             ],
                           );}
                     ),

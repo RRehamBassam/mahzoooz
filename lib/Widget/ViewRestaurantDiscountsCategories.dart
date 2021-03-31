@@ -1,3 +1,4 @@
+//ViewRestaurantDiscountsCategories
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:flutter/material.dart';
 import 'package:mahzoooz/Screen/RestaurantData.dart';
@@ -7,16 +8,16 @@ import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:convert' as convert;
 
-class ViewRestaurantDiscounts extends StatefulWidget {
+class ViewRestaurantDiscountsCategories extends StatefulWidget {
   var data;
 
-  ViewRestaurantDiscounts(this.data);
+  ViewRestaurantDiscountsCategories(this.data);
 
   @override
   _ViewRestaurantDiscountsState createState() => _ViewRestaurantDiscountsState(data);
 }
 
-class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
+class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscountsCategories> {
   var data;
 
   _ViewRestaurantDiscountsState(this.data);
@@ -39,17 +40,17 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   Uint8List bytes; Uint8List bytesback;
   @override
   void initState() {
-        if(data['providerLogo']!= null)
-       {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}
-       if(data['offerImages'][0]['imageName']!=null)
-       {  bytesback= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);}
+    if(data['providerLogo']!= null)
+    {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}
+    if(data['offerImages'][0]['imageName']!=null)
+    {  bytesback= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);}
 
     // TODO: implement initState
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-  //  print(data['providerLogo']);print(data['offerImages'][0]['imageName']);
+    //  print(data['providerLogo']);print(data['offerImages'][0]['imageName']);
 
     //  bytes = convert.base64.decode(data['offerImages'][0]['imageName']);
     //bytes= convert.base64.decode(data['providerLogo']);
@@ -58,8 +59,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
       onTap: (){
         Navigator.push(context,PageTransition(
           type: PageTransitionType.leftToRight,
-            duration: Duration(milliseconds: 550) ,
-            reverseDuration: Duration(milliseconds: 700),
+          duration: Duration(milliseconds: 550) ,
+          reverseDuration: Duration(milliseconds: 700),
           child: RestaurantData(),
         ),);
       },
@@ -164,21 +165,21 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height:18,),
-                             Row(
-                               children: [
-                                 SizedBox(width: 16,),
-                                 new Text(
-                                   data['providerNameAr'] ==null? "مطاعم البيك السعودية":data['providerNameAr'],
-                                   textAlign: TextAlign.right,
-                                   style: TextStyle(
-                                     fontFamily: "Tajawal",
-                                     fontSize: 13,
-                                     color:Color(0xff242e42),
-                                   ),
-                                 ),
-                               ],
-                             ),
-                             // SizedBox(height: 20,),
+                              Row(
+                                children: [
+                                  SizedBox(width: 16,),
+                                  new Text(
+                                    data['providerNameAr'] ==null? "مطاعم البيك السعودية":data['providerNameAr'],
+                                    textAlign: TextAlign.right,
+                                    style: TextStyle(
+                                      fontFamily: "Tajawal",
+                                      fontSize: 13,
+                                      color:Color(0xff242e42),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // SizedBox(height: 20,),
                               Row(
                                 children: [
                                   new Text(
@@ -193,56 +194,56 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   Spacer(),
                                   Row(
                                     children: [
-                                      ClipSwitch(
-                                        value: _bool,
-                                        onChanged: _toggleBool,
-                                        inactiveWidget: Container(
-                                          alignment: Alignment.center,
-                                          height: 34.00,
-                                          width: 72.00,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff38056e),
-                                            border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
-                                          ),
-                                          child: Center(
-                                            child: new Text(
-                                              translator.translate("Copy Code"),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 11,
-                                                color:Color(0xffffffff),
-                                              ),
-                                            ),
-                                          ) ,
-                                        ),
-                                        activeWidget: Container(
-                                          alignment: Alignment.center,
-                                            height: 34.00,
-                                            width: 72.00,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xffffffff),
-                                              border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
-                                            ),
-                                            child: Center(
-                                              child: new Text(
-                                                data['code']==null?"dd":data['code'],
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 9,
-                                                  color:Color(0xff38056e),
-                                                ),
-                                              ),
-                                            )
-                                        ),
-                                      ),
+                                      // ClipSwitch(
+                                      //   value: _bool,
+                                      //   onChanged: _toggleBool,
+                                      //   inactiveWidget: Container(
+                                      //     alignment: Alignment.center,
+                                      //     height: 34.00,
+                                      //     width: 72.00,
+                                      //     decoration: BoxDecoration(
+                                      //       color: Color(0xff38056e),
+                                      //       border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                                      //     ),
+                                      //     child: Center(
+                                      //       child: new Text(
+                                      //         translator.translate("Copy Code"),
+                                      //         textAlign: TextAlign.center,
+                                      //         style: TextStyle(
+                                      //           fontWeight: FontWeight.w500,
+                                      //           fontSize: 11,
+                                      //           color:Color(0xffffffff),
+                                      //         ),
+                                      //       ),
+                                      //     ) ,
+                                      //   ),
+                                      //   activeWidget: Container(
+                                      //       alignment: Alignment.center,
+                                      //       height: 34.00,
+                                      //       width: 72.00,
+                                      //       decoration: BoxDecoration(
+                                      //         color: Color(0xffffffff),
+                                      //         border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                                      //       ),
+                                      //       child: Center(
+                                      //         child: new Text(
+                                      //           data['code']==null?"dd":data['code'],
+                                      //           textAlign: TextAlign.center,
+                                      //           style: TextStyle(
+                                      //             fontWeight: FontWeight.w500,
+                                      //             fontSize: 9,
+                                      //             color:Color(0xff38056e),
+                                      //           ),
+                                      //         ),
+                                      //       )
+                                      //   ),
+                                      // ),
                                       SizedBox(width: 6,),
 
-                                      Transform(
-                                          alignment: Alignment.center,
-                                        transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),
-                                          child: Image.asset('Assets/Send.png',scale: 0.8,))
+                                      // Transform(
+                                      //     alignment: Alignment.center,
+                                      //     transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),
+                                      //     child: Image.asset('Assets/Send.png',scale: 0.8,))
                                       // new Container(
                                       //   height: 22.00,
                                       //   width: 60.00,
@@ -304,7 +305,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                      //  child: Image.memory(bytes),
+                          //  child: Image.memory(bytes),
                         ),
                       ): Positioned(
                         right:  20,
@@ -312,7 +313,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         child: Container(
                           width: 48,
                           height: 48,
-                        //  child: Image.memory(bytes),
+                          //  child: Image.memory(bytes),
                           // margin: EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
 

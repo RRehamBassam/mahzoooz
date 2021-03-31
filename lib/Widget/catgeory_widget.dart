@@ -3,6 +3,7 @@ import 'package:mahzoooz/Models/category.dart';
 import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/app_state.dart';
 import 'package:mahzoooz/utilities/themeColors.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 
 
 class CategoryWidget extends StatelessWidget {
@@ -28,7 +29,7 @@ class CategoryWidget extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            category.name,
+        translator.translate(category.name),
 
             style: isSelected
                 ? TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold)

@@ -1,4 +1,4 @@
-
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:flutter/material.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
@@ -48,25 +48,25 @@ class _HomeState extends State<Home> {
             icon: Container(
               margin:EdgeInsets.only(bottom: 6,top: 2) ,
                 child: Image.asset("Assets/Home.png",color: _selectedIndex==0?Color(0xff38056e):Color(0xFF748A9D),)),
-            label: 'الرئيسية',
+            label: translator.translate('home'),
 
           ),
           BottomNavigationBarItem(
             icon:Container(
                 margin:EdgeInsets.only(bottom: 6,top: 2) ,
                 child: Image.asset("Assets/Stroke 7.png",color: _selectedIndex==1?Color(0xff38056e):Color(0xFF748A9D),)),
-            label: 'الخصومات',
+            label: translator.translate('Discounts'),
           ),
           BottomNavigationBarItem(
             icon:Container( margin:EdgeInsets.only(bottom: 6,top: 2) ,
                 child: Image.asset("Assets/Profile.png",color: _selectedIndex==2?Color(0xff38056e):Color(0xFF748A9D),)),
-            label: 'صفحتي',
+            label: translator.translate('Profile'),
           ),
           BottomNavigationBarItem(
             icon: Container(
                 margin:EdgeInsets.only(bottom: 6,top: 2) ,
                 child: Image.asset("Assets/Chat.png",color: _selectedIndex==3?Color(0xff38056e):Color(0xFF748A9D),)),
-            label: 'المساعده',
+            label: translator.translate('Help'),
           ),
         ],
         currentIndex: _selectedIndex,

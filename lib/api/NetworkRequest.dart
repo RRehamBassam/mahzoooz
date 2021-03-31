@@ -221,15 +221,6 @@ class NetworkRequest{
     print(reply);
     var jsonResponse = convert.jsonDecode(reply);
     return jsonResponse['message'];
-    if (reply == "Name +966111122222 is already taken.") {
-      itemCount="Name +966111122222 is already taken.";
-    }else{
-      itemCount = jsonResponse['result'];}
-
-    dynamic itemCount2 = jsonResponse;
-
-    // HelperFunctions.saveUserEmailSharedPreference(itemCount);
-    return itemCount;
   }
 
   Future<dynamic> Countries() async {
@@ -248,14 +239,63 @@ class NetworkRequest{
     var jsonResponse = convert.jsonDecode(reply);
 
     return jsonResponse['message'];
-    if (reply == "Name +966111122222 is already taken.") {
-      itemCount="Name +966111122222 is already taken.";
-    }else{
-      itemCount = jsonResponse['result'];}
-
-    dynamic itemCount2 = jsonResponse;
-
-    // HelperFunctions.saveUserEmailSharedPreference(itemCount);
-    return itemCount;
   }
+  Future<dynamic> OffersGetPaged(bool isSpecial) async {
+
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
+
+    Map map ={
+      "pageNumber": 1,
+      "pageSize": 10,
+      "filter": {
+        "isSpecial": isSpecial,
+        "latitude": "24.75007441712588",
+        "longitude": "46.775951958232405"
+      }
+    };
+    var itemCount ;
+    HttpClientRequest request = await client.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(convert.utf8.encode(convert.json.encode(map)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(convert.utf8.decoder).join();
+    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
+    print(jsonResponse['data']['data']);
+
+    return jsonResponse['data']['data'];
+
+  }
+
+  Future<dynamic> CategoriesGetPaged() async {
+
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Categories/GetPaged';
+    print("jj");
+    Map map ={
+      "pageNumber": 1,
+      "pageSize": 10,
+      "filter": {
+        "name": ""
+      },
+
+
+    };
+    var itemCount ;
+    HttpClientRequest request = await client.postUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.add(convert.utf8.encode(convert.json.encode(map)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(convert.utf8.decoder).join();
+    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
+    print(reply);
+
+    return jsonResponse['data']['data'];
+
+  }
+
 }

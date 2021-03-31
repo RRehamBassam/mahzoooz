@@ -145,7 +145,7 @@ bool eeName=false;
 
               SizedBox(height: 10,),
               Container(
-                height:ee? MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height*0.76: MediaQuery.of(context).size.height*0.69
+                height:ee? MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height*0.76: MediaQuery.of(context).size.height*0.76
 
                     : MediaQuery.of(context).size.height*0.52,
                 child: Form(
@@ -173,6 +173,7 @@ bool eeName=false;
                 children: [
                   InkWell(
                     onTap: ()async{
+
                       if (_formKey.currentState.validate()) {
                         await  getUserHasAccount();
                         if(message=="Rigisterd Successfully"){

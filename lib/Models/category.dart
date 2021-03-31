@@ -6,26 +6,49 @@ class Category {
 
 final trainCategory = Category(
   categoryId: 0,
-  name: 'أقوى العروض',
+  name:  "Hot Deals",
 );
 
 final busCategory = Category(
   categoryId: 1,
-  name: 'الأكثر مبيعاً',
+  name: "Best Seller",
 );
 
 final planeCategory = Category(
   categoryId: 2,
-  name: 'العروض الجديدة',
+  name: 'Recent',
 );
 final trainCategory1 = Category(
   categoryId: 3,
-  name: 'الأعلى تقييما',
+  name: 'Top Rate',
 );
+final trainCategory2 = Category(
+  categoryId: 4,
+  name:  "Hot Deals",
+);
+
+final busCategory3 = Category(
+  categoryId: 5,
+  name: "Best Seller",
+);
+
+final planeCategory4 = Category(
+  categoryId: 6,
+  name: 'Recent',
+);
+final trainCategory5 = Category(
+  categoryId: 7,
+  name: 'Top Rate',
+);
+
 final categories = [
   trainCategory,
   busCategory,
   planeCategory,
   trainCategory1,
+  trainCategory2,
+  busCategory3,
+  planeCategory4,
+  trainCategory5,
 
 ];

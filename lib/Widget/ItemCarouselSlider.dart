@@ -1,13 +1,25 @@
 
+import 'dart:typed_data';
+import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
 class ItemCarouselSlider extends StatefulWidget {
+  var data;
+
+  ItemCarouselSlider(this.data);
+
   @override
-  _ItemCarouselSliderState createState() => _ItemCarouselSliderState();
+  _ItemCarouselSliderState createState() => _ItemCarouselSliderState(data);
 }
 
 class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
+  var data;
+
+  _ItemCarouselSliderState(this.data);
+
   @override
   Widget build(BuildContext context) {
+    print(data);
+    Uint8List bytes= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);
     return   Stack(
       children: [
         Container(
@@ -15,10 +27,12 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: DecorationImage(
-              image: AssetImage('Assets/Rectangle.png'),
+              image: MemoryImage(bytes),
               fit: BoxFit.cover,
             ),
-          ),),
+          ),
+        // child: Image.memory(bytes,fit: BoxFit.fitWidth),
+        ),
         Positioned(
           bottom: 0,
           left: 0,
@@ -26,7 +40,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
           child: Container(
             margin: EdgeInsets.all(5.0),
             padding: EdgeInsets.all(5.0) ,
-            decoration: BoxDecoration(color: Colors.black.withOpacity(0.2),
+            decoration: BoxDecoration(color: Colors.black.withOpacity(0.3),
               borderRadius: BorderRadius.circular(10.0),
             ),
 
@@ -34,15 +48,17 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
             height: 66,
             child: Row(
               children: [
+
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Text(
-                      "مطعم البيك",
+                      data['providerNameAr']==null? "مطعم البيك": data['providerNameAr'],
                       textAlign: TextAlign.right,
                       style: TextStyle(
-                        fontFamily: 'Nimbus',
+                        fontWeight: FontWeight.w500,
+                      //  fontFamily: 'Nimbus',
                         fontSize: 13,
                         color:Color(0xffffffff),
                       ),
@@ -50,7 +66,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: new Text(
-                        "خصم ١٠٠ ريال سعودي",
+                        data['titeAr'],//"خصم ١٠٠ ريال سعودي",
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontFamily: 'Nimbus',

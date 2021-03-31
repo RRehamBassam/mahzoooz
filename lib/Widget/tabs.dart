@@ -6,11 +6,19 @@ import 'package:provider/provider.dart';
 
 
 class MyTabs extends StatefulWidget {
+   var categoriesList;
+
+   MyTabs(this.categoriesList);
+
   @override
-  _MyTabsState createState() => _MyTabsState();
+  _MyTabsState createState() => _MyTabsState(categoriesList);
 }
 
 class _MyTabsState extends State<MyTabs> {
+  var categoriesList;
+
+  _MyTabsState(this.categoriesList);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,7 +42,7 @@ class _MyTabsState extends State<MyTabs> {
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: <Widget>[
-                    for (final category in categories)
+                    for (final category in categoriesList)
                       CategoryWidget(
                         category: category,
                       )

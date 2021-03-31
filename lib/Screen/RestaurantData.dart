@@ -427,7 +427,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
-                  color:Color(0xff747474),
+                  color:Color(0xff040303).withOpacity(0.9),
                 ),
               ),
               Spacer(),
