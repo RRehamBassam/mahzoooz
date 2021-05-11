@@ -20,5 +20,19 @@
     "Best Seller": "الأكثر مبيعاً",
     "Recent": "العروض الجديدة",
     "Top Rate": "الأعلى تقييما",
-    "Copy Code": "نسخ الكود"
+    "Copy Code": "نسخ الكود",
+    "language": "اللغة",
+    "change": "تغيير",
+    "Receive notifications": "إستقبال إشعارات",
+    "password": "الرقم السري",
+    "Settings": " الإعدادات",
+    "show": "شوف العرض",
+    "Reservation Service": "خدمة الحجز",
+    "Available Reservation Timings": "مواعيد الحجز المتاحة",
+    "Choose the number of guests": "اختر عدد الضيوف",
+    "Persons": "أشخاص",
+    "Please select a time": "رجاء اختر الوقت",
+    "Special request": "طلب خاص",
+    "Occasion type": "نوع المناسبة",
+    "Available times": "الأوقات المتاحة"
 }

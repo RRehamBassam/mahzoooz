@@ -1,7 +1,9 @@
-
+import 'package:page_transition/page_transition.dart';
 import 'dart:typed_data';
 import 'dart:convert' as convert;
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:mahzoooz/Screen/RestaurantData.dart';
 class ItemCarouselSlider extends StatefulWidget {
   var data;
 
@@ -22,7 +24,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
     Uint8List bytes= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);
     return   Stack(
       children: [
-        Container(
+        data['offerImages'][0]['imageName']==null?Container():  Container(
           margin: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
@@ -54,7 +56,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Text(
-                      data['providerNameAr']==null? "مطعم البيك": data['providerNameAr'],
+                      data['providerNameAr']==null? "مطعم البيك":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                       textAlign: TextAlign.right,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -66,7 +68,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: new Text(
-                        data['titeAr'],//"خصم ١٠٠ ريال سعودي",
+                        translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontFamily: 'Nimbus',
@@ -79,20 +81,30 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                   ],
                 ),
                 Spacer(),
-                Container(
-                  width: 60,
-                  height:30,
-                  decoration: BoxDecoration(
-                    color: Color(0xff38056e),borderRadius: BorderRadius.circular(18.00),
-                  ),
-                  child: Center(
-                    child: new Text(
-                      "شوف العرض",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 8,
-                        color:Color(0xffffffff),
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context,PageTransition(
+                      type: PageTransitionType.leftToRight,
+                      duration: Duration(milliseconds: 550) ,
+                      reverseDuration: Duration(milliseconds: 700),
+                      child: RestaurantData(data),
+                    ),);
+                  },
+                  child: Container(
+                    width: 60,
+                    height:30,
+                    decoration: BoxDecoration(
+                      color: Color(0xff38056e),borderRadius: BorderRadius.circular(18.00),
+                    ),
+                    child: Center(
+                      child: new Text(
+                        translator.translate("show"),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 8,
+                          color:Color(0xffffffff),
+                        ),
                       ),
                     ),
                   ),

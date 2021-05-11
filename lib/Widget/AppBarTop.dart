@@ -23,9 +23,19 @@ class AppBarTop extends StatelessWidget {
             top: 47,
             child: Row(
               children: [
-                Image.asset("Assets/Notification.png",color:Color(0xfe38056e)),
+                Container(
+                    height: 25.00,
+                    width: 25.00,
+                    decoration: BoxDecoration(
+                      color: Color(0xfe38056e),borderRadius: BorderRadius.circular(15.00),
+                    ),child: Image.asset("Assets/Notification.png",color:Colors.white)),
                 SizedBox(width: 8,),
-                Image.asset("Assets/gift (1).png",color:Color(0xfe38056e)),
+              Container(
+                  height: 25.00,
+                  width: 25.00,
+                  decoration: BoxDecoration(
+                    color: Color(0xfe38056e),borderRadius: BorderRadius.circular(15.00),
+                  ),child: Image.asset("Assets/gift (1).png",color:Colors.white)),
 
 
               ],

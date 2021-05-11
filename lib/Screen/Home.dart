@@ -1,3 +1,4 @@
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:flutter/material.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
@@ -9,7 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex ;  bool Admin=false;
+  int _selectedIndex ;
   List<Widget> _widgettajerAccount = <Widget>[
     homeWidget(),Discounts(),
     Profile(),
@@ -18,10 +19,42 @@ class _HomeState extends State<Home> {
 
   ];
   void _onItemTapped(int index) {
+    if(index==3){
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              color:Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: BottomSheetExample(context),
+          ),
+        ),
+      );
+     // FlutterOpenWhatsapp.sendSingleMessage("+9665665151191", "Hello");//+972598390185
+    }
     setState(() {
       _selectedIndex = index;
     });
   }
+  // launchWhatsApp() async {
+  //   final link = WhatsAppUnilink(
+  //     phoneNumber: '+001-(555)1234567',
+  //     text: "Hey! I'm inquiring about the apartment listing",
+  //   );
+  //   // Convert the WhatsAppUnilink instance to a string.
+  //   // Use either Dart's string interpolation or the toString() method.
+  //   // The "launch" method is part of "url_launcher".
+  //   await launch('$link');
+  // }
   @override
   void initState() {
     _selectedIndex=0;
@@ -74,5 +107,109 @@ class _HomeState extends State<Home> {
         onTap: _onItemTapped,
       ),
     );
+  }
+  BottomSheetExample(context){
+    return
+      Container(
+        color: Colors.black45.withOpacity(0.56),
+
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color:Colors.white,
+            boxShadow: [BoxShadow(
+                color: Color.fromRGBO(34, 134, 234, .3),
+                blurRadius: 20,
+                offset: Offset(0, 10)
+            )],
+
+
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(35.0),
+              topRight: Radius.circular(35.0),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(height: 16,),
+              Center(
+                child:  Text(
+                  "خدمة العملاء",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "Tajawal",fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color:Color(0xff3d3b39),
+                  ),
+                ),
+              ),
+              Container(
+                height:15,
+                width: 90,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(top: 16, bottom: 30),
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    // Row(
+                    //   children: [
+                    //     new Text(
+                    //       text,
+                    //       textAlign: TextAlign.right,
+                    //       style: TextStyle(
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: 14,
+                    //         color:Color(0xff040303).withOpacity(0.9),
+                    //       ),
+                    //     ),
+                    //     Spacer(),
+                    //     Icon(Icons.arrow_forward_ios,color: Color(0xffD9D9D9),size: 18,)
+                    //   ],
+                    // )
+                  ],
+                ),
+              ),
+              GestureDetector(
+                onTap:()=> {
+                FlutterOpenWhatsapp.sendSingleMessage("+966566515191", "Hello"),
+                  print("ooo"),
+                  Navigator.pop(context)},
+                child: new Container(
+                  margin:EdgeInsets.only(right: 30, left: 30),
+                  width:20,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                        new Text(
+                          "تواصل معنا عبر WhatsApp",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color:Color(0xffffffff),
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        Container(
+                            margin:EdgeInsets.only(bottom: 5),
+                            child: Image.asset("Assets/whatsapp.png",width: 20,)),
+                      ],
+                    )
+                  ),
+                ),
+              ),
+              SizedBox(width: 18,),
+            ],
+          ),
+        ),
+      );
   }
 }

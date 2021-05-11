@@ -38,36 +38,40 @@ class _DiscountsState extends State<Discounts> {
   }
   @override
   Widget build(BuildContext context) {
+
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         body:Column(
           //shrinkWrap: true,
           children: [
-            AppBarTop(),
+           // AppBarTop(),
             Search(),
             Expanded(
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Container(
-                    width: 400,
-                    height: 600,
-                  child:   AnimatedOpacity(
-                      duration: const Duration(milliseconds: 800),
-                      opacity: closeTopContainer?0:1,
-                      child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 800),
-                          alignment: Alignment.topCenter,
-                          height: closeTopContainer?0:MediaQuery.of(context).size.height*0.48,
-                          child: ListView(children: [
-                            ListView(
+                  Positioned(
+                    top: 8,
+
+                    child: Container(
+                      width: 400,
+                      height: 600,
+                    child:   AnimatedOpacity(
+                        duration: const Duration(milliseconds: 800),
+                        opacity: closeTopContainer?0:1,
+                        child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 800),
+                            alignment: Alignment.topCenter,
+                            height: closeTopContainer?0:MediaQuery.of(context).size.height*0.48,
+                            child: ListView(
                               shrinkWrap: true,
                               children: <Widget>[
                                 //  SizedBox(height: 15.0),
                               FutureBuilder<dynamic>(
-                                future: networkRequest.OffersGetPaged(true),
+                                future: networkRequest.OffersGetPaged(true,""),
                                 builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                  return  CarouselSlider(
@@ -100,7 +104,7 @@ class _DiscountsState extends State<Discounts> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                          SizedBox(height: 30,),
+                                         // SizedBox(height: 30,),
                                             CarouselSlider(
                                                 options: CarouselOptions(
                                                   enableInfiniteScroll: true,
@@ -137,14 +141,17 @@ class _DiscountsState extends State<Discounts> {
                                                         future: networkRequest.CategoriesGetPaged(),
                                                         builder: (context, snapshot) {
                                                         if (snapshot.hasData) {
-                                                        return  ListView.builder(
-                                                        shrinkWrap: true,
-                                                            scrollDirection: Axis.horizontal,
-                                                        itemCount:snapshot.data.length,
-                                                        physics: BouncingScrollPhysics(),
-                                                        itemBuilder: (context, index) {
-                                                        double scale = 1.0;
-                                                        return Categories(snapshot.data[index],false);});}
+                                                        return  Container(
+                                                          width:    MediaQuery.of(context).size.width,
+                                                          child: ListView.builder(
+                                                          shrinkWrap: true,
+                                                              scrollDirection: Axis.horizontal,
+                                                          itemCount:snapshot.data.length,
+                                                          physics: BouncingScrollPhysics(),
+                                                          itemBuilder: (context, index) {
+                                                          double scale = 1.0;
+                                                          return Categories(snapshot.data[index],false);}),
+                                                        );}
                                                         else if (snapshot.hasError) {
                                                           return Center(child: Text("تأكد من إتصال بالإنرنت"));
                                                         }
@@ -221,82 +228,79 @@ class _DiscountsState extends State<Discounts> {
                               ],
 
 
-                            ),
-                          ],))),
-                  ),
-                  Expanded(
-                    child: DraggableScrollableSheet(
-                        maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.999: 0.999,
-                        minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.3:0.4,
-                        initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.35:0.44 ,
-                        builder: (BuildContext context, ScrollController scrolController){
-                          return Stack(
-                            children: [
-                              // Positioned(
-                              //   child:   MyTabs(),
-                              // ),
-                              Expanded(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-
-                                      boxShadow: [BoxShadow(
-                                          color: Colors.black45,
-                                          blurRadius: 1,
-                                          offset: Offset(2, 1)
-                                      )],
-                                      borderRadius: BorderRadius.circular(2.0),),
-                                    child:ListView(
-                                      controller: scrolController,
-                                      // controller: controller,
-                                      children: [
-                                        MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 72,):SizedBox(height: 72,),
-                                  FutureBuilder<dynamic>(
-                                  future: networkRequest.OffersGetPaged(false),
-                                  builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    print(snapshot.data.length);
-                                  return
-                                    Expanded(
-                                    child:  Container(
-                                      height: MediaQuery.of(context).size.height,
-                                      child: ListView.builder(
-                                                shrinkWrap: true,
-                                                itemCount:snapshot.data.length,
-                                                physics: BouncingScrollPhysics(),
-                                                itemBuilder: (context, index) {
-                                                  return ViewRestaurantDiscounts(snapshot.data[index]);
-                                                }),
-                                    ),
-                                  ); }
-                                  else if (snapshot.hasError) {
-                                  return Center(child: Text("تأكد من إتصال بالإنرنت"));
-                                  }
-                          // By default, show a loading spinner.
-                                      return Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                      SizedBox(height: 30,),
-                                        ViewRestaurantDiscountsLoud(),
-                                        ViewRestaurantDiscountsLoud()
-                                     // Loading(),
-                          // Center(
-                          //   child: PixLoader(
-                          //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
-                          // )
-                          //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
-                          ],
-                          );}),
-                                      ],
-                                    ),
-                                  )),
-                              Container(
-                                color:Colors.white,
-                                  child: MyTabs(categories))
-                            ],
-                          );}
+                            ))),
                     ),
+                  ),
+                  DraggableScrollableSheet(
+                      maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.999: 0.999,
+                      minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.58,
+                      initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.58 ,
+                      builder: (BuildContext context, ScrollController scrolController){
+                        return Stack(
+                          children: [
+                            // Positioned(
+                            //   child:   MyTabs(),
+                            // ),
+                            Container(
+
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+
+                                boxShadow: [BoxShadow(
+                                    color: Colors.black45,
+                                    blurRadius: 1,
+                                    offset: Offset(2, 1)
+                                )],
+                                borderRadius: BorderRadius.circular(2.0),),
+                              child:ListView(
+                                shrinkWrap: true,
+                                controller: scrolController,
+                                // controller: controller,
+                                children: [
+                                  MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 72,):SizedBox(height: 72,),
+                            FutureBuilder<dynamic>(
+                            future: networkRequest.OffersGetPaged(false,""),
+                            builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              print(snapshot.data.length);
+                            return
+                              Container(
+                                height: MediaQuery.of(context).size.height,
+                                child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemCount:snapshot.data.length,
+                                          physics: BouncingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return ViewRestaurantDiscounts(snapshot.data[index]);
+                                          }),
+                              ); }
+                            else if (snapshot.hasError) {
+                            return Center(child: Text("تأكد من إتصال بالإنرنت"));
+                            }
+                        // By default, show a loading spinner.
+                                return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                SizedBox(height: 30,),
+                                  ViewRestaurantDiscountsLoud(),
+                                  ViewRestaurantDiscountsLoud()
+                               // Loading(),
+                        // Center(
+                        //   child: PixLoader(
+                        //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
+                        // )
+                        //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
+                        ],
+                        );}),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              color:Colors.white,
+                                child: MyTabs(categories))
+                          ],
+                        );}
                   ),
                 ],
               ),

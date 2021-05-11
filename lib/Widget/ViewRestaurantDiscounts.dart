@@ -1,12 +1,18 @@
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/Screen/RestaurantData.dart';
+import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:convert' as convert;
-
+import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 class ViewRestaurantDiscounts extends StatefulWidget {
   var data;
 
@@ -20,7 +26,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   var data;
 
   _ViewRestaurantDiscountsState(this.data);
-
+  var rate;
   int _counter = 0;
   bool _bool = false;
 
@@ -29,14 +35,47 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
       _counter++;
     });
   }
-
+  Future<void> share() async {
+    await FlutterShare.share(
+        title: 'Example share',
+        text: 'Example share text',
+        linkUrl: data['webSite'],
+        chooserTitle: 'Example Chooser Title');
+  }
   void _toggleBool(bool newValue) {
+    if(newValue){
+      getLoggedInState();
+      Fluttertoast.showToast(
+          msg: "تم نسخ الكود",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      setState(() {
+        Clipboard.setData(new ClipboardData(text: data['code']));
+      });
+    }
     setState(() {
+
       _bool = newValue;
     });
   }
+  NetworkRequest networkRequest=new NetworkRequest();
+  getLoggedInState() async {
+    await networkRequest.Copy(data['id']).then((value){
 
+    });
+  }
+
+  DateTime now = DateTime.now();
+
+  //print(now.hour.toString() + ":" + now.minute.toString() + ":" + now.second.toString());{data['lastDate'].toString().split('T')[1]}
   Uint8List bytes; Uint8List bytesback;
+
+
   @override
   void initState() {
         if(data['providerLogo']!= null)
@@ -49,6 +88,11 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   }
   @override
   Widget build(BuildContext context) {
+    final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
+    print(timeago.format(fifteenAgo));
+    DateTime time = DateTime.parse(data['lastDate']);
+    print(timeago.format(time));
+   // print(now.hour.toString() + ":" + now.minute.toString() + ":" + now.second.toString());
   //  print(data['providerLogo']);print(data['offerImages'][0]['imageName']);
 
     //  bytes = convert.base64.decode(data['offerImages'][0]['imageName']);
@@ -60,7 +104,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
           type: PageTransitionType.leftToRight,
             duration: Duration(milliseconds: 550) ,
             reverseDuration: Duration(milliseconds: 700),
-          child: RestaurantData(),
+          child: RestaurantData(data),
         ),);
       },
       child: Align(
@@ -100,22 +144,55 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                           left: 10, top: 10,
                           child:Row(
                             children: [
-                              new Container(
-                                height: 25.00,
-                                width: 25.00,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                              InkWell(
+                                onTap:(){
+                                  share();
+                      },
+                                child: new Container(
+                                  height: 25.00,
+                                  width: 25.00,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                  ),
+                                  child:     Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
                                 ),
-                                child:     Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
                               ),
                               SizedBox(width: 10,),
-                              new Container(
-                                height: 25.00,
-                                width: 25.00,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                              InkWell(
+                                onTap: ()async{
+                               await addFavourites();
+                               if(message=="Data Inserted Successfully"){
+                                 Fluttertoast.showToast(
+                                     msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                     toastLength: Toast.LENGTH_SHORT,
+                                     gravity: ToastGravity.BOTTOM,
+                                     timeInSecForIosWeb: 1,
+                                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                     textColor: Colors.white,
+                                     fontSize: 16.0
+                                 );
+                               }else{
+                                 Fluttertoast.showToast(
+                                     msg: message,
+                                     toastLength: Toast.LENGTH_SHORT,
+                                     gravity: ToastGravity.BOTTOM,
+                                     timeInSecForIosWeb: 1,
+                                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                     textColor: Colors.white,
+                                     fontSize: 16.0
+                                 );
+
+                               }
+
+                                },
+                                child: new Container(
+                                  height: 25.00,
+                                  width: 25.00,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                  ),
+                                  child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
                                 ),
-                                child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
                               ),
                               SizedBox(width: 10,),
                               new Container(
@@ -125,7 +202,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   color: Color(0xffffffff),borderRadius: BorderRadius.circular(10.00),
                                 ),
                                 child: Center(
-                                  child: new Text("خصم ${data['discount']}",
+                                  child: new Text(" %${data['discount'].toString().split('.')[0]} خصم ",
                                     //"٢٥٪ خصم",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -147,7 +224,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         left: 0,
                         child:Container(
                           width:MediaQuery.of(context).size.width*0.6,
-                          height: 110,
+                          height: 160,
                           padding:EdgeInsets.all(16.0) ,
                           // margin: EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
@@ -162,27 +239,116 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(height:18,),
+                              SizedBox(height:16,),
                              Row(
                                children: [
                                  SizedBox(width: 16,),
                                  new Text(
-                                   data['providerNameAr'] ==null? "مطاعم البيك السعودية":data['providerNameAr'],
+                                   data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],
                                    textAlign: TextAlign.right,
                                    style: TextStyle(
+                                     fontWeight: FontWeight.w700,
                                      fontFamily: "Tajawal",
-                                     fontSize: 13,
+                                     fontSize: 15,
                                      color:Color(0xff242e42),
                                    ),
                                  ),
                                ],
                              ),
+
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: (){
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isScrollControlled: true,
+                                        builder: (context) => SingleChildScrollView(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color:Colors.white,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(20.0),
+                                                topRight: Radius.circular(20.0),
+                                              ),
+                                            ),
+
+                                            padding: EdgeInsets.only(
+                                                bottom: MediaQuery.of(context).viewInsets.bottom),
+                                            child: BottomSheetExample(context,"text",data),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.star,color:Color(0xff38056e) ,),
+                                        new Text(
+                                          "4.9",
+                                          style: TextStyle(
+
+                                            fontSize: 15,
+                                            color:Color(0xffc8c7cc),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Spacer(),// Adobe XD layer: '4.9' (text)
+                                  Image.asset('Assets/Ticket.png'),
+                                SizedBox(width: 4,),
+                                Text(
+                                  'استخدم ${data['numberUsed']} مرة',
+                                  style: TextStyle(
+                                    fontFamily: 'DIN Next LT Arabic',
+                                    fontSize: 10,
+                                    color: const Color(0xff80ab40),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(width: 14,)  ,
+                                  Row(
+                                    children: [
+                                      new Text(//{data['lastDate'].toString().split('T')[1]}
+                                        "استعمل مؤخراً منذ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10,
+                                          color:Color(0xff909090),
+                                        ),
+                                      ),
+                                      new Text(//{data['lastDate'].toString().split('T')[1]}
+                                        " ${timeago.format(time)}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 10,
+                                          color:Color(0xff909090),
+                                        ),
+                                      ),
+
+                                    ],
+                                  ),
+                                  // new Text(//{data['lastDate'].toString().split('T')[1]}
+                                  //   " ${timeago.format(time)}  استعمل مؤخرا",
+                                  //   textAlign: TextAlign.center,
+                                  //   style: TextStyle(
+                                  //     fontWeight: FontWeight.w500,
+                                  //     fontSize: 10,
+                                  //     color:Color(0xff909090),
+                                  //   ),
+                                  // )
+                                ],
+                              ),
                              // SizedBox(height: 20,),
                               Row(
                                 children: [
                                   new Text(
-                                    data['titeAr']==null? "خصم ١٠٠ ريال سعودي":data['titeAr'],
+                                    data['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
                                       fontFamily: "Tajawal",fontWeight: FontWeight.bold,
@@ -193,33 +359,84 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   Spacer(),
                                   Row(
                                     children: [
-                                      ClipSwitch(
+                                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container(
+                                      alignment: Alignment.centerLeft,
+                                      height: 34.00,
+                                      width: 82.00,
+                                      padding: EdgeInsets.all(5) ,
+                                      decoration: BoxDecoration(
+                                        color:Color(0xff38056e),
+                                        border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                                      ),
+                                      child: Directionality(
+                                        textDirection:translator.currentLanguage == 'ar' ? TextDirection.rtl:TextDirection.ltr,
+                                        child: Center(
+                                          child: new Text(
+                                              "كوبون خصم",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                              color: Color(0xffffffff),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                  ):  ClipSwitch(
+                                        pathBuilder:	PathBuilders.slideRight,
                                         value: _bool,
                                         onChanged: _toggleBool,
-                                        inactiveWidget: Container(
-                                          alignment: Alignment.center,
-                                          height: 34.00,
-                                          width: 72.00,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff38056e),
-                                            border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
-                                          ),
-                                          child: Center(
-                                            child: new Text(
-                                              translator.translate("Copy Code"),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 11,
-                                                color:Color(0xffffffff),
-                                              ),
+                                        inactiveWidget: Stack(
+                                          children: [
+                                            Container(
+                                                alignment: Alignment.centerLeft,
+                                                height: 34.00,
+                                                width: 82.00,
+                                                padding: EdgeInsets.all(5) ,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xffffffff),
+                                                  border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                                                ),
+                                                child: Directionality(
+                                                  textDirection:translator.currentLanguage == 'ar' ? TextDirection.rtl:TextDirection.ltr,
+                                                  child: new Text(
+
+                                                    data['code']==null?"dd":data['code'],
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 12,
+                                                      color:Color(0xff38056e),
+                                                    ),
+                                                  ),
+                                                )
                                             ),
-                                          ) ,
+                                            Container(
+                                              alignment: Alignment.center,
+                                              height: 34.00,
+                                              width: 65.00,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xff38056e),
+                                                border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                                              ),
+                                              child: Center(
+                                                child: new Text(
+                                                  translator.translate("Copy Code"),
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 11,
+                                                    color:Color(0xffffffff),
+                                                  ),
+                                                ),
+                                              ) ,
+                                            ),
+                                          ],
                                         ),
                                         activeWidget: Container(
                                           alignment: Alignment.center,
                                             height: 34.00,
-                                            width: 72.00,
+                                            width: 82.00,
                                             decoration: BoxDecoration(
                                               color: Color(0xffffffff),
                                               border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
@@ -230,7 +447,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.w500,
-                                                  fontSize: 9,
+                                                  fontSize: 12,
                                                   color:Color(0xff38056e),
                                                 ),
                                               ),
@@ -239,10 +456,16 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                       ),
                                       SizedBox(width: 6,),
 
-                                      Transform(
-                                          alignment: Alignment.center,
-                                        transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),
-                                          child: Image.asset('Assets/Send.png',scale: 0.8,))
+                                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container(): InkWell(
+                                        onTap: () => setState(() {
+                                          launch(data['webSite']);
+
+                                        }),
+                                        child: Transform(
+                                            alignment: Alignment.center,
+                                          transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),
+                                            child: Image.asset('Assets/Send.png',scale: 0.8,)),
+                                      )
                                       // new Container(
                                       //   height: 22.00,
                                       //   width: 60.00,
@@ -291,7 +514,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                       ),
                       data['providerLogo']!=null?   translator.currentLanguage == 'en' ?Positioned(
                         left:  20,
-                        bottom: 85,
+                        bottom: 130,
                         child: Container(
                           width: 48,
                           height: 48,
@@ -308,7 +531,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         ),
                       ): Positioned(
                         right:  20,
-                        bottom: 85,
+                        bottom: 130,
                         child: Container(
                           width: 48,
                           height: 48,
@@ -333,4 +556,170 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
           ) ),
     ):Container();
   }
+  BottomSheetExample(context,String text,data){
+    return
+      Container(
+        color: Colors.black45.withOpacity(0.56),
+
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color:Colors.white,
+            boxShadow: [BoxShadow(
+                color: Color.fromRGBO(34, 134, 234, .3),
+                blurRadius: 20,
+                offset: Offset(0, 10)
+            )],
+
+
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(35.0),
+              topRight: Radius.circular(35.0),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(height: 16,),
+              Center(
+                child: // Adobe XD layer: 'How is your trip?' (text)
+                Text(
+                  'كيف كانت تجربتك ؟',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: const Color(0xff242e42),
+                    letterSpacing: 0.2894117431640625,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(
+              //  height:342,
+                width: 90,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(top: 16, bottom: 20),
+                color: Colors.white,
+                child:Column(
+                  children: [
+                  // Adobe XD layer: 'Your feedback will h' (text)
+                  Text(
+                  'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا',
+                  style: TextStyle(
+                    fontFamily: 'DIN Next LT Arabic',
+                    fontSize: 17,
+                    color: const Color(0xff8a8a8f),
+                    letterSpacing: 0.41000000190734864,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.15,
+                      child: Center(
+                        child: RatingBar.builder(
+                          initialRating: 1,
+                          minRating: 0,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          glowColor:Color(0xff38056e).withOpacity(0.1),
+                          unratedColor:Colors.grey.withOpacity(0.1) ,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Color(0xff38056e),
+                          ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              rate=rating;
+                            });
+                            print(rating);
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.15,
+                      width:MediaQuery.of(context).size.width*0.9,
+                      child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
+                        cursorColor: Color(0xff38056e),
+                        keyboardType:TextInputType.text,
+                        autofocus: false,
+                        textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                        onChanged:(val){
+                          setState(() {
+                          //  SpecialRequest=val;
+                          });
+                        },
+                        // controller:controller ,
+                        minLines: 3,
+                        maxLines: 6,
+
+                        obscureText: false,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(width: 0.5,color: Colors.grey[300]),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(width: 0.5,color:Color(0xff38056e))
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
+                            // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+
+                            hintText:"إضافة تعليق",
+
+                            // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+                            hintStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color:Color(0xff5e5e5e).withOpacity(0.48),
+                            ),
+                            labelStyle: null
+                        ),
+
+                      ),
+                    ),
+                    InkWell(
+                      onTap:()=> Navigator.pop(context),
+                      child: new Container(
+                        margin:EdgeInsets.only(right: 30, left: 30),
+                        width:MediaQuery.of(context).size.width*0.67,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                        ),
+                        child: Center(
+                          child: new Text(
+                            "إرسال",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color:Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      );
+
 }
+ var message;
+  addFavourites() async {
+    await  networkRequest.AddFavourites(data['id']).then((value){
+      setState(() {
+        message  = value;
+      });
+    });
+  }}

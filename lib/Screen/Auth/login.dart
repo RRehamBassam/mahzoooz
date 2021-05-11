@@ -9,20 +9,23 @@ import 'package:mahzoooz/Screen/Auth/createAccount.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 class login extends StatefulWidget {
   String phoneNo;
+  bool isReservation;
 
-  login(this.phoneNo);
+  login(this.phoneNo,this.isReservation);
 
   @override
-  _loginState createState() => _loginState(phoneNo);
+  _loginState createState() => _loginState(phoneNo,isReservation);
 }
 
 class _loginState extends State<login> {
   String phoneNumber;
+  bool isReservation;
 
-  _loginState(this.phoneNumber);
-
+  _loginState(this.phoneNumber,this.isReservation);
+  bool  _obscureText;
   String smsOTP;
   String verificationId;
   String errorMessage = '';
@@ -30,7 +33,17 @@ class _loginState extends State<login> {
   bool isLouding=false;
 String Password;
   String otp, authStatus = "";
+  @override
+  void initState() {
+    _obscureText = false;
+  }
+  getLoggedInState() async {
+    await HelperFunctions.getUserMobileSharedPreference().then((value){
 
+      phoneNumber= value;
+    });
+    ;
+  }
   Future<void> verifyPhoneNumber(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -131,7 +144,7 @@ String Password;
                     children: [
                       new Text(
                         "اهلاً بيك في محظوووظ",
-                        // textAlign: TextAlign.right,
+                        // textAlign: TextAlign.right,gt3
                         style: TextStyle(fontWeight: FontWeight.w700,
                           fontSize: 23,
                           color:Colors.black54.withOpacity(0.7),
@@ -162,9 +175,10 @@ String Password;
                       cursorColor: Color(0xff38056e),
                       keyboardType:TextInputType.text,
                       autofocus: false,
+                      obscureText: !_obscureText,
                       textAlign: TextAlign.right,
                       //  onChanged: (val)=>setState(()=>Name=val),
-                      obscureText: true,
+                     // obscureText: true,
                       onChanged: (val){
                         setState(() {
                           Password=val;
@@ -172,6 +186,15 @@ String Password;
                       },
 
                       decoration: InputDecoration(
+                          suffixIcon:  new InkWell(
+                            onTap: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                            child: Container(
+                              margin:EdgeInsets.symmetric(horizontal: 5) ,
+                                child: Icon(_obscureText? Icons.visibility : Icons.visibility_off))),
                           contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -210,11 +233,19 @@ String Password;
                         setState(() {
                           isLouding=true;
                         });
+                      if(isReservation){
+                        await getLoggedInState();}
                        await getUserHasAccount(phoneNumber,Password);
                        if(message=="OK"){
+                              if(isReservation){
+                              Navigator.pop(context);
+                              }else{
+                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+
+                              }
 
                          //phoneNumber == null ? null : verifyPhoneNumber(context);
-                        Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                       // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
                        }else{
                          setState(() {
                          isLouding=false;

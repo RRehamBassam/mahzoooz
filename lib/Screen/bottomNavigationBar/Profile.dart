@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_restart/flutter_restart.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:mahzoooz/Screen/Auth/welcome.dart';
 import 'package:mahzoooz/Widget/AppBarTop.dart';
+import 'package:mahzoooz/Screen/Settings.dart';
+import 'package:mahzoooz/Screen/ProfileScreen/myReservations.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:mahzoooz/Screen/ProfileScreen/Favourites.dart';
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -7,8 +16,41 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   ScrollController _controller = new ScrollController();
+  Future<String> getData() async {
+    await Future<void>.delayed(Duration(seconds: 3));
+     }
+
+  getDatatoken()async{
+    await gettoken();
+    if(token==null){
+      Fluttertoast.showToast(
+          msg: " يجب عليك تسجيل دخول",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      await getData();
+      Navigator.push(context,PageTransition(
+        type: PageTransitionType.leftToRight,
+        duration: Duration(milliseconds: 550) ,
+        reverseDuration: Duration(milliseconds: 700),
+        child: welcome(true),
+      ),);
+    }
+  }
+  @override
+  void initState() {
+
+    getDatatoken();
+    // TODO: implement initState
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Container(
         padding: EdgeInsets.all(16),
@@ -38,7 +80,7 @@ class _ProfileState extends State<Profile> {
             ),
             SizedBox(height: 8,),
             Container(
-              height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height*0.71: MediaQuery.of(context).size.height*0.782,
+              height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height*0.71: MediaQuery.of(context).size.height*0.742,
 
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(), // new
@@ -47,10 +89,10 @@ class _ProfileState extends State<Profile> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width*0.9,
-                    height: MediaQuery.of(context).size.height*0.3,
+                    height: MediaQuery.of(context).size.height*0.17,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8.0),
-                      color: const Color(0xf2f5f5f5),
+                     // color: const Color(0xf2f5f5f5),
                     ),
                     child: Column(
                       children: [
@@ -106,89 +148,89 @@ class _ProfileState extends State<Profile> {
                             )
                           ],
                         ),
-                        Container(
-                          padding: EdgeInsets.all(16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                children: [
-                                  Text(
-                                    'رصيد',
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: const Color(0xffc8c7cc),
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  SizedBox(height: 8,),
-                                  // Adobe XD layer: '0.2 km' (text)
-                                  Text(
-                                    '100 ر.س',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: const Color(0xff242e42),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  )
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    'نقطة',
-                                    style: TextStyle(
-
-                                      fontSize: 13,
-                                      color: const Color(0xffc8c7cc),
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  // Adobe XD layer: '0.2 km' (text)
-                                  SizedBox(height: 8,),
-                                  Text(
-                                    "100",
-                                    style: TextStyle(
-
-                                      fontSize: 15,
-                                      color: const Color(0xff242e42),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  )
-                                ],
-                              ),
-                              Column(
-                                children: [
-
-                                  Text(
-                                    'طلب',
-                                    style: TextStyle(
-                                      fontFamily: 'DIN Next LT Arabic',
-                                      fontSize: 13,
-                                      color: const Color(0xffc8c7cc),
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  ),
-                                  // Adobe XD layer: '0.2 km' (text)
-                                  SizedBox(height: 8,),
-                                  Text(
-                                    '0.0',
-                                    style: TextStyle(
-                                      fontFamily: 'DIN Next LT Arabic',
-                                      fontSize: 15,
-                                      color: const Color(0xff242e42),
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                    textAlign: TextAlign.right,
-                                  )
-                                ],
-                              )
-
-                            ],
-                          ),
-                        ),
+                        // Container(
+                        //   padding: EdgeInsets.all(16),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Column(
+                        //         children: [
+                        //           Text(
+                        //             'رصيد',
+                        //             style: TextStyle(
+                        //               fontSize: 13,
+                        //               color: const Color(0xffc8c7cc),
+                        //             ),
+                        //             textAlign: TextAlign.right,
+                        //           ),
+                        //           SizedBox(height: 8,),
+                        //           // Adobe XD layer: '0.2 km' (text)
+                        //           Text(
+                        //             '100 ر.س',
+                        //             style: TextStyle(
+                        //               fontSize: 15,
+                        //               color: const Color(0xff242e42),
+                        //               fontWeight: FontWeight.w700,
+                        //             ),
+                        //             textAlign: TextAlign.right,
+                        //           )
+                        //         ],
+                        //       ),
+                        //       Column(
+                        //         children: [
+                        //           Text(
+                        //             'نقطة',
+                        //             style: TextStyle(
+                        //
+                        //               fontSize: 13,
+                        //               color: const Color(0xffc8c7cc),
+                        //             ),
+                        //             textAlign: TextAlign.right,
+                        //           ),
+                        //           // Adobe XD layer: '0.2 km' (text)
+                        //           SizedBox(height: 8,),
+                        //           Text(
+                        //             "100",
+                        //             style: TextStyle(
+                        //
+                        //               fontSize: 15,
+                        //               color: const Color(0xff242e42),
+                        //               fontWeight: FontWeight.w700,
+                        //             ),
+                        //             textAlign: TextAlign.right,
+                        //           )
+                        //         ],
+                        //       ),
+                        //       Column(
+                        //         children: [
+                        //
+                        //           Text(
+                        //             'طلب',
+                        //             style: TextStyle(
+                        //               fontFamily: 'DIN Next LT Arabic',
+                        //               fontSize: 13,
+                        //               color: const Color(0xffc8c7cc),
+                        //             ),
+                        //             textAlign: TextAlign.right,
+                        //           ),
+                        //           // Adobe XD layer: '0.2 km' (text)
+                        //           SizedBox(height: 8,),
+                        //           Text(
+                        //             '0.0',
+                        //             style: TextStyle(
+                        //               fontFamily: 'DIN Next LT Arabic',
+                        //               fontSize: 15,
+                        //               color: const Color(0xff242e42),
+                        //               fontWeight: FontWeight.w700,
+                        //             ),
+                        //             textAlign: TextAlign.right,
+                        //           )
+                        //         ],
+                        //       )
+                        //
+                        //     ],
+                        //   ),
+                        // ),
 
 
                       ],
@@ -200,10 +242,10 @@ class _ProfileState extends State<Profile> {
                   Box("العروض الخاصة و الحجوزات",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),),
                   SizedBox(height: 4,),
                   Box("المفضلة",Image.asset('Assets/Bookmark2.png',color:  Color(0xff38056e),),),
-                  SizedBox(height: 4,),
-                  Box("العروض المرسلة",Image.asset('Assets/TicketStar.png',color:  Color(0xff38056e),),),
-                  SizedBox(height: 4,),
-                  Box("الجوائز",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),),
+                  //  SizedBox(height: 4,),
+                  // Box("العروض المرسلة",Image.asset('Assets/TicketStar.png',color:  Color(0xff38056e),),),
+                  // SizedBox(height: 4,),
+                  // Box("الجوائز",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),),
                   SizedBox(height: 4,),
                   Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),),
                   SizedBox(height: 4,),
@@ -222,41 +264,75 @@ class _ProfileState extends State<Profile> {
 
     );
   }
+  var token;
+  void gettoken()async{
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+  }
   Widget Box(String text,Widget widget){
-    return           Container(
-      decoration: BoxDecoration(
-        color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
-      ),
-      margin:EdgeInsets.all(2) ,
-      child: Material(
-        elevation: 1,
-        borderRadius: BorderRadius.circular(11.00),
-        child: new Container(
-          height: 59.00,
+    return          GestureDetector(
+      onTap:()=> {
+        if(text=="الاعدادت"){
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => new Settings())),
+          }else if(text=="العروض الخاصة و الحجوزات"){
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new myReservations())),
+        }
+        else if(text=="خروج"){
+          print('mm'),
+    HelperFunctions.saveUserEmailSharedPreference(null),
+          HelperFunctions.saveUserLoggedInSharedPreference(null),
+            translator.setNewLanguage(
+              context,
+            //  newLanguage:appState.selectedCategory==1? 'ar':'en',
+              remember: true,
+              restart: true,
+            ),
 
-          width: MediaQuery.of(context).size.width*0.82,
-          padding:EdgeInsets.symmetric(vertical: 8,horizontal: 12) ,
-          decoration: BoxDecoration(
-            color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
-          ),
-          child: Row(
-            children: [
+    }else if(text=="المفضلة"){
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => new Favourites())),
+          },
 
-              widget,
-              SizedBox(width: 16,),
-              new Text(
-                text,
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                  color:Color(0xff040303).withOpacity(0.9),
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
+        ),
+        margin:EdgeInsets.all(2) ,
+        child: Material(
+          elevation: 1,
+          borderRadius: BorderRadius.circular(11.00),
+          child: new Container(
+            height: 59.00,
+
+            width: MediaQuery.of(context).size.width*0.82,
+            padding:EdgeInsets.symmetric(vertical: 8,horizontal: 12) ,
+            decoration: BoxDecoration(
+              color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
+            ),
+            child: Row(
+              children: [
+
+                widget,
+                SizedBox(width: 16,),
+                new Text(
+                  text,
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                    color:Color(0xff040303).withOpacity(0.9),
+                  ),
                 ),
-              ),
-              Spacer(),
-              Icon(Icons.arrow_forward_ios,color: Color(0xffD9D9D9),size: 18,)
+                Spacer(),
+                Icon(Icons.arrow_forward_ios,color: Color(0xffD9D9D9),size: 18,)
 
-            ],
+              ],
+            ),
           ),
         ),
       ),

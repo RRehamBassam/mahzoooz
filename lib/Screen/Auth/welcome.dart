@@ -9,12 +9,21 @@ import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 class welcome extends StatefulWidget {
+  bool isReservation;
+
+  welcome(this.isReservation);
+
   @override
-  _welcomeState createState() => _welcomeState();
+  _welcomeState createState() => _welcomeState(isReservation);
 }
 
 class _welcomeState extends State<welcome> {
+  bool isReservation;
+
+  _welcomeState(this.isReservation);
+
   String phoneNumber;
   String phoneIsoCode;
   String changePass;
@@ -166,14 +175,14 @@ bool isverifyPhoneNumbe=false;
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: InternationalPhoneInput(
-
-
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(width: 1,color:Color(0xff38056e))
                             ),
                           // hintStyle: TextStyle(color: Colors.white),
-                            decoration:InputDecoration.collapsed(hintText: '(56) 123-1234',hintStyle: TextStyle(fontFamily: "Tajawal")
+                            decoration:InputDecoration.collapsed(
+
+                                hintText: '(56) 123-1234',hintStyle: TextStyle(fontFamily: "Tajawal")
                             ),
 
                             onPhoneNumberChange: onPhoneNumberChange,
@@ -181,7 +190,7 @@ bool isverifyPhoneNumbe=false;
                             // initialSelection:phoneIsoCode,
                             dropdownIcon: Icon(Icons.arrow_drop_down,color: Colors.grey[300],),
                             labelStyle: TextStyle(color: Colors.grey[300],fontFamily: "Tajawal"),
-                            enabledCountries: ['+1', '+966', '+972', '+970'],
+                            enabledCountries: ['+966','+970','+20'],
                             //showCountryFlags: false,
                             showCountryCodes: true),
                       ),
@@ -248,7 +257,21 @@ bool isverifyPhoneNumbe=false;
                             // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  CreateAccount(phoneNumber,code)));
                           }
                           else
-                         await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber)));
+                       {
+                         if(isReservation){
+                           await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
+                           await   Navigator.popAndPushNamed(context, '/login');
+                          // await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation)));
+
+                         }else{
+                           await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
+                           await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation)));
+
+                         }
+                       }
+
+
+
                           setState(() {
                             isLouding=false;
                           });
@@ -281,7 +304,9 @@ bool isverifyPhoneNumbe=false;
 
 
               InkWell(
-              onTap: ()=>     Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home())),//Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home())),
+              onTap: (){
+                Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+              },//Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home())),
                 child: new Text(
                   translator.translate('Browse the application without registering'),
                   textAlign: TextAlign.right,

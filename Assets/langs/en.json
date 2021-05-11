@@ -19,5 +19,19 @@
     "Hot Deals":  "Hot Deals",
     "Recent": "Recent",
     "Top Rate": "Top Rate",
-    "Copy Code": "Copy Code"
+    "Copy Code": "Copy Code",
+    "language": "Language",
+    "change": "change",
+    "Receive notifications": "Receive notifications",
+    "password": "password",
+    "Settings": "Settings",
+    "show": "show",
+    "Reservation Service": "Reservation Service",
+    "Available Reservation Timings": "Available Reservation Timings",
+    "Choose the number of guests": "Choose the number of guests",
+    "Persons": "Persons",
+    "Please select a time": "Please select a time",
+    "Special request": "Special request",
+    "Occasion type": "Occasion type",
+    "Available times": "Available times"
 }

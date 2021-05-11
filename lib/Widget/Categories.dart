@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mahzoooz/Screen/CountriesDataSliver.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:typed_data';
 import 'dart:convert' as convert;
 import 'package:shimmer/shimmer.dart';
 import 'package:mahzoooz/Screen/CountriesData.dart';
-
+import 'package:localize_and_translate/localize_and_translate.dart';
 class Categories extends StatefulWidget {
   var data ;
   bool louding;
@@ -35,8 +36,14 @@ class _CategoriesState extends State<Categories> {
           type: PageTransitionType.leftToRight,
           duration: Duration(milliseconds: 550) ,
           reverseDuration: Duration(milliseconds: 700),
-          child: CountriesData(data['nameAr']),
+          child: CountriesData(translator.currentLanguage == 'ar' ?data['nameAr']:data['nameEn'], data['id'],data),
         ));
+        // Navigator.push(context,PageTransition(
+        //   type: PageTransitionType.leftToRight,
+        //   duration: Duration(milliseconds: 550) ,
+        //   reverseDuration: Duration(milliseconds: 700),
+        //   child: CountriesDataSliver(data),
+        // ));
        // Navigator.push(context, new MaterialPageRoute(builder: (context)=>new CountriesData(data['nameAr'])));
       },
       child: Stack(
@@ -78,15 +85,33 @@ class _CategoriesState extends State<Categories> {
 
               ),),
           ),
-          Positioned(
+          translator.currentLanguage == 'ar' ? Positioned(
             bottom: 25,
             right: 8,
             child:  Container(
               width:60,
-              child: Text(data['nameAr'],
+              child: Text(translator.currentLanguage == 'ar' ?data['nameAr']:data['nameEr'],
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                // "محلات\n وخدمات",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color:Color(0xffffffff),
+                ),
+              ),
+            ),
+          ):
+          Positioned(
+            bottom: 25,
+            left: 8,
+            child:  Container(
+              width:60,
+              child: Text(translator.currentLanguage == 'ar' ?data['nameAr']:data['nameEn'],
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                // "محلات\n وخدمات",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

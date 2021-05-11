@@ -61,7 +61,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscountsCategor
           type: PageTransitionType.leftToRight,
           duration: Duration(milliseconds: 550) ,
           reverseDuration: Duration(milliseconds: 700),
-          child: RestaurantData(),
+          child: RestaurantData(data),
         ),);
       },
       child: Align(
@@ -126,7 +126,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscountsCategor
                                   color: Color(0xffffffff),borderRadius: BorderRadius.circular(10.00),
                                 ),
                                 child: Center(
-                                  child: new Text("خصم ${data['discount']}",
+                                  child: new Text(translator.currentLanguage == 'ar' ?" %${data['discount'].toString().split('.')[0]} خصم ":" %${data['discount'].toString().split('.')[0]} Discount ",
                                     //"٢٥٪ خصم",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
