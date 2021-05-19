@@ -56,12 +56,12 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                 // margin: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
-
-                    image:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,): MemoryImage(bytes,),
-
-                    fit: BoxFit.cover,
-                  ),
+                  // image: DecorationImage(
+                  //
+                  //   image:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,): MemoryImage(bytes,),
+                  //
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),),
               // ClipRRect(
               //   borderRadius: BorderRadius.circular(12.00),
@@ -82,7 +82,7 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                         children: [
                           Text(""),
                           //Spacer(),
-                          Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),
+                          //Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),
                         ],
                       ),
                     )
@@ -106,7 +106,7 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.person_outline,size: 22,),
-                    Text(" شخص ${data['numberOfPerson']} ",style: TextStyle(fontSize: 9),)
+                 //   Text(" شخص ${data['numberOfPerson']} ",style: TextStyle(fontSize: 9),)
                   ],
                 ),
     Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
@@ -115,7 +115,7 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.date_range_outlined,size: 22,),
-                    Text(" ${data['dayDate'].toString().split('T')[0]} ",style: TextStyle(fontSize: 9),)
+                   // Text(" ${data['dayDate'].toString().split('T')[0]} ",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
@@ -124,14 +124,14 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.access_time_outlined,size: 22,),
-                    Text("  ${data['bookingTime'].toString().split(':')[0]}:${data['bookingTime'].toString().split(':')[1].split(':')[0]} ",style: TextStyle(fontSize: 9),)
+                   // Text("  ${data['bookingTime'].toString().split(':')[0]}:${data['bookingTime'].toString().split(':')[1].split(':')[0]} ",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
                 InkWell(
                   onTap: (){
-                    Navigator.push(context,
-                        new MaterialPageRoute(builder: (context) => new maps(data['latitude'],data['longitude'])));
+                    // Navigator.push(context,
+                    //     new MaterialPageRoute(builder: (context) => new maps(data['latitude'],data['longitude'])));
                   //
                   },
                   child: Column(
@@ -139,21 +139,21 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                     children: [
                       SizedBox(height: 2,),
                       Icon(Icons.location_on_outlined,size: 22,),
-                      Text(" الاتجاهات ",style: TextStyle(fontSize: 9),)
+                    //  Text(" الاتجاهات ",style: TextStyle(fontSize: 9),)
                     ],
                   ),
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
                 InkWell(
                   onTap: (){
-                    customLaunch('tel:${data['mobile']}');
+                  //  customLaunch('tel:${data['mobile']}');
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(height: 2,),
                       Icon(Icons.call,size: 22,),
-                      Text(" اتصل الان ",style: TextStyle(fontSize: 9),)
+                    //  Text(" اتصل الان ",style: TextStyle(fontSize: 9),)
                     ],
                   ),
                 )

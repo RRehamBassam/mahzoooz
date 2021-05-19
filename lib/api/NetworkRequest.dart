@@ -370,7 +370,9 @@ class NetworkRequest{
   }
   Future<dynamic> OffersFavourites(bool isSpecial) async {
 
-
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
@@ -388,6 +390,7 @@ class NetworkRequest{
     var itemCount ;
     HttpClientRequest request = await client.postUrl(Uri.parse(url));
     request.headers.set('content-type', 'application/json');
+    request.headers.set('Authorization', 'Bearer $token');
     request.add(convert.utf8.encode(convert.json.encode(map)));
     HttpClientResponse response = await request.close();
     String reply = await response.transform(convert.utf8.decoder).join();
@@ -468,7 +471,7 @@ class NetworkRequest{
       "numberOfPerson":numberOfPerson,
       "occasion": occasion,
       "notes": SpecialRequest,
-      "branchId":id
+      "offerId":id
     };
 
 
@@ -513,6 +516,60 @@ class NetworkRequest{
      // );
      print(v);
    }
+
+
+  }
+  Future<dynamic> getProfile() async {//String bookingTime, dayDate,numberOfPerson ,occasion
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+    //print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
+    print(token);
+    print("pppppppppppp");
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Users/GetUserProfile';
+    try{
+      HttpClientRequest request = await client.getUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.headers.set('Authorization', 'Bearer $token');
+      //request.add(convert.utf8.encode(convert.json.encode(map)));
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(reply);
+      var jsonResponse = convert.jsonDecode(reply);
+      if(jsonResponse['status']=="OK"){
+        print(jsonResponse['status']);
+        return jsonResponse['data'];
+      }else {
+        print(jsonResponse['status']);
+        return jsonResponse['message'];
+      }
+      return "no";
+      //
+      // if(response.statusCode!=200&&response.statusCode!=201 ){
+      //
+      //   print("Ok"); print(response.statusCode);
+      //   print(jsonResponse);
+      //   return "notOk";
+      // }
+      //
+      // print("Ok"); print(response.statusCode);
+      // print(jsonResponse);
+      // return "ok";
+
+    }catch(v){
+      // Fluttertoast.showToast(
+      //     msg: "لم تتم الحجز",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+      //     textColor: Color(0xffffffff),
+      //     fontSize: 16.0
+      // );
+      print(v);
+    }
 
 
   }
@@ -635,6 +692,67 @@ class NetworkRequest{
 
 
   }
+  Future<dynamic> GetMyCoupons() async {//String bookingTime, dayDate,numberOfPerson ,occasion
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+    // print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
+    print(token);
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/SchoolCoupons/GetMyCoupons';
+    // print(id);
+    Map map ={
+      "pageNumber": 1,
+      "pageSize": 10,
+      "filter": "",
+      "orderByValue": [
+        // {
+        //   "colId": "string",
+        //   "sort": "string"
+        // }
+      ]
+    };
+
+
+    try{
+      HttpClientRequest request = await client.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.headers.set('Authorization', 'Bearer $token');
+      request.add(convert.utf8.encode(convert.json.encode(map)));
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(reply);
+      var jsonResponse = convert.jsonDecode(reply);
+      return jsonResponse['data']['data'];
+
+      //
+      // if(response.statusCode!=200&&response.statusCode!=201 ){
+      //
+      //   print("Ok"); print(response.statusCode);
+      //   print(jsonResponse);
+      //   return "notOk";
+      // }
+      //
+      // print("Ok"); print(response.statusCode);
+      // print(jsonResponse);
+      // return "ok";
+
+    }catch(v){
+      // Fluttertoast.showToast(
+      //     msg: "لم تتم الحجز",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+      //     textColor: Color(0xffffffff),
+      //     fontSize: 16.0
+      // );
+      print(v);
+    }
+
+
+  }
   Future<dynamic> SchoolCouponsAdd(expireDate,branchId,list) async {//String bookingTime, dayDate,numberOfPerson ,occasion
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
@@ -649,11 +767,9 @@ class NetworkRequest{
       "id": 0,
       "notes": "string",
       "expireDate": expireDate,
-      "branchId": branchId,
+      "offerId": branchId,
       "schoolCouponStudents":list
     };
-
-
     try{
       HttpClientRequest request = await client.postUrl(Uri.parse(url));
       request.headers.set('content-type', 'application/json');

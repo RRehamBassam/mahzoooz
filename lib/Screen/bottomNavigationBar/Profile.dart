@@ -9,12 +9,17 @@ import 'package:mahzoooz/Screen/ProfileScreen/myReservations.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:mahzoooz/Screen/ProfileScreen/Favourites.dart';
+import 'package:mahzoooz/Screen/ProfileScreen/myCouponDiscount.dart';
+import 'package:mahzoooz/api/NetworkRequest.dart';
+import 'package:mahzoooz/Widget/loading.dart';
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
+  NetworkRequest networkRequest=new NetworkRequest();
   ScrollController _controller = new ScrollController();
   Future<String> getData() async {
     await Future<void>.delayed(Duration(seconds: 3));
@@ -52,7 +57,11 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Container(
+      body:FutureBuilder<dynamic>(
+        future: networkRequest.getProfile(),
+    builder: (context, snapshot) {
+    if (snapshot.hasData) {
+    return  Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -100,7 +109,7 @@ class _ProfileState extends State<Profile> {
                           children: [
                             Container(
                               width: MediaQuery.of(context).size.width*0.95,
-                              height: MediaQuery.of(context).size.height*0.15,
+                              height: MediaQuery.of(context).size.height*0.128,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8.0),
                                 color: const Color(0xf238056e),
@@ -110,7 +119,7 @@ class _ProfileState extends State<Profile> {
                             Image.asset('Assets/Intersection.png'),
                             Container(
                               width: MediaQuery.of(context).size.width*0.9,
-                              height: MediaQuery.of(context).size.height*0.15,
+                              height: MediaQuery.of(context).size.height*0.128,
                               padding: EdgeInsets.all(16),
                               child: Row(
                                 children: [
@@ -121,7 +130,7 @@ class _ProfileState extends State<Profile> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "بيبو رمزي لويز",
+                                          "${snapshot.data['name']}", // "بيبو رمزي لويز",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -131,7 +140,7 @@ class _ProfileState extends State<Profile> {
                                         ),
                                         SizedBox(height: 8,),
                                         Text(
-                                          "01101970947",
+                                          "${snapshot.data['phone']}",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -239,7 +248,9 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 22,),
                   Box("الصفحة الشخصية",Image.asset('Assets/ProfilePage.png',color:  Color(0xff38056e),),),
                   SizedBox(height: 4,),
-                  Box("العروض الخاصة و الحجوزات",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),),
+                  Box("حجوزاتي",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),),
+                  SizedBox(height: 4,),
+                  Box("كوبونات خصم للمدراس",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),),
                   SizedBox(height: 4,),
                   Box("المفضلة",Image.asset('Assets/Bookmark2.png',color:  Color(0xff38056e),),),
                   //  SizedBox(height: 4,),
@@ -260,7 +271,28 @@ class _ProfileState extends State<Profile> {
 
           ],
         ),
-      ),
+      );}
+      else if (snapshot.hasError) {
+      return Center(child: Text("تأكد من إتصال بالإنرنت"));
+      }
+      // By default, show a loading spinner.
+      return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+      SizedBox(height: 30,),
+      // CategoriesLoud(snapshot.data,true),
+      // CategoriesLoud(snapshot.data,true),
+      // CategoriesLoud(snapshot.data,true),
+      //  CategoriesLoud(snapshot.data,true),
+       Loading(),
+      // Center(
+      //   child: PixLoader(
+      //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
+      // )
+      //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
+      ],
+      );}),
 
     );
   }
@@ -276,7 +308,7 @@ class _ProfileState extends State<Profile> {
         if(text=="الاعدادت"){
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new Settings())),
-          }else if(text=="العروض الخاصة و الحجوزات"){
+          }else if(text=="حجوزاتي"){
           Navigator.push(context,
               new MaterialPageRoute(builder: (context) => new myReservations())),
         }
@@ -294,6 +326,9 @@ class _ProfileState extends State<Profile> {
     }else if(text=="المفضلة"){
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new Favourites())),
+          }else if(text=="كوبونات خصم للمدراس"){
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => new myCouponDiscount())),
           },
 
 

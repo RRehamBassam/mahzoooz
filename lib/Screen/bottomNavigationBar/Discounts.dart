@@ -79,7 +79,7 @@ class _DiscountsState extends State<Discounts> {
                                     enableInfiniteScroll: true,
                                     autoPlayAnimationDuration: Duration(milliseconds: 1000),
                                     viewportFraction: 0.8,
-                                    height: 140.0, autoPlayCurve: Curves.fastOutSlowIn,
+                                    height:snapshot.data.length==0?5: 140.0, autoPlayCurve: Curves.fastOutSlowIn,
                                     autoPlay: true,
                                     aspectRatio:  10 / 9,
                                     enlargeCenterPage: true,

@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Profile.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
+import 'package:mahzoooz/Screen/Auth/welcome.dart';
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
@@ -12,12 +16,44 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex ;
   List<Widget> _widgettajerAccount = <Widget>[
-    homeWidget(),Discounts(),
+    homeWidget(),
+    Discounts(),
     Profile(),
 
     homeWidget(),
 
   ];
+  var token;
+  void gettoken()async{
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+  }
+  getDatatoken()async{
+    await gettoken();
+    if(token==null){
+      Fluttertoast.showToast(
+          msg: " يجب عليك تسجيل دخول",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      await getData();
+      Navigator.push(context,PageTransition(
+        type: PageTransitionType.leftToRight,
+        duration: Duration(milliseconds: 550) ,
+        reverseDuration: Duration(milliseconds: 700),
+        child: welcome(true),
+      ),);
+    }
+
+  }
+  Future<String> getData() async {
+    await Future<void>.delayed(Duration(seconds: 3));
+  }
   void _onItemTapped(int index) {
     if(index==3){
       showModalBottomSheet(

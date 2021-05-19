@@ -30,7 +30,7 @@ class _FavouritesState extends State<Favourites> {
         title: SizedBox(
           width: 87.0,
           child: Text(
-            translator.translate('Settings'),
+            translator.translate('Favourites'),
             style: TextStyle(
               // fontFamily: 'DIN Next LT Arabic',
               fontSize: 16,
@@ -44,6 +44,7 @@ class _FavouritesState extends State<Favourites> {
       ),
       body: Column(
         children: [
+          SizedBox(height: 18,),
           FutureBuilder<dynamic>(
               future: networkRequest.OffersFavourites(false),
               builder: (context, snapshot) {

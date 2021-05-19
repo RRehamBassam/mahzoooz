@@ -1,6 +1,7 @@
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/Screen/Map.dart';
 import 'package:mahzoooz/Screen/ReservationService.dart';
 import 'package:mahzoooz/Widget/loading.dart';
@@ -42,7 +43,7 @@ class _RestaurantDataState extends State<RestaurantData> {
       _bool = newValue;
     });
   }
-  Uint8List bytes; Uint8List bytesback;
+  Uint8List bytes; Uint8List bytesback;Uint8List bytesMenu;
 
   @override
   void initState() {
@@ -68,6 +69,9 @@ class _RestaurantDataState extends State<RestaurantData> {
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
+
+      if(snapshot.data['menu']!= null)
+      {bytesMenu= convert.base64.decode(snapshot.data['menu'].split(',').last);}
     return     Column(
       //shrinkWrap: true,
         children: [   Container(
@@ -150,16 +154,44 @@ class _RestaurantDataState extends State<RestaurantData> {
                                ),
                              ),
                              SizedBox(width: 10,),
-                             Material(
-                               borderRadius:  BorderRadius.circular(15.00),
-                               elevation: 5,
-                               child: new Container(
-                                 height: 25.00,
-                                 width: 25.00,
-                                 decoration: BoxDecoration(
-                                   color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                             InkWell(
+                               onTap: ()async{
+                                 await addFavourites();
+                                 if(message=="Data Inserted Successfully"){
+                                   Fluttertoast.showToast(
+                                       msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                       toastLength: Toast.LENGTH_SHORT,
+                                       gravity: ToastGravity.BOTTOM,
+                                       timeInSecForIosWeb: 1,
+                                       backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                       textColor: Colors.white,
+                                       fontSize: 16.0
+                                   );
+                                 }else{
+                                   Fluttertoast.showToast(
+                                       msg: message,
+                                       toastLength: Toast.LENGTH_SHORT,
+                                       gravity: ToastGravity.BOTTOM,
+                                       timeInSecForIosWeb: 1,
+                                       backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                       textColor: Colors.white,
+                                       fontSize: 16.0
+                                   );
+
+                                 }
+
+                               },
+                               child: Material(
+                                 borderRadius:  BorderRadius.circular(15.00),
+                                 elevation: 5,
+                                 child: new Container(
+                                   height: 25.00,
+                                   width: 25.00,
+                                   decoration: BoxDecoration(
+                                     color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                   ),
+                                   child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
                                  ),
-                                 child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
                                ),
                              ),
 
@@ -625,12 +657,12 @@ class _RestaurantDataState extends State<RestaurantData> {
                 ),
               ),
               Container(
-                height:text=="الفروع المتاحة"?356:142,
+                height:text=="الفروع المتاحة"?356:text=="القائمة"?456:142,
                 width: 90,
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(top: 16, bottom: text=="الفروع المتاحة"?6:16),
                 color: Colors.white,
-               child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="الفروع المتاحة"?Branches(data):text=="مراحل"?SchoolStages(data):Column(
+               child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="الفروع المتاحة"?Branches(data):text=="مراحل"?SchoolStages(data):text=="القائمة"?menu(data):Column(
                  children: [
                    text=="ساعات العمل"?Text(
                'يعمل الفرع في الاولاوقات التالية',
@@ -1053,6 +1085,30 @@ class _RestaurantDataState extends State<RestaurantData> {
       ],
     );
   }
+  Widget menu(data){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        data['menu']==null?Container():  Container(
+          height: 433.79,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+    borderRadius: BorderRadius.all(
+    Radius.circular(5.0),
+
+    ),
+            image: DecorationImage(
+
+              fit: BoxFit.fill,
+              image: MemoryImage(bytesMenu),
+            ),
+            //border: Border.all(width: 1.00, color: Color(0xfff5f5f5).withOpacity(0.4),), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.00), bottomRight: Radius.circular(12.00), ),
+          ),
+        ),
+
+      ],
+    );
+  }
   Widget SchoolStages(data){
     return  Column(
       children: [
@@ -1086,5 +1142,13 @@ class _RestaurantDataState extends State<RestaurantData> {
     } else {
       print(' could not launch $command');
     }
+  }
+  var message;
+  addFavourites() async {
+    await  networkRequest.AddFavourites(data['id']).then((value){
+      setState(() {
+        message  = value;
+      });
+    });
   }
 }

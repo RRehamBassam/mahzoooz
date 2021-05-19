@@ -98,173 +98,239 @@ var token;
         child: Column(crossAxisAlignment: CrossAxisAlignment.start,
 
           children: [
-            Container(
-              height: MediaQuery.of(context).size.height*0.08,
-              child:Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(translator.translate("المدرسة"),textDirection: TextDirection.rtl,
-                      style: TextStyle(fontWeight:FontWeight.w700,fontSize: 19,color:Colors.black ,),
-                    ),
-                  ),
-        // Container(
-        //   width: MediaQuery.of(context).size.width*0.815,
-        //   height: MediaQuery.of(context).size.height*0.032,
-        //   child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
-        //     cursorColor: Color(0xff38056e),
-        //     keyboardType:TextInputType.text,
-        //     autofocus: false,
-        //     textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
-        //     // onChanged:onChanged ,
-        //     // controller:controller ,
-        //     obscureText: false,
-        //
-        //
-        //
-        //     decoration: InputDecoration(
-        //         //suffixIcon: Icon(Icons.arrow_drop_down,color:text=="الدولة"|| text=="النوع"||text=="تاريخ الميلاد"?Colors.grey[300]: Color(0x0ffff),),
-        //         contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
-        //         enabledBorder: OutlineInputBorder(
-        //           borderRadius: BorderRadius.all(Radius.circular(30)),
-        //           borderSide: BorderSide(width: 1,color: Colors.grey[300]),
-        //         ),
-        //         border: OutlineInputBorder(
-        //             borderRadius: BorderRadius.all(Radius.circular(30)),
-        //             borderSide: BorderSide(width: 1,color:Color(0xff38056e))
-        //         ),
-        //         filled: true,
-        //         fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
-        //         // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
-        //
-        //         hintText:'أدخل اسم المدرسة',
-        //
-        //         // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
-        //         hintStyle: TextStyle(
-        //           fontWeight: FontWeight.w500,
-        //           fontSize: 12,
-        //           color:Color(0xff5e5e5e).withOpacity(0.48),
-        //         ),
-        //         labelStyle: null
-        //     ),
-        //
-        //   ),
-        // ),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: Text(translator.translate(datapath['offer']['providerNameAr']),
-                      style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
-                    ),
-                  ),
-                ],
-              ) ,
-            ),
-            Container(
-              width:MediaQuery.of(context).size.width ,
-              height: MediaQuery.of(context).size.height*0.15+StudentsData.length*MediaQuery.of(context).size.height*0.03,
-              child:Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(translator.translate("بيانات الأبناء"),
-                    style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
-                  ),
-        Container(
-         // height: MediaQuery.of(context).size.height,
-          child: ListView.builder(
-              shrinkWrap: true,
-              itemCount:StudentsData.length,
-              physics: BouncingScrollPhysics(),
-              itemBuilder: (context, index) {
-                return childs(StudentsData[index].name,StudentsData[index].schoolStageId,StudentsData[index].schoolStageIdname,index);
-              }),
-        ),
-                  Center(
-                    child: InkWell(
-                      onTap: ()async{
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20.0),
-                                  topRight: Radius.circular(20.0),
-                                ),
-                              ),
 
-                              padding: EdgeInsets.only(
-                                  bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: BottomSheetExample(context),
-                            ),
-                          ),
-                        );
-                      },
-                      child: new Container(
-                          height: 38.00,
-                          width:168.00,
+    Align(
+    //   heightFactor: 0.7,
+    alignment: Alignment.topCenter,
+    child:Container(
+    margin: EdgeInsets.only(bottom: 8,top: 2),
+    decoration: BoxDecoration(
+
+    borderRadius: BorderRadius.circular(10.0),),
+    child: Material(
+    elevation: 1,
+    borderRadius: BorderRadius.circular(10.0),
+    child: Container(
+      padding: EdgeInsets.all(11),
+    decoration: BoxDecoration(
+color: Colors.white,
+    borderRadius: BorderRadius.circular(10.0),),
+   child:   Container(
+     height: MediaQuery.of(context).size.height*0.08,
+     child:Column(
+       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+       children: [
+         SizedBox(
+           width: MediaQuery.of(context).size.width,
+           child: Text(translator.translate("المدرسة"),textDirection: TextDirection.rtl,
+             style: TextStyle(fontWeight:FontWeight.w700,fontSize: 19,color:Colors.black ,),
+           ),
+         ),
+         // Container(
+         //   width: MediaQuery.of(context).size.width*0.815,
+         //   height: MediaQuery.of(context).size.height*0.032,
+         //   child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
+         //     cursorColor: Color(0xff38056e),
+         //     keyboardType:TextInputType.text,
+         //     autofocus: false,
+         //     textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+         //     // onChanged:onChanged ,
+         //     // controller:controller ,
+         //     obscureText: false,
+         //
+         //
+         //
+         //     decoration: InputDecoration(
+         //         //suffixIcon: Icon(Icons.arrow_drop_down,color:text=="الدولة"|| text=="النوع"||text=="تاريخ الميلاد"?Colors.grey[300]: Color(0x0ffff),),
+         //         contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+         //         enabledBorder: OutlineInputBorder(
+         //           borderRadius: BorderRadius.all(Radius.circular(30)),
+         //           borderSide: BorderSide(width: 1,color: Colors.grey[300]),
+         //         ),
+         //         border: OutlineInputBorder(
+         //             borderRadius: BorderRadius.all(Radius.circular(30)),
+         //             borderSide: BorderSide(width: 1,color:Color(0xff38056e))
+         //         ),
+         //         filled: true,
+         //         fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
+         //         // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+         //
+         //         hintText:'أدخل اسم المدرسة',
+         //
+         //         // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+         //         hintStyle: TextStyle(
+         //           fontWeight: FontWeight.w500,
+         //           fontSize: 12,
+         //           color:Color(0xff5e5e5e).withOpacity(0.48),
+         //         ),
+         //         labelStyle: null
+         //     ),
+         //
+         //   ),
+         // ),
+         SizedBox(
+           width: MediaQuery.of(context).size.width,
+           child: Text(translator.translate(datapath['offer']['providerNameAr']),
+             style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
+           ),
+         ),
+       ],
+     ) ,
+   ),
+        )))),
+            Align(
+              //   heightFactor: 0.7,
+                alignment: Alignment.topCenter,
+                child:Container(
+                    margin: EdgeInsets.only(bottom: 8,top: 2),
+                    decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.circular(10.0),),
+                    child: Material(
+                        elevation: 1,
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: Container(
+                          padding: EdgeInsets.all(11),
                           decoration: BoxDecoration(
-                            color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                          ),
-                          child:Center(
-                            child: new Text(
-                              "اضف بيانات ابن جديد",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14,
-                                color:Color(0xffffffff),
-                              ),
-                            ),
-                          )
-                      ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10.0),),
+                         child:   Container(
+  width:MediaQuery.of(context).size.width ,
+  height: MediaQuery.of(context).size.height*0.15+StudentsData.length*MediaQuery.of(context).size.height*0.03,
+  child:Column(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(translator.translate("بيانات الأبناء"),
+        style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
+      ),
+      Container(
+        // height: MediaQuery.of(context).size.height,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount:StudentsData.length,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (context, index) {
+              return childs(StudentsData[index].name,StudentsData[index].schoolStageId,StudentsData[index].schoolStageIdname,index);
+            }),
+      ),
+      Center(
+        child: InkWell(
+          onTap: ()async{
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color:Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.0),
+                      topRight: Radius.circular(20.0),
                     ),
                   ),
-                  // Text(translator.translate("مدرسة فاطمة العالمية"),
-                  //   style: TextStyle(fontWeight:FontWeight.w700,fontSize: 20,color:Colors.black ),
-                  // ),
-                ],
-              ) ,
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height*0.22-((StudentsData.length*MediaQuery.of(context).size.height*0.03)/2),
-              child:Column(
-               // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height:16,),
-                  Text(translator.translate("تفاصيل الخصم"),
-                    style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
-                  ),
-                  SizedBox(height: 8,),
-                  Text(translator.translate("الخصم ساري لمرحلة الكي جي ققط"),
-                    style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
-                  ),
-                ],
-              ) ,
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height*0.25-((StudentsData.length*MediaQuery.of(context).size.height*0.03)/2),
-              child:Column(
-                children: [
-                  Text(translator.translate("صالح لغاية"),
-                    style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
-                  ),
-                  SizedBox(height: 8,),
-                  Text(translator.translate( datapath['offer']['specialEndDate'].toString().split('T')[0]),
-                    style: TextStyle(fontWeight:FontWeight.w500,fontSize: 18,color:Color(0xff38056e) ),
-                  ),
-                ],
-              ) ,
-            ),
 
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: BottomSheetExample(context),
+                ),
+              ),
+            );
+          },
+          child: new Container(
+              height: 38.00,
+              width:168.00,
+              decoration: BoxDecoration(
+                color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+              ),
+              child:Center(
+                child: new Text(
+                  "اضف بيانات ابن جديد",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color:Color(0xffffffff),
+                  ),
+                ),
+              )
+          ),
+        ),
+      ),
+      // Text(translator.translate("مدرسة فاطمة العالمية"),
+      //   style: TextStyle(fontWeight:FontWeight.w700,fontSize: 20,color:Colors.black ),
+      // ),
+    ],
+  ) ,
+),
+                        )))),
+    Align(
+    //   heightFactor: 0.7,
+    alignment: Alignment.topCenter,
+    child:Container(
+    margin: EdgeInsets.only(bottom: 8,top: 2),
+    decoration: BoxDecoration(
+
+    borderRadius: BorderRadius.circular(10.0),),
+    child: Material(
+    elevation: 1,
+    borderRadius: BorderRadius.circular(10.0),
+    child: Container(
+    padding: EdgeInsets.all(11),
+    decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(10.0),),
+    child:Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+         width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height*0.13,
+          child:Column(
+            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height:16,),
+              Text(translator.translate("تفاصيل الخصم"),
+                style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
+              ),
+              SizedBox(height: 8,),
+              Text(translator.translate("الخصم ساري لمرحلة الكي جي ققط"),
+                style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
+              ),
+            ],
+          ) ,
+        ),
+        Container(
+            width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height*0.1,
+          child:Column(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Text(translator.translate("صالح لغاية"),
+                  style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
+                ),
+              ),
+              SizedBox(height: 8,),
+              Container
+                (width: MediaQuery.of(context).size.width,
+                child: Text(translator.translate( datapath['offer']['offerExpireDate'].toString().split('T')[0]),
+                  style: TextStyle(fontWeight:FontWeight.w500,fontSize: 18,color:Color(0xff38056e) ),
+                ),
+              ),
+            ],
+          ) ,
+        ),
+      ],
+    ),)))),
+
+
+            SizedBox(height: 16,),
             StudentsData.length==0?SizedBox():  Center(
               child: InkWell(
                 onTap: ()async{
-                  await getLoggedInState(datapath['offer']['specialEndDate'],datapath['offer']['id']);
+                  await getLoggedInState(datapath['offer']['offerExpireDate'],datapath['offer']['id']);
                   if(result=='Created'){
                     Fluttertoast.showToast(
                         msg: "تم الحصول على كوبون الخصم للمدرسة",
@@ -352,7 +418,7 @@ var token;
                 ),
               ),
               Container(
-                height:335,
+                height:355,
                 width: 90,
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(top: 8, bottom: 8),
@@ -376,8 +442,8 @@ var token;
                           ),
                         ),
                 Container(
-                    width: MediaQuery.of(context).size.width*0.655,
-                    height: MediaQuery.of(context).size.height*0.042,
+                    width: MediaQuery.of(context).size.width*0.8,
+                    height: MediaQuery.of(context).size.height*0.06,
                     child: TextFormField(onChanged: (val)=>setState((){newStudentsName=val;}),
                       cursorColor: Color(0xff38056e),
                       keyboardType:TextInputType.text,

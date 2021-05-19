@@ -59,7 +59,7 @@ dependencies:
   location: ^3.0.0
   geocoding: ^1.0.5
   geocoder: ^0.2.1
-  location_web: ^3.0.0
+
 
 
 
