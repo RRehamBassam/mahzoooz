@@ -86,17 +86,17 @@ class _BoardViewState extends State<BoardView> {
       angle: _rotate,
       child: Container(
         height: size.height,
-        width: size.width,
+        width: size.width*20,
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
 
           constraints:
-              BoxConstraints.expand(height: size.height / 3, width: 44),
+              BoxConstraints.expand(height: size.height / 3, width: 90),
           child: Transform.rotate(
             angle:pi/2,
             alignment: Alignment.center,
            // transform:   Matrix4.rotationY(math.pi),
-            child: Center(child: Text(luck.asset,style: TextStyle(fontWeight:FontWeight.bold,
+            child: Center(child: Text(luck.asset,  textAlign: TextAlign.center, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 9,
               color: luck.color==Color(0xffE2E2E2)?Color(0xff38056e):Colors.white,))),
           ),
         ),

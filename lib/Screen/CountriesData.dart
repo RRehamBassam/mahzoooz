@@ -30,9 +30,12 @@ class _CountriesDataState extends State<CountriesData> {
   var subcategoriesData;
   var subcategoriesDatabody;
   Uint8List bytesback;
+  bool isEmpty;
+  int count=1;
   @override
   void initState() {
-
+    isEmpty=false;
+    count=1;
     bytesback= convert.base64.decode(data['imageName'].split(',').last);
     final dataCategory = Category(
       categoryId: 0,
@@ -135,9 +138,10 @@ class _CountriesDataState extends State<CountriesData> {
                                           setState(() {
                                             isSelected=-1;
                                           });
-
+                                          appState.updateCountEmpty(-1);
                                           appState.updateid(-1);
                                           appState.updateCount(-1);
+
 
                                         },
                                         child: Container(
@@ -171,10 +175,12 @@ class _CountriesDataState extends State<CountriesData> {
                                                 print("$index");
                                                 setState(() {
                                                   isSelected=index;
+                                                  isEmpty=false;
                                                 });
-
+                                                appState.updateCountEmpty(-1);
                                                 appState.updateid(subcategoriesData[index]['id']);
                                                 appState.updateCount(index);
+
 
                                               },
                                               child: Container(
@@ -269,33 +275,89 @@ class _CountriesDataState extends State<CountriesData> {
                                         //       offset: Offset(2, 1)
                                         //   )],
                                         //   borderRadius: BorderRadius.circular(2.0),),
-                                        child:ListView(
-                                          shrinkWrap: true,
-                                          // controller: scrolController,
-                                          // controller: controller,
-                                          children: [
-                                            //   MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 5,):SizedBox(height: ,),
-                                            Container(
-                                              // height: MediaQuery.of(context).size.height*0.89,
-                                              child: ListView.builder(
-                                                  shrinkWrap: true,
-                                                  itemCount:subcategoriesDatabody['data'].length,
-                                                  physics: BouncingScrollPhysics(),
-                                                  itemBuilder: (context, index) {
-                                                    for(int i=0;i<snapshot.data.length;i++)
-                                                      if(snapshot.data['data'][index]['categoryId']==appState.id)
-                                                        appState.updateEmptyData();
+                                        child:Container(
+                                          height: MediaQuery.of(context).size.height*0.772,
+                                          // height: MediaQuery.of(context).size.height*0.89,
+                                          child: ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount:appState.CountEmpty==-1?1:subcategoriesDatabody['data'].length,
+                                              physics: BouncingScrollPhysics(),
+                                              itemBuilder: (context, index) {
 
-                                                    // categoriesData.add(new Category(
-                                                    //   categoryId: index,
-                                                    //   name: snapshot.data[index]['nameAr'],
-                                                    // ));
-                                                    // appState.updateCategory(index,snapshot.data[index]['nameAr']);
-                                                    print(appState.categoriesData);
-                                                    // AppCategoris.updateCategory(index,snapshot.data[index]['nameAr']);
-                                                    return snapshot.data['data'][index]['categoryId']==appState.id?ViewRestaurantDiscounts(snapshot.data['data'][index]):Container(height: 0,)   ;    }),
-                                            )
-                                          ],
+
+                                                  for(int i=0;i<snapshot.data.length;i++){
+                                                    print("ppppppp");
+                                                    if(subcategoriesDatabody['data'][i]['categoryId']==appState.id){
+                                                      appState.updateCountEmpty(1);
+                                                      print("jjjjjj");
+                                                      break;
+
+
+                                                      print(count);
+                                                    }
+                                                  }
+
+                                                // categoriesData.add(new Category(
+                                                //   categoryId: index,
+                                                //   name: snapshot.data[index]['nameAr'],
+                                                // ));
+                                                // appState.updateCategory(index,snapshot.data[index]['nameAr']);
+                                                print(appState.categoriesData);
+                                                // AppCategoris.updateCategory(index,snapshot.data[index]['nameAr']);
+                                                return appState.CountEmpty==-1? Expanded(
+                                                  child: Container(
+
+                                                    child: Center(
+                                                      child: Column(
+                                                        crossAxisAlignment:CrossAxisAlignment.center ,
+                                                        mainAxisAlignment:MainAxisAlignment.center ,
+                                                        children: [
+                                                        Container(
+                                                        height: 20.0,),
+                                                          Container(
+                                                            width: 260.0,
+                                                            height: 260.0,
+                                                            padding:EdgeInsets.all(45),
+                                                            decoration: new BoxDecoration(
+                                                              color:  Color(0xffF0FAF9),
+                                                              shape: BoxShape.circle,
+                                                            ),
+                                                            child: Container(
+                                                              width: 120.0,
+                                                              height: 120.0,
+
+                                                              padding:EdgeInsets.all(50),
+                                                              decoration: new BoxDecoration(
+                                                                color: Color(0xffCEEAE7),
+                                                                shape: BoxShape.circle,
+                                                              ),
+                                                              child: Container(
+                                                                width: 60.0,
+                                                                height: 60.0,
+                                                                decoration: new BoxDecoration(
+                                                                  color:Color(0xff029789),
+                                                                  shape: BoxShape.circle,
+                                                                ),
+                                                                child: Icon(Icons.receipt, color: Colors.white,),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(height: 25,),
+                                                          new Text(
+                                                            "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                                            textAlign: TextAlign.center,
+                                                            style: TextStyle(
+
+                                                              fontWeight: FontWeight.w700,
+                                                              fontSize: 16,
+                                                              color:Color(0xff029789),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ): snapshot.data['data'][index]['categoryId']==appState.id?ViewRestaurantDiscounts(snapshot.data['data'][index]):Container(height: 0,)   ;    }),
                                         ),
                                       ),
 
@@ -330,7 +392,7 @@ class _CountriesDataState extends State<CountriesData> {
                                           children: [
                                             //   MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 5,):SizedBox(height: ,),
                                             Container(
-                                              // height: MediaQuery.of(context).size.height*0.89,
+                                               height: MediaQuery.of(context).size.height*0.772,
                                               child: ListView.builder(
                                                   shrinkWrap: true,
                                                   itemCount:subcategoriesDatabody['data'].length,

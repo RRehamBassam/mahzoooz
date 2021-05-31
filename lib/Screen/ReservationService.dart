@@ -9,20 +9,23 @@ import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/Screen/Auth/welcome.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:mahzoooz/Screen/RestaurantData.dart';
+
 class ReservationService extends StatefulWidget {
   var data;
   var id;
+  var dataRestaurantData;
   @override
-  _ReservationServiceState createState() => _ReservationServiceState(data,id);
+  _ReservationServiceState createState() => _ReservationServiceState(data,id,dataRestaurantData);
 
-  ReservationService(this.data,this.id);
+  ReservationService(this.data,this.id,this.dataRestaurantData);
 }
 
 class _ReservationServiceState extends State<ReservationService> {
   var data;
-  var id;
+  var id; var dataRestaurantData;
   NetworkRequest networkRequest=new NetworkRequest();
-  _ReservationServiceState(this.data,this.id);
+  _ReservationServiceState(this.data,this.id,this.dataRestaurantData);
   List occasionList=["يوم ميلاد","ذكرى سنوية","وجبة عمل","موعد ليلى"];
   int Count;
   var ShowCount;
@@ -452,6 +455,14 @@ class _ReservationServiceState extends State<ReservationService> {
                               fontSize: 16.0
                           );
                           Navigator.pop(context);
+                          Navigator.pushReplacement(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder: (a, b, c) => RestaurantData(dataRestaurantData),
+                              transitionDuration: Duration(seconds: 0),
+                            ),
+                          );
+                       //   Navigator.pop(context);
                         }else if(AddBooking is int){
                           Fluttertoast.showToast(
                               msg: "العدد المسموح به $AddBooking",

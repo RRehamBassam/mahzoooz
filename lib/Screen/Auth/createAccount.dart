@@ -577,14 +577,14 @@ print(error);
                     //  itemExtent: 40,
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
-                      {setState(()=>{_controllerG.text=dataG[int],gender==int+1});}
+                      {setState(()=>{_controllerG.text=dataG[int],gender=int+1});}
                        },
                     // diameterRatio: 1.6,
                     children: <Widget>[
                       ...dataG.map<Widget>((name) {
                       //  print(name['nameAr']);
                         return InkWell(
-                        onTap: ()=>{setState(()=>{_controllerG.text=name,}),},
+                        onTap: ()=>{setState(()=>{_controllerG.text=name}),},
                           child: Container(
                             width: double.infinity,
 

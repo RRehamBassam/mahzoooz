@@ -7,6 +7,7 @@ import 'package:mahzoooz/Screen/ReservationService.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Widget/RestaurantDataLoud.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:page_transition/page_transition.dart';
 import 'dart:typed_data';
 import 'dart:convert' as convert;
@@ -15,6 +16,7 @@ import 'package:mahzoooz/Widget/ImageItem.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:mahzoooz/Screen/CouponDiscount.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_share/flutter_share.dart';
 class RestaurantData extends StatefulWidget {
   var data;
   @override
@@ -25,8 +27,8 @@ class RestaurantData extends StatefulWidget {
 
 class _RestaurantDataState extends State<RestaurantData> {
 
-  var data;
 
+var data;
   _RestaurantDataState(this.data);
 
   int _counter = 0;
@@ -47,29 +49,41 @@ class _RestaurantDataState extends State<RestaurantData> {
 
   @override
   void initState() {
-    if(data['providerLogo']!= null)
-    {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}
-    if(data['offerImages'][0]['imageName']!=null)
-    {  bytesback= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);}
+    gettoken();
+
 
     // TODO: implement initState
     super.initState();
   }
-
-
+Future<void> share() async {
+  await FlutterShare.share(
+      title: 'Example share',
+      text: 'Example share text',
+      linkUrl: data['webSite'],
+      chooserTitle: 'Example Chooser Title');
+}
+  var token;
+  void gettoken()async{
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
-    print(timeago.format(fifteenAgo));
-    DateTime time = DateTime.parse(data['lastDate']);
-    print(timeago.format(time));
+    // final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
+    // print(timeago.format(fifteenAgo));
+    // DateTime time = DateTime.parse(data['lastDate']);
+    // print(timeago.format(time));
     return Scaffold(
       backgroundColor:Color(0xffffffff),
       body: FutureBuilder<dynamic>(
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
-
+      if(snapshot.data['offer']['providerLogo']!= null)
+      {bytes= convert.base64.decode(snapshot.data['offer']['providerLogo'].split(',').last);}
+      if(snapshot.data['offer']['offerImages'][0]['imageName']!=null)
+      {  bytesback= convert.base64.decode(snapshot.data['offer']['offerImages'][0]['imageName'].split(',').last);}
       if(snapshot.data['menu']!= null)
       {bytesMenu= convert.base64.decode(snapshot.data['menu'].split(',').last);}
     return     Column(
@@ -124,7 +138,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
                                new Text(
-                                 data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                 snapshot.data['offer']['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? snapshot.data['offer']['providerNameAr']:snapshot.data['offer']['providerNameEn'],
                                  textAlign: TextAlign.center,
                                  style: TextStyle(
                                fontWeight: FontWeight.w700,
@@ -139,49 +153,13 @@ class _RestaurantDataState extends State<RestaurantData> {
                        Positioned(
                          left: 40,
                          top: 47,
-                         child: Row(
-                           children: [
-                             Material(
-                               borderRadius:  BorderRadius.circular(15.00),
-                               elevation: 5,
-                               child: new Container(
-                                 height: 25.00,
-                                 width: 25.00,
-                                 decoration: BoxDecoration(
-                                   color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
-                                 ),
-                                 child:     Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
-                               ),
-                             ),
-                             SizedBox(width: 10,),
-                             InkWell(
-                               onTap: ()async{
-                                 await addFavourites();
-                                 if(message=="Data Inserted Successfully"){
-                                   Fluttertoast.showToast(
-                                       msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
-                                       toastLength: Toast.LENGTH_SHORT,
-                                       gravity: ToastGravity.BOTTOM,
-                                       timeInSecForIosWeb: 1,
-                                       backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                       textColor: Colors.white,
-                                       fontSize: 16.0
-                                   );
-                                 }else{
-                                   Fluttertoast.showToast(
-                                       msg: message,
-                                       toastLength: Toast.LENGTH_SHORT,
-                                       gravity: ToastGravity.BOTTOM,
-                                       timeInSecForIosWeb: 1,
-                                       backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                       textColor: Colors.white,
-                                       fontSize: 16.0
-                                   );
-
-                                 }
-
-                               },
-                               child: Material(
+                         child: InkWell(
+                           onTap: (){
+                             share();
+                           },
+                           child: Row(
+                             children: [
+                               Material(
                                  borderRadius:  BorderRadius.circular(15.00),
                                  elevation: 5,
                                  child: new Container(
@@ -190,12 +168,66 @@ class _RestaurantDataState extends State<RestaurantData> {
                                    decoration: BoxDecoration(
                                      color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
                                    ),
-                                   child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
+                                   child:     Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
                                  ),
                                ),
-                             ),
+                               SizedBox(width: 10,),
+                               InkWell(
+                                 onTap: ()async{
+                                   if(token==null){
+                                     Fluttertoast.showToast(
+                                         msg: "يجب عليك تسجيل الدخول",
+                                         toastLength: Toast.LENGTH_SHORT,
+                                         gravity: ToastGravity.BOTTOM,
+                                         timeInSecForIosWeb: 1,
+                                         backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                         textColor: Colors.white,
+                                         fontSize: 16.0
+                                     );
+                                   }else{
+                                     await addFavourites();
+                                     if(message=="Data Inserted Successfully"){
+                                       Fluttertoast.showToast(
+                                           msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                           toastLength: Toast.LENGTH_SHORT,
+                                           gravity: ToastGravity.BOTTOM,
+                                           timeInSecForIosWeb: 1,
+                                           backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                           textColor: Colors.white,
+                                           fontSize: 16.0
+                                       );
+                                     }else{
+                                       Fluttertoast.showToast(
+                                           msg: message,
+                                           toastLength: Toast.LENGTH_SHORT,
+                                           gravity: ToastGravity.BOTTOM,
+                                           timeInSecForIosWeb: 1,
+                                           backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                           textColor: Colors.white,
+                                           fontSize: 16.0
+                                       );
 
-                           ],
+                                     }
+                                   }
+
+
+                                 },
+                                 child: Material(
+                                   borderRadius:  BorderRadius.circular(15.00),
+                                   elevation: 5,
+                                   child: new Container(
+                                     height: 25.00,
+                                     width: 25.00,
+                                     decoration: BoxDecoration(
+                                       color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                     ),
+                                     child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
+                                   ),
+                                 ),
+                               ),
+
+                             ],
+                           ),
                          ),
                        ),
                        Positioned(
@@ -252,7 +284,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                           Align(
                             alignment:translator.currentLanguage == 'ar' ? Alignment.centerRight:Alignment.centerLeft,
                             child: new Text(
-                              data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                              snapshot.data['offer']['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? snapshot.data['offer']['providerNameAr']:snapshot.data['offer']['providerNameEn'],
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                 fontSize: 16,
@@ -270,7 +302,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                         children: [
                           Icon(Icons.star,color:Color(0xff38056e) ,),
                           new Text(
-                            data['rate'] .toString(),
+                            snapshot.data['offer']['rate'] .toString(),
                             style: TextStyle(
 
                               fontSize: 15,
@@ -280,7 +312,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                         ],
                       ),
                       SizedBox(width: 60,),
-                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Text(
+                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Text(
                         "للبنين",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -289,7 +321,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                         ),
                       ):Container(),
                       Spacer(),
-                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container():    Row(
+                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container():    Row(
                         children: [
                           new Text(//{data['lastDate'].toString().split('T')[1]}
                             "استعمل مؤخراً منذ",
@@ -300,15 +332,15 @@ class _RestaurantDataState extends State<RestaurantData> {
                               color:Color(0xff909090),
                             ),
                           ),
-                          new Text(//{data['lastDate'].toString().split('T')[1]}
-                            " ${timeago.format(time)}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                              color:Color(0xff909090),
-                            ),
-                          ),
+                          // new Text(//{data['lastDate'].toString().split('T')[1]}
+                          //   " ${timeago.format(time)}",
+                          //   textAlign: TextAlign.center,
+                          //   style: TextStyle(
+                          //     fontWeight: FontWeight.w500,
+                          //     fontSize: 10,
+                          //     color:Color(0xff909090),
+                          //   ),
+                          // ),
 
                         ],
                       ),
@@ -325,7 +357,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                   ),
                       SizedBox(height: 8,),
                       new Text(
-                        translator.currentLanguage == 'ar' ? data['descriptionAr']: data['descriptionEn'],
+                        translator.currentLanguage == 'ar' ? snapshot.data['offer']['descriptionAr']: snapshot.data['offer']['descriptionEn'],
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -342,7 +374,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                       Row(
                         children: [
                           new Text(
-                            data['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
+                            snapshot.data['offer']['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?snapshot.data['offer']['titeAr']:snapshot.data['offer']['titleEn'],
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
@@ -403,27 +435,27 @@ class _RestaurantDataState extends State<RestaurantData> {
 
                         ],
                       ),
-
                       SizedBox(height: 16,),
-                      Box("وسائل الإتصال",Image.asset('Assets/Calling.png',color:  Color(0xff38056e),),snapshot.data),
+                      Box("وسائل الإتصال",Image.asset('Assets/Calling.png',color:  Color(0xff38056e),),snapshot.data,data),
                       SizedBox(height: 4,),
-                      Box("ساعات العمل",Image.asset('Assets/Time Square.png',color:  Color(0xff38056e),),snapshot.data),
+                      Box("ساعات العمل",Image.asset('Assets/Time Square.png',color:  Color(0xff38056e),),snapshot.data,data),
                       SizedBox(height: 4,),
-                      Box("شروط الاستخدام وتفاصيل الخصم",Image.asset('Assets/Group 39851.png',color:  Color(0xff38056e),),snapshot.data),
+                      Box("شروط الاستخدام وتفاصيل الخصم",Image.asset('Assets/Group 39851.png',color:  Color(0xff38056e),),snapshot.data,data),
                       SizedBox(height: 4,),
-                      Box("الفروع المتاحة",Image.asset('Assets/Location.png',color:  Color(0xff38056e),),snapshot.data),
+                      Box("الفروع المتاحة",Image.asset('Assets/Location.png',color:  Color(0xff38056e),),snapshot.data,data),
                       SizedBox(height: 4,),
-                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data) :Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data),
+                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data) :snapshot.data['menu']!=null?Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
                       SizedBox(height: 4,),
-                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("خدمة الحجز",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data):Container(),//"كوبون الخصم للمدرسه"
+                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("خدمة الحجز",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
                       snapshot.data['branches'][0]['hasBooking']&&snapshot.data['bookingSettings'].length!=0?SizedBox(height: 4,):Container(),
-                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data):Container(),
-                    ],
+                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+
+                         ],
                   ),
                 ),
               ),
             ),
-            data['providerLogo']==null?Container(): translator.currentLanguage == 'ar' ?   Positioned(
+            snapshot.data['offer']['providerLogo']==null?Container(): translator.currentLanguage == 'ar' ?   Positioned(
               right: 22,
               top: 170,
               child: Material(
@@ -462,7 +494,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                   ),),
               ),
             ),
-            data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container():   translator.currentLanguage == 'ar' ?  Positioned(
+            snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container():   translator.currentLanguage == 'ar' ?snapshot.data['offer']['discount'].toString().split('.')[0]==0?Container():  Positioned(
               left: 22,
               top: 178,
 
@@ -483,7 +515,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                     ),
                     child: Center(
                       child: new Text(
-                        " %${data['discount'].toString().split('.')[0]} خصم ",
+                        " %${snapshot.data['offer']['discount'].toString().split('.')[0]} خصم ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -495,7 +527,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                   ),
                 ),
               ),
-            ):Positioned(
+            ):snapshot.data['offer']['discount'].toString().split('.')[0]==0?Container():Positioned(
               right: 22,
               top: 178,
 
@@ -516,7 +548,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                     ),
                     child: Center(
                       child: new Text(
-                        " %${data['discount'].toString().split('.')[0]} Discount ",
+                        " %${snapshot.data['offer']['discount'].toString().split('.')[0]} Discount ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -540,7 +572,7 @@ class _RestaurantDataState extends State<RestaurantData> {
     );
   }
   //  snapshot.data['branches'][0]['hasBooking']
-  Widget Box(String text,Widget widget,data){
+  Widget Box(String text,Widget widget,data,dataRestaurantData){
     return     InkWell(
       onTap:(){
         if(text=="خدمة الحجز"){
@@ -549,7 +581,7 @@ class _RestaurantDataState extends State<RestaurantData> {
             type: PageTransitionType.bottomToTop,
             duration: Duration(milliseconds: 550) ,
             reverseDuration: Duration(milliseconds: 700),
-            child:ReservationService(data['bookingSettings'],data['offer']['id']),
+            child:ReservationService(data['bookingSettings'],data['offer']['id'],dataRestaurantData),
           ),);
         } else  if(text=="كوبون الخصم للمدرسة"){
           print("${data['offer']['id']}  id");
@@ -662,7 +694,7 @@ class _RestaurantDataState extends State<RestaurantData> {
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(top: 16, bottom: text=="الفروع المتاحة"?6:16),
                 color: Colors.white,
-               child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="الفروع المتاحة"?Branches(data):text=="مراحل"?SchoolStages(data):text=="القائمة"?menu(data):Column(
+               child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="الفروع المتاحة"?Branches(data):text=="مراحل"?SchoolStages(data):text=="القائمة"?menu(data):text=="شروط الاستخدام وتفاصيل الخصم"?condition(data):Column(
                  children: [
                    text=="ساعات العمل"?Text(
                'يعمل الفرع في الاولاوقات التالية',
@@ -1104,6 +1136,28 @@ class _RestaurantDataState extends State<RestaurantData> {
             ),
             //border: Border.all(width: 1.00, color: Color(0xfff5f5f5).withOpacity(0.4),), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.00), bottomRight: Radius.circular(12.00), ),
           ),
+        ),
+
+      ],
+    );
+  }
+  Widget condition(data){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        data['offer']['notesAr']==null?Container():Column(
+          children: [
+            Text(
+              translator.currentLanguage == 'ar' ? '${data['offer']['notesAr']}':'${data['offer']['notesEn']}',
+              style: TextStyle(
+               // fontFamily: 'DIN Next LT Arabic',
+                fontSize: 15,
+                color: const Color(0xff242e42),
+                fontWeight: FontWeight.w700,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ],
         ),
 
       ],

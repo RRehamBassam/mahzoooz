@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 class ArrowView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+   // print( MediaQuery.of(context).size.height);
     return Align(
       alignment: Alignment.center,
       child: Transform.rotate(
         angle: pi,
         child: Padding(
-          padding: EdgeInsets.only(top: 80),
+          padding: EdgeInsets.only(top:MediaQuery.of(context).size.height<800? 82:90,right:MediaQuery.of(context).size.height<800?4: 0,left: MediaQuery.of(context).size.height<800?0:5),
           child: ClipPath(
             clipper: _ArrowClipper(),
             child: Container(
@@ -18,9 +19,9 @@ class ArrowView extends StatelessWidget {
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Colors.black12, Colors.black])),
-              height: 40,
-              width: 40,
+                      colors: [Colors.black12,Color(0xffFFA500), Color(0xffFFA500)])),
+              height: 45,
+              width: 45,
             ),
           ),
         ),

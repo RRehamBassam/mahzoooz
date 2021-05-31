@@ -5,6 +5,7 @@ import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/Screen/RestaurantData.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'dart:math' as math;
@@ -75,9 +76,15 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   //print(now.hour.toString() + ":" + now.minute.toString() + ":" + now.second.toString());{data['lastDate'].toString().split('T')[1]}
   Uint8List bytes; Uint8List bytesback;
 
-
+  var token;
+  void gettoken()async{
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+  }
   @override
   void initState() {
+    gettoken();
         if(data['providerLogo']!= null)
        {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}
        if(data['offerImages'][0]['imageName']!=null)
@@ -160,42 +167,56 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                               SizedBox(width: 10,),
                               InkWell(
                                 onTap: ()async{
-                               await addFavourites();
-                               if(message=="Data Inserted Successfully"){
-                                 Fluttertoast.showToast(
-                                     msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
-                                     toastLength: Toast.LENGTH_SHORT,
-                                     gravity: ToastGravity.BOTTOM,
-                                     timeInSecForIosWeb: 1,
-                                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                     textColor: Colors.white,
-                                     fontSize: 16.0
-                                 );
-                               }else{
-                                 Fluttertoast.showToast(
-                                     msg: message,
-                                     toastLength: Toast.LENGTH_SHORT,
-                                     gravity: ToastGravity.BOTTOM,
-                                     timeInSecForIosWeb: 1,
-                                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                     textColor: Colors.white,
-                                     fontSize: 16.0
-                                 );
+                                  if(token==null){
+                                    Fluttertoast.showToast(
+                                        msg: "يجب عليك تسجيل الدخول",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                        textColor: Colors.white,
+                                        fontSize: 16.0
+                                    );
+                                  }else{
+                                    await addFavourites();
+                                    if(message=="Data Inserted Successfully"){
+                                      Fluttertoast.showToast(
+                                          msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                          textColor: Colors.white,
+                                          fontSize: 16.0
+                                      );
+                                    }else{
+                                      Fluttertoast.showToast(
+                                          msg: message,
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                          textColor: Colors.white,
+                                          fontSize: 16.0
+                                      );
 
-                               }
+                                    }
+                                  }
+
 
                                 },
                                 child: new Container(
                                   height: 25.00,
                                   width: 25.00,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                    color: Color(0xffffffff)
+                                    ,borderRadius: BorderRadius.circular(15.00),
                                   ),
                                   child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
                                 ),
                               ),
                               SizedBox(width: 10,),
-                              new Container(
+                              data['discount']==0.0?Container(): new Container(
                                 height: 27.00,
                                 width: 76.00,
                                 decoration: BoxDecoration(
@@ -286,7 +307,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                       children: [
                                         Icon(Icons.star,color:Color(0xff38056e) ,),
                                         new Text(
-                                          "4.9",
+                                          data['rate'].toString(),
                                           style: TextStyle(
 
                                             fontSize: 15,

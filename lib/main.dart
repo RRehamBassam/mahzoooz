@@ -7,6 +7,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:mahzoooz/Screen/Auth/login.dart';
 import 'Screen/Auth/welcome.dart';
 import 'Screen/Home.dart';
+import 'package:provider/provider.dart';
+import 'package:mahzoooz/services/providerUser.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   print(LocalizationDefaultType.device);
@@ -17,7 +19,11 @@ void main() async{
     apiKeyGoogle: '<Key>', // NOT YET TESTED
   ); // intialize
 
-  runApp(LocalizedApp(child:MyApp()));
+  runApp(LocalizedApp(
+      child:   MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => providerUser()),
+      ],child: MyApp())));
 }
 
 class MyApp extends StatelessWidget {

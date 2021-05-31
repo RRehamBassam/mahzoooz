@@ -10,6 +10,7 @@ class AppCategoris extends ChangeNotifier {
   bool show=true;
   String Search = "1";
   int Empty=-1;
+  int CountEmpty=-1;
   void updatecategoriesData(var count) {
     this.categoriesData = count;
     notifyListeners();
@@ -20,6 +21,10 @@ class AppCategoris extends ChangeNotifier {
   }
   void updateEmptyData() {
     this.Empty = 1;
+    notifyListeners();
+  }
+  void updateCountEmpty(int c) {
+    this.CountEmpty=  c;
     notifyListeners();
   }
 

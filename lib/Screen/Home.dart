@@ -14,6 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
   int _selectedIndex ;
   List<Widget> _widgettajerAccount = <Widget>[
     homeWidget(),
@@ -76,10 +77,21 @@ class _HomeState extends State<Home> {
         ),
       );
      // FlutterOpenWhatsapp.sendSingleMessage("+9665665151191", "Hello");//+972598390185
+    }else  if(index==2){
+      if(token==null) {
+        getDatatoken();
+      }else{
+        setState(() {
+          _selectedIndex = index;
+        });
+      }
+    }else{
+      setState(() {
+        _selectedIndex = index;
+      });
     }
-    setState(() {
-      _selectedIndex = index;
-    });
+
+
   }
   // launchWhatsApp() async {
   //   final link = WhatsAppUnilink(

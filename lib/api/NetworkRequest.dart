@@ -192,7 +192,7 @@ class NetworkRequest{
     print("$phone"+"${generatedCode}");
     print(name);
     print(password);
-    print(gender);
+    print(gender);//null
     print(birthDate);
     print(base64Image);
     print(countryId);
@@ -225,9 +225,56 @@ class NetworkRequest{
     print(response.statusCode);
     print(reply);
     var jsonResponse = convert.jsonDecode(reply);
+    HelperFunctions.saveUserEmailSharedPreference(jsonResponse['data']['token']);
+    HelperFunctions.saveUserLoggedInSharedPreference(true);
     return jsonResponse['message'];
   }
+  Future<dynamic> UpdateUserProfile(String name,String password,String confirmPassword,String email,String phone,
+      int gender, birthDate,String base64Image,countryId) async {
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+    print(name);
+    print(password);
+    print(gender);//null
+    print(birthDate);
+    print(base64Image);
+    print(countryId);
+    print(email);
+    print(name);
 
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Users/UpdateUserProfile';
+
+    Map map ={
+
+      "name": name,
+      "password": password,
+      "confirmPassword": confirmPassword,
+      "email": email,
+      "phone": phone,
+      "gender": gender,
+      "birthDate": birthDate,
+      "countryId": countryId,
+      "imageName": base64Image,
+
+    };
+    var itemCount ;
+    HttpClientRequest request = await client.putUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.headers.set('Authorization', 'Bearer $token');
+    request.headers.set('content-type', 'application/json');
+    request.add(convert.utf8.encode(convert.json.encode(map)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(convert.utf8.decoder).join();
+    print(response.statusCode);
+    print(reply);
+    var jsonResponse = convert.jsonDecode(reply);
+    HelperFunctions.saveUserEmailSharedPreference(jsonResponse['data']['token']);
+    HelperFunctions.saveUserLoggedInSharedPreference(true);
+    return jsonResponse['message'];
+  }
   Future<dynamic> Countries() async {
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -337,6 +384,50 @@ class NetworkRequest{
     print(jsonResponse['data']['data']);
 
     return jsonResponse['data']['data'];
+
+  }
+  Future<dynamic> CancelBooking(id) async {
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/BookingSettings/CancelBooking/${id}';
+
+    var itemCount ;
+    HttpClientRequest request = await client.deleteUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.headers.set('Authorization', 'Bearer $token');
+   // request.add(convert.utf8.encode(convert.json.encode(map)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(convert.utf8.decoder).join();
+    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
+   // print(jsonResponse['data']['data']);
+
+    return jsonResponse;
+
+  }
+  Future<dynamic> CancelBookingSchool(id) async {
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/SchoolCoupons/CancelCoupon/${id}';
+
+    var itemCount ;
+    HttpClientRequest request = await client.deleteUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.headers.set('Authorization', 'Bearer $token');
+    // request.add(convert.utf8.encode(convert.json.encode(map)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(convert.utf8.decoder).join();
+    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
+    // print(jsonResponse['data']['data']);
+
+    return jsonResponse;
 
   }
   Future<dynamic> OffersGetPagedS(bool isSpecial,String searchText) async {
@@ -573,6 +664,60 @@ class NetworkRequest{
 
 
   }
+  Future<dynamic> getLuck() async {//String bookingTime, dayDate,numberOfPerson ,occasion
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+    //print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
+    print(token);
+    print("pppppppppppp");
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetRandomOffers';
+    try{
+      HttpClientRequest request = await client.getUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.headers.set('Authorization', 'Bearer $token');
+      //request.add(convert.utf8.encode(convert.json.encode(map)));
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(reply);
+      var jsonResponse = convert.jsonDecode(reply);
+      if(jsonResponse['status']=="OK"){
+        print(jsonResponse['status']);
+        return jsonResponse['data'];
+      }else {
+        print(jsonResponse['status']);
+        return jsonResponse['message'];
+      }
+      return "no";
+      //
+      // if(response.statusCode!=200&&response.statusCode!=201 ){
+      //
+      //   print("Ok"); print(response.statusCode);
+      //   print(jsonResponse);
+      //   return "notOk";
+      // }
+      //
+      // print("Ok"); print(response.statusCode);
+      // print(jsonResponse);
+      // return "ok";
+
+    }catch(v){
+      // Fluttertoast.showToast(
+      //     msg: "لم تتم الحجز",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+      //     textColor: Color(0xffffffff),
+      //     fontSize: 16.0
+      // );
+      print(v);
+    }
+
+
+  }
   Future<dynamic> AddFavourites(tableId) async {//String bookingTime, dayDate,numberOfPerson ,occasion
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
@@ -707,10 +852,7 @@ class NetworkRequest{
       "pageSize": 10,
       "filter": "",
       "orderByValue": [
-        // {
-        //   "colId": "string",
-        //   "sort": "string"
-        // }
+
       ]
     };
 

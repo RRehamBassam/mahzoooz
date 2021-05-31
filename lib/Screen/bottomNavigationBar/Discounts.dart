@@ -55,7 +55,6 @@ class _DiscountsState extends State<Discounts> {
                 children: [
                   Positioned(
                     top: 8,
-
                     child: Container(
                       width: 400,
                       height: 600,
@@ -79,7 +78,7 @@ class _DiscountsState extends State<Discounts> {
                                     enableInfiniteScroll: true,
                                     autoPlayAnimationDuration: Duration(milliseconds: 1000),
                                     viewportFraction: 0.8,
-                                    height:snapshot.data.length==0?5: 140.0, autoPlayCurve: Curves.fastOutSlowIn,
+                                    height: 140.0, autoPlayCurve: Curves.fastOutSlowIn,
                                     autoPlay: true,
                                     aspectRatio:  10 / 9,
                                     enlargeCenterPage: true,
@@ -265,7 +264,7 @@ class _DiscountsState extends State<Discounts> {
                               print(snapshot.data.length);
                             return
                               Container(
-                                height: MediaQuery.of(context).size.height,
+                              //  height: MediaQuery.of(context).size.height,
                                 child: ListView.builder(
                                           shrinkWrap: true,
                                           itemCount:snapshot.data.length,

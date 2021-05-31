@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_restart/flutter_restart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,6 +14,10 @@ import 'package:mahzoooz/Screen/ProfileScreen/Favourites.dart';
 import 'package:mahzoooz/Screen/ProfileScreen/myCouponDiscount.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Widget/loading.dart';
+import 'package:mahzoooz/Screen/Auth/editProfile.dart';
+import 'package:provider/provider.dart';
+import 'package:mahzoooz/services/providerUser.dart';
+import 'dart:convert' as convert;
 
 class Profile extends StatefulWidget {
   @override
@@ -20,6 +26,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   NetworkRequest networkRequest=new NetworkRequest();
+  Uint8List bytes;
   ScrollController _controller = new ScrollController();
   Future<String> getData() async {
     await Future<void>.delayed(Duration(seconds: 3));
@@ -61,7 +68,16 @@ class _ProfileState extends State<Profile> {
         future: networkRequest.getProfile(),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
-    return  Container(
+      context.read<providerUser>().updateName(snapshot.data['name']);
+      context.read<providerUser>().updatMobile(snapshot.data['phone'].toString());
+      context.read<providerUser>().updateGender(snapshot.data['gender'].toString());
+      context.read<providerUser>().updateEmail(snapshot.data['email']);
+      if(snapshot.data['imageName']==null){
+
+      }else {
+                bytes = convert.base64.decode(snapshot.data['imageName']);
+              }
+              return  Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -77,19 +93,22 @@ class _ProfileState extends State<Profile> {
           children: [
             Column(
               children: [
-                SizedBox(height: 30,),
+                SizedBox(height: 16,),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset("Assets/Image-2.png")
                   ],
-                ),
+                )
+
+
+
               ],
             ),
             SizedBox(height: 8,),
             Container(
-              height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height*0.71: MediaQuery.of(context).size.height*0.742,
+              height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height*0.74: MediaQuery.of(context).size.height*0.742,
 
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(), // new
@@ -123,34 +142,62 @@ class _ProfileState extends State<Profile> {
                               padding: EdgeInsets.all(16),
                               child: Row(
                                 children: [
-                                  Image.asset('Assets/man.png'),
-                                  SizedBox(width: 16,),
-                                  Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "${snapshot.data['name']}", // "بيبو رمزي لويز",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                            color:Color(0xffffffff),
-                                          ),
-                                        ),
-                                        SizedBox(height: 8,),
-                                        Text(
-                                          "${snapshot.data['phone']}",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                            color:Color(0xffffffff),
-                                          ),
-                                        )
 
-                                      ],
+                                  snapshot.data['imageName']==""|| snapshot.data['imageName']==null|| snapshot.data['imageName'].Length==0?Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 68,
+                                        height: 68,
+                                        // margin: EdgeInsets.all(16.0),
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                          image: AssetImage("Assets/profileImage.png")),
+                                          borderRadius: BorderRadius.circular(14.0),),)
+
+                                    ],
+                                  ):Container(
+                                    width: 48,
+                                    height: 48,
+                                    // margin: EdgeInsets.all(16.0),
+                                    decoration: BoxDecoration(
+
+                                      borderRadius: BorderRadius.circular(14.0),
+                                      image: DecorationImage(
+                                        image: MemoryImage(bytes),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
+                                    //  child: Image.memory(bytes),
+                                  ),
+                                //  Image.asset('Assets/man.png'),
+                                  SizedBox(width: 12,),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${snapshot.data['name']}", // "بيبو رمزي لويز",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color:Color(0xffffffff),
+                                        ),
+                                      ),
+                                      SizedBox(height: 8,),
+                                      Text(
+                                        "${snapshot.data['phone']}",
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                          color:Color(0xffffffff),
+                                        ),
+                                      )
+
+                                    ],
                                   )
                                 ],
                               ),
@@ -245,25 +292,25 @@ class _ProfileState extends State<Profile> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 22,),
-                  Box("الصفحة الشخصية",Image.asset('Assets/ProfilePage.png',color:  Color(0xff38056e),),),
+                 // SizedBox(height: 0,),
+                  Box("الصفحة الشخصية",Image.asset('Assets/ProfilePage.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("حجوزاتي",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),),
+                  Box("حجوزاتي",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("كوبونات خصم للمدراس",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),),
+                  Box("كوبونات خصم للمدراس",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("المفضلة",Image.asset('Assets/Bookmark2.png',color:  Color(0xff38056e),),),
+                  Box("المفضلة",Image.asset('Assets/Bookmark2.png',color:  Color(0xff38056e),),snapshot.data),
                   //  SizedBox(height: 4,),
                   // Box("العروض المرسلة",Image.asset('Assets/TicketStar.png',color:  Color(0xff38056e),),),
                   // SizedBox(height: 4,),
                   // Box("الجوائز",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),),
                   SizedBox(height: 4,),
-                  Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),),
+                  Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("عن التطبيق",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),),
+                  Box("عن التطبيق",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("خروج",Image.asset('Assets/Login.png',color:  Color(0xff38056e),),),
-                  SizedBox(height: 4,),
+                  Box("خروج",Image.asset('Assets/Login.png',color:  Color(0xff38056e),),snapshot.data),
+                //  SizedBox(height: 4,),
                 ],
               ),
             ),
@@ -302,7 +349,7 @@ class _ProfileState extends State<Profile> {
       token  = value ;
     });
   }
-  Widget Box(String text,Widget widget){
+  Widget Box(String text,Widget widget,data){
     return          GestureDetector(
       onTap:()=> {
         if(text=="الاعدادت"){
@@ -329,6 +376,8 @@ class _ProfileState extends State<Profile> {
           }else if(text=="كوبونات خصم للمدراس"){
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new myCouponDiscount())),
+          }else if(text=="الصفحة الشخصية"){
+            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['countryId'].toString(),data['gender']==1?"ذكر":"أنثى",data['birthDate'].toString().split("T")[0],data['phone']))),
           },
 
 

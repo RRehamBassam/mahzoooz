@@ -541,12 +541,12 @@ color: Colors.white,
                             })
                           ]),
                     ),
-
                     Center(
                       child: InkWell(
                         onTap: ()async{
                            Students StudentsItem = new Students(schoolStageId:newStudentsid,name:newStudentsName,schoolStageIdname:newStudentsNameid );
                       await  setState(() {
+
                         if(newStudentsName==null ||newStudentsid==null){
                           Fluttertoast.showToast(
                               msg: "لم تتم اضافة ابن",
