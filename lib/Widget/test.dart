@@ -25,21 +25,21 @@ class _CameraConnectState extends State<test> {
   File image;
   File _image;
   SharedPreferences preferences;
-  _imgFromCamera() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50
-    );
-    preferences  = await SharedPreferences.getInstance();
-    setState(() {
-    //  HelperFunctions.saveUserPhotoSharedPreference(image);
-      _image = image;
-      base64Image = base64Encode(_image.readAsBytesSync());
-      fileName = image.path.split('/').last;
-      base64Image = base64Encode(_image.readAsBytesSync());
-      HelperFunctions.saveUserImageSharedPreference(base64Image);
-      callback(base64Image);
-    });
-  }
+  // _imgFromCamera() async {
+  //   File image = await ImagePicker.pickImage(
+  //       source: ImageSource.camera, imageQuality: 50
+  //   );
+  //   preferences  = await SharedPreferences.getInstance();
+  //   setState(() {
+  //   //  HelperFunctions.saveUserPhotoSharedPreference(image);
+  //     _image = image;
+  //     base64Image = base64Encode(_image.readAsBytesSync());
+  //     fileName = image.path.split('/').last;
+  //     base64Image = base64Encode(_image.readAsBytesSync());
+  //     HelperFunctions.saveUserImageSharedPreference(base64Image);
+  //     callback(base64Image);
+  //   });
+  // }
   String userImage;
   Uint8List bytes;
   String fileName;
@@ -78,14 +78,14 @@ class _CameraConnectState extends State<test> {
                         _imgFromGallery();
                         Navigator.of(context).pop();
                       }),
-                  new ListTile(
-                    leading: new Icon(Icons.photo_camera),
-                    title: new Text('Camera'),
-                    onTap: () {
-                      _imgFromCamera();
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                  // new ListTile(
+                  //   leading: new Icon(Icons.photo_camera),
+                  //   title: new Text('Camera'),
+                  //   onTap: () {
+                  //     _imgFromCamera();
+                  //     Navigator.of(context).pop();
+                  //   },
+                  // ),
                 ],
               ),
             ),
