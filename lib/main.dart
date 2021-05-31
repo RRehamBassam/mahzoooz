@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/providerUser.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  print(LocalizationDefaultType.device);
   await translator.init(
     localeDefault: LocalizationDefaultType.device,
     languagesList: <String>['ar', 'en'],
