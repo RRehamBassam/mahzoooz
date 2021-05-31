@@ -246,11 +246,9 @@ bool isverifyPhoneNumbe=false;
                                 setState(() {
                                   isverifyPhoneNumbe=false;
                                 });
-                            //  await  phoneNumber == null ? null : verifyPhoneNumber(context);
-                                await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code)));
-                                setState(() {
-                                  isLouding=false;
-                                });
+                              await  phoneNumber == null ? null : verifyPhoneNumber(context);
+
+
                               }else{
 
                               }
