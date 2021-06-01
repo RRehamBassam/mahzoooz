@@ -9,6 +9,7 @@ import 'Screen/Auth/welcome.dart';
 import 'Screen/Home.dart';
 import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/providerUser.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await translator.init(
@@ -47,7 +48,17 @@ class MyApp extends StatelessWidget {
 
       },
       home: MyHomePage(),
-      localizationsDelegates: translator.delegates,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+
+
+
+
+
+
+      ],
+   // localizationsDelegates: translator.delegates,
       locale: translator.locale,
       supportedLocales: translator.locals(),
     );

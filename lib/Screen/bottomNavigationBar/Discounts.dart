@@ -42,7 +42,7 @@ class _DiscountsState extends State<Discounts> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        resizeToAvoidBottomPadding: false,
+       // resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         body:Column(
           //shrinkWrap: true,

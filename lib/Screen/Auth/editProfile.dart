@@ -128,7 +128,7 @@ class _editProfileState extends State<editProfile> {
     String emailUser =
         Provider.of<providerUser>(context, listen: true).email;
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+     // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         centerTitle: true,
         elevation: 1,
