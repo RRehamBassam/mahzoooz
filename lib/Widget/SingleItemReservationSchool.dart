@@ -78,8 +78,9 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                 child: Column(
                   crossAxisAlignment:CrossAxisAlignment.start ,
                   children: [
-                    Text(data['providerNameAr']== null?"مشتى دخول سيارة واحدة":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']),
-                    Text(data['locationAr']== null?"الرياض":translator.currentLanguage == 'ar' ?data['locationAr']:data['locationEn']),
+                    Text(data['providerNameAr']== null?"مشتى دخول سيارة واحدة":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],style: TextStyle(color: Colors.black.withOpacity(0.6))),
+                    SizedBox(height: 4,),
+                    Text(data['titlAr']== null?"خصم":translator.currentLanguage == 'ar' ?data['titlAr']:data['titleEn'],style: TextStyle(color: Colors.black),),
                     //  Spacer(),
 
 

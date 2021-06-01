@@ -25,7 +25,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
   Future<void> share(text) async {
     await FlutterShare.share(
         title: 'Example share',
-        text:' مـــبرووك كسبت $text' +' من مطعم البيك  حمل الآن تطبيق محظوووظ من الرابط',
+        text:' مـــبرووك كسبت $text' +'  حمل الآن تطبيق محظوووظ من الرابط',
       //  linkUrl: 'https://flutter.dev/',
         chooserTitle: 'Example Chooser Title'
     );
@@ -495,7 +495,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
 
   _buildResult(_value) {
     var  _index = _calIndex(_value * _angle + _current);
-   //  context.read<providerUser>().updateRandomNum(_index);
+   context.read<providerUser>().updateRandomNum(_value);
     String _asset = _items[_index].asset;// _items[_calIndex(_value * _angle + _current)].asset
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),

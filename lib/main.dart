@@ -48,17 +48,12 @@ class MyApp extends StatelessWidget {
 
       },
       home: MyHomePage(),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-
-
-
-
-
-
-      ],
-   // localizationsDelegates: translator.delegates,
+      // localizationsDelegates: [
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //
+      // ],
+       localizationsDelegates: translator.delegates,
       locale: translator.locale,
       supportedLocales: translator.locals(),
     );

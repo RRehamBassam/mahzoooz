@@ -8,7 +8,7 @@ class providerUser with ChangeNotifier, DiagnosticableTreeMixin {
   String _gender = "";
   String _date = "";
   String _email = "";
-  int _RandomNum = 0;
+  double _RandomNum = 0;
   String get tokenUser => _city;
   String get name => _name;
   String get mobile => _mobile;
@@ -16,7 +16,7 @@ class providerUser with ChangeNotifier, DiagnosticableTreeMixin {
   String get geder => _gender;
   String get date => _date;
   String get email => _email;
-  int get RandomNum => _RandomNum;
+  double get RandomNum => _RandomNum;
 
 
 
@@ -25,7 +25,7 @@ class providerUser with ChangeNotifier, DiagnosticableTreeMixin {
     // _tokenUser++;
     notifyListeners();
   }
-  void updateRandomNum(int val) {
+  void updateRandomNum(double val) {
     _RandomNum=val;
     // _tokenUser++;
     notifyListeners();

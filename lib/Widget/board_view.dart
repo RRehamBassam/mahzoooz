@@ -89,7 +89,6 @@ class _BoardViewState extends State<BoardView> {
         width: size.width*20,
         alignment: Alignment.topCenter,
         child: ConstrainedBox(
-
           constraints:
               BoxConstraints.expand(height: size.height / 3, width: 90),
           child: Transform.rotate(

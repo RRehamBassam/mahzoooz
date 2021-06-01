@@ -64,7 +64,7 @@ class _CountriesDataState extends State<CountriesData> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        resizeToAvoidBottomPadding: false,
+     //   resizeToAvoidBottomPadding: false,
         resizeToAvoidBottomInset: true,
         appBar: AppBar(
           leading: InkWell(

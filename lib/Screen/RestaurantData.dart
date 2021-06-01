@@ -70,9 +70,9 @@ Future<void> share() async {
   }
   @override
   Widget build(BuildContext context) {
-    // final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
-    // print(timeago.format(fifteenAgo));
-    // DateTime time = DateTime.parse(data['lastDate']);
+    final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
+    print(timeago.format(fifteenAgo));
+   // DateTime time = DateTime.parse('2021-04-28T01:31:35.3605982');
     // print(timeago.format(time));
     return Scaffold(
       backgroundColor:Color(0xffffffff),
@@ -80,6 +80,7 @@ Future<void> share() async {
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
+    //  time = DateTime.parse(data['lastDate']);
       if(snapshot.data['offer']['providerLogo']!= null)
       {bytes= convert.base64.decode(snapshot.data['offer']['providerLogo'].split(',').last);}
       if(snapshot.data['offer']['offerImages'][0]['imageName']!=null)
@@ -298,18 +299,40 @@ Future<void> share() async {
                       SizedBox(height: 8,),
                   Row(
                     children: [
-                      Row(
-                        children: [
-                          Icon(Icons.star,color:Color(0xff38056e) ,),
-                          new Text(
-                            snapshot.data['offer']['rate'] .toString(),
-                            style: TextStyle(
+                      InkWell(onTap: (){
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => SingleChildScrollView(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color:Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0),
+                                ),
+                              ),
 
-                              fontSize: 15,
-                              color:Color(0xffc8c7cc),
+                              padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                              child: BottomSheetExample(context,"text",data),
                             ),
                           ),
-                        ],
+                        );
+                      },
+                        child: Row(
+                          children: [
+                            Icon(Icons.star,color:Color(0xff38056e) ,),
+                            new Text(
+                              snapshot.data['offer']['rate'] .toString(),
+                              style: TextStyle(
+
+                                fontSize: 15,
+                                color:Color(0xffc8c7cc),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(width: 60,),
                       snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Text(
