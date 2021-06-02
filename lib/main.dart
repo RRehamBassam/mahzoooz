@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       //   GlobalWidgetsLocalizations.delegate,
       //
       // ],
-       localizationsDelegates: translator.delegates,
+      // localizationsDelegates: translator.delegates,
       locale: translator.locale,
       supportedLocales: translator.locals(),
     );

@@ -108,7 +108,7 @@ bool eeName=false;
   Widget build(BuildContext context) {
 
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+     // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
         centerTitle: true,
         elevation: 1,
