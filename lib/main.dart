@@ -10,6 +10,7 @@ import 'Screen/Home.dart';
 import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/providerUser.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await translator.init(
@@ -19,11 +20,11 @@ void main() async{
     apiKeyGoogle: '<Key>', // NOT YET TESTED
   ); // intialize
 
-  runApp(LocalizedApp(
-      child:   MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => providerUser()),
-      ],child: MyApp())));
+  runApp( MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (_) => providerUser()),
+  ],child: MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -47,7 +48,19 @@ class MyApp extends StatelessWidget {
         '/login': (BuildContext context) => login("+9705941025",true),
 
       },
-      home: MyHomePage(),
+      supportedLocales: [
+        const Locale('en', ''), // English, no country code
+        const Locale('es', ''), // Spanish, no country code
+      ],
+      home: Localizations(
+          locale: const Locale('ar', ''),
+          delegates: <LocalizationsDelegate<dynamic>>[
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+
+          child: MyHomePage()),
       // localizationsDelegates: [
       //   GlobalMaterialLocalizations.delegate,
       //   GlobalWidgetsLocalizations.delegate,
@@ -55,7 +68,7 @@ class MyApp extends StatelessWidget {
       // ],
       // localizationsDelegates: translator.delegates,
       locale: translator.locale,
-      supportedLocales: translator.locals(),
+     // supportedLocales: translator.locals(),
     );
   }
 }
