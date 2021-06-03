@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/Auth/ActivateCode.dart';
 import 'package:mahzoooz/Screen/Auth/createAccount.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
+
+import '../../main.dart';
 class login extends StatefulWidget {
   String phoneNo;
   bool isReservation;
@@ -299,25 +302,40 @@ String Password;
                   ),
                 ),
               ),
-              Container(
-                height:MediaQuery.of(context).size.height*.2 ,
-                alignment: Alignment.bottomCenter,
-                child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('Assets/Group 39810.png'),
-                        new Text(
-                          "Change to English",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontFamily: "DIN Next LT Arabic",fontWeight: FontWeight.w500,
-                            fontSize: 10,
-                            color:Color(0xff38056e),
+              InkWell(
+                onTap:(){
+                  translator.setNewLanguage(
+                    context,
+                    newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
+                    remember: true,
+
+                  );
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_){
+                        return MyApp();
+                      }),(route)=> false
+                  );
+                },
+                child: Container(
+                  height:MediaQuery.of(context).size.height*.2 ,
+                  alignment: Alignment.bottomCenter,
+                  child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('Assets/Group 39810.png'),
+                          new Text(
+                            "Change to English",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontFamily: "DIN Next LT Arabic",fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color:Color(0xff38056e),
+                            ),
                           ),
-                        ),
-                      ],
-                    )
+                        ],
+                      )
+                  ),
                 ),
               )
             ],

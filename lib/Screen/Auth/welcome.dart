@@ -10,6 +10,8 @@ import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
+
+import '../../main.dart';
 class welcome extends StatefulWidget {
   bool isReservation;
 
@@ -45,6 +47,8 @@ bool isverifyPhoneNumbe=false;
         setState(() {
           authStatus = "Your account is successfully verified";
         });
+        Navigator.push(context, new MaterialPageRoute(
+            builder: (context) => CreateAccount(phoneNumber, code)));
       },
       verificationFailed: (AuthException authException) {
         setState(() {
@@ -326,7 +330,12 @@ bool isverifyPhoneNumbe=false;
                     context,
                     newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
                     remember: true,
-                    restart: true,
+
+                  );
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_){
+                        return MyApp();
+                      }),(route)=> false
                   );
                 },
                 child: Container(

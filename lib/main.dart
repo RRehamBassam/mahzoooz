@@ -23,13 +23,11 @@ void main() async{
   runApp( MultiProvider(
   providers: [
     ChangeNotifierProvider(create: (_) => providerUser()),
-  ],child: MyApp()),
+  ],child:   LocalizedApp(child: MyApp())),
   );
 }
 
 class MyApp extends StatelessWidget {
-
-
 
   // This widget is the root of your application.
   @override
@@ -44,31 +42,14 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xff38056e),
       ),
       routes: <String, WidgetBuilder> {
-
         '/login': (BuildContext context) => login("+9705941025",true),
 
       },
-      supportedLocales: [
-        const Locale('en', ''), // English, no country code
-        const Locale('ar', ''), // Spanish, no country code
-      ],
-      home: Localizations(
-          locale: const Locale('ar', ''),
-          delegates: <LocalizationsDelegate<dynamic>>[
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
 
-          child: MyHomePage()),
-      // localizationsDelegates: [
-      //   GlobalMaterialLocalizations.delegate,
-      //   GlobalWidgetsLocalizations.delegate,
-      //
-      // ],
-      // localizationsDelegates: translator.delegates,
-      locale: translator.locale,
-     // supportedLocales: translator.locals(),
+      home: MyHomePage(),
+      localizationsDelegates: translator.delegates, // Android + iOS Delegates
+      locale: translator.locale, // Active locale
+      supportedLocales: translator.locals(),
     );
   }
 }

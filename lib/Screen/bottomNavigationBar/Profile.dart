@@ -19,6 +19,8 @@ import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/providerUser.dart';
 import 'dart:convert' as convert;
 
+import '../../main.dart';
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -363,12 +365,18 @@ class _ProfileState extends State<Profile> {
           print('mm'),
     HelperFunctions.saveUserEmailSharedPreference(null),
           HelperFunctions.saveUserLoggedInSharedPreference(null),
+    Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (_){
+    return MyApp();
+    }),(route)=> false
+    ),
             translator.setNewLanguage(
               context,
             //  newLanguage:appState.selectedCategory==1? 'ar':'en',
               remember: true,
-              restart: true,
+
             ),
+
 
     }else if(text=="المفضلة"){
             Navigator.push(context,

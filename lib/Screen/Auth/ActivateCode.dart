@@ -79,8 +79,10 @@ class _ActivateCodeState extends State<ActivateCode> {
               child:Column(
                 children: [
                   PinEntryTextField(
+                    fields: 6,
                     showFieldAsBox: true, onSubmit: (String pin){
                     setState(() {
+                      smsOTP=pin;
                       // ActiationCode=pin;
                     });
                     // showDialog(context: context, builder: (context){
@@ -107,7 +109,12 @@ class _ActivateCodeState extends State<ActivateCode> {
         Container(
           height:  MediaQuery.of(context).size.height *0.12,),
             InkWell(
-              onTap:() =>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  CreateAccount(phoneNumber,code))),
+              onTap:() {
+                signIn( smsOTP);
+                if(smsOTP!=null)
+                Navigator.push(context, new MaterialPageRoute(
+                    builder: (context) => CreateAccount(phoneNumber, code)));
+              },
               child: new Container(
                   height: 48.00,
                   width: 311.00,

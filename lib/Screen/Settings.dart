@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:mahzoooz/services/app_state.dart';
+
+import '../main.dart';
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -398,7 +400,12 @@ class _SettingsState extends State<Settings> {
                       context,
                       newLanguage:appState.selectedCategory==1? 'ar':'en',
                       remember: true,
-                      restart: true,
+
+                      ),
+                      Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (_){
+                      return MyApp();
+                      }),(route)=> false
                       ),
                         Navigator.pop(context)},
                       child: new Container(
