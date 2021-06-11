@@ -243,7 +243,12 @@ String Password;
                               if(isReservation){
                               Navigator.pop(context);
                               }else{
-                              Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (_){
+                                      return  Home();
+                                    }),(route)=> false
+                                );
+                          //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
 
                               }
 

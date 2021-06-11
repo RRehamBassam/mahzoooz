@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Models/category.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscounts.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscountsLoud.dart';
@@ -13,11 +14,19 @@ import 'package:mahzoooz/Widget/CategoriesLoud.dart';
 import 'package:mahzoooz/Widget/ItemCarouselSliderLoud.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 class Discounts extends StatefulWidget {
+  LatLng latLnglocation;
+
+  Discounts(this.latLnglocation);
+
   @override
-  _DiscountsState createState() => _DiscountsState();
+  _DiscountsState createState() => _DiscountsState(latLnglocation);
 }
 
 class _DiscountsState extends State<Discounts> {
+  LatLng latLnglocation;
+
+  _DiscountsState(this.latLnglocation);
+
   ScrollController controller = ScrollController();
   bool closeTopContainer = false;
   double topContainer = 0;
@@ -70,7 +79,7 @@ class _DiscountsState extends State<Discounts> {
                               children: <Widget>[
                                 //  SizedBox(height: 15.0),
                               FutureBuilder<dynamic>(
-                                future: networkRequest.OffersGetPaged(true,""),
+                                future: networkRequest.OffersGetPaged(true,"",latLnglocation.latitude,latLnglocation.longitude),
                                 builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                  return  CarouselSlider(
@@ -132,12 +141,13 @@ class _DiscountsState extends State<Discounts> {
                                           );}),
                                 Container(
                                   height: 132,
+                                  margin: EdgeInsets.only(right: 10),
                                   child: ListView(
                                     shrinkWrap: true,
                                     scrollDirection: Axis.horizontal,
                                     children: [
                                                         FutureBuilder<dynamic>(
-                                                        future: networkRequest.CategoriesGetPaged(),
+                                                        future: networkRequest.CategoriesGetPaged(latLnglocation.latitude,latLnglocation.longitude),
                                                         builder: (context, snapshot) {
                                                         if (snapshot.hasData) {
                                                         return  Container(
@@ -232,8 +242,8 @@ class _DiscountsState extends State<Discounts> {
                   ),
                   DraggableScrollableSheet(
                       maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.999: 0.999,
-                      minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.58,
-                      initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.58 ,
+                      minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.57,
+                      initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.57 ,
                       builder: (BuildContext context, ScrollController scrolController){
                         return Stack(
                           children: [
@@ -245,11 +255,11 @@ class _DiscountsState extends State<Discounts> {
                               decoration: BoxDecoration(
                                 color: Colors.white,
 
-                                boxShadow: [BoxShadow(
-                                    color: Colors.black45,
-                                    blurRadius: 1,
-                                    offset: Offset(2, 1)
-                                )],
+                                // boxShadow: [BoxShadow(
+                                //     color: Colors.black45,
+                                //     blurRadius: 1,
+                                //     offset: Offset(2, 1)
+                                // )],
                                 borderRadius: BorderRadius.circular(2.0),),
                               child:ListView(
                                 shrinkWrap: true,
@@ -258,12 +268,13 @@ class _DiscountsState extends State<Discounts> {
                                 children: [
                                   MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 72,):SizedBox(height: 72,),
                             FutureBuilder<dynamic>(
-                            future: networkRequest.OffersGetPaged(false,""),
+                            future: networkRequest.OffersGetPaged(false,"",latLnglocation.latitude,latLnglocation.longitude),
                             builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               print(snapshot.data.length);
                             return
                               Container(
+                                margin: EdgeInsets.only(top: 16),
                               //  height: MediaQuery.of(context).size.height,
                                 child: ListView.builder(
                                           shrinkWrap: true,

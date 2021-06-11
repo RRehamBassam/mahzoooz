@@ -10,18 +10,22 @@ class ArrowView extends StatelessWidget {
       alignment: Alignment.center,
       child: Transform.rotate(
         angle: pi,
-        child: Padding(
-          padding: EdgeInsets.only(top:MediaQuery.of(context).size.height<800? 82:90,right:MediaQuery.of(context).size.height<800?4: 0,left: MediaQuery.of(context).size.height<800?0:5),
-          child: ClipPath(
-            clipper: _ArrowClipper(),
-            child: Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black12,Color(0xffFFA500), Color(0xffFFA500)])),
-              height: 45,
-              width: 45,
+        child: Container(
+           margin: EdgeInsets.only(right: 5,bottom: 7),
+          child: Padding(
+
+            padding: EdgeInsets.only(top:MediaQuery.of(context).size.height<800? 82:90,right:MediaQuery.of(context).size.height<800?4: 0,left: MediaQuery.of(context).size.height<800?0:5),
+            child: ClipPath(
+              clipper: _ArrowClipper(),
+              child: Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black12,Color(0xffFFA500), Color(0xffFFA500)])),
+                height: 45,
+                width: 45,
+              ),
             ),
           ),
         ),

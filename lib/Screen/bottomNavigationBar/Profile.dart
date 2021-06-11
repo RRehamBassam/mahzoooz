@@ -1,5 +1,8 @@
 import 'dart:typed_data';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:mahzoooz/Screen/ProfileScreen/aboutApp.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_restart/flutter_restart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,6 +58,28 @@ class _ProfileState extends State<Profile> {
       ),);
     }
   }
+  var data;
+  var edAdd;
+  Future<String> getSWData(cityInt) async {
+    var res = await http
+        .get(Uri.encodeFull('http://ahmed453160-001-site1.etempurl.com/Countries/GetAll'), headers: {"Accept": "application/json"});
+    var resBody = json.decode(res.body);
+    print(resBody);
+    setState(() {
+      data = resBody['data'];
+    });
+    for(int i;i<data.length;i++){
+      if(data[i]['id']==cityInt)
+        setState(() {
+          edAdd=data[i]['nameAr'];
+        });
+
+    };
+    print(data);
+
+    return "Sucess";
+  }
+
   @override
   void initState() {
 
@@ -74,6 +99,7 @@ class _ProfileState extends State<Profile> {
       context.read<providerUser>().updatMobile(snapshot.data['phone'].toString());
       context.read<providerUser>().updateGender(snapshot.data['gender'].toString());
       context.read<providerUser>().updateEmail(snapshot.data['email']);
+      getSWData(snapshot.data['countryId']);
       if(snapshot.data['imageName']==null){
 
       }else {
@@ -309,6 +335,8 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 4,),
                   Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
+                  Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
+                  SizedBox(height: 4,),
                   Box("عن التطبيق",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
                   Box("خروج",Image.asset('Assets/Login.png',color:  Color(0xff38056e),),snapshot.data),
@@ -385,7 +413,11 @@ class _ProfileState extends State<Profile> {
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new myCouponDiscount())),
           }else if(text=="الصفحة الشخصية"){
-            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['countryId'].toString(),data['gender']==1?"ذكر":"أنثى",data['birthDate'].toString().split("T")[0],data['phone']))),
+            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['countryId'].toString(),data['gender']==1?"ذكر":"أنثى",data['birthDate'].toString().split("T")[0],data['phone'],edAdd))),
+          }else if(text=="اتصل بنا عبر صفحتنا"){
+        launch('http://mahzoooz.com/'),
+          }else if(text =="عن التطبيق"){
+            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  aboutApp())),
           },
 
 

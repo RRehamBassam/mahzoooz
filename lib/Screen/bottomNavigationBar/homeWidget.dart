@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Models/Luck.dart';
 import 'package:mahzoooz/Screen/RestaurantData.dart';
 import 'package:mahzoooz/Widget/board_view.dart';
@@ -17,11 +18,19 @@ import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/providerUser.dart';
 
 class homeWidget extends StatefulWidget {
+  LatLng latLnglocation;
+
+  homeWidget(this.latLnglocation);
+
   @override
-  _homeWidgetState createState() => _homeWidgetState();
+  _homeWidgetState createState() => _homeWidgetState(latLnglocation);
 }
 
 class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateMixin {
+  LatLng latLnglocation;
+
+  _homeWidgetState(this.latLnglocation);
+
   Future<void> share(text) async {
     await FlutterShare.share(
         title: 'Example share',
@@ -251,7 +260,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                 width: 32.00,
                                  decoration: BoxDecoration(
                                      color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                 ),child: Icon(Icons.bookmark_border_rounded,color:Colors.white,size: 20,)),
+                                 ),child: Icon(Icons.favorite_border,color:Colors.white,size: 20,)),
                   ),
                            ),
                          ),
@@ -330,16 +339,16 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                   ):open? Column(
                   children: [
                   new Text(
-                  "السحب جاهز دلوقتي",
+               " استمتع بوقتك الآن " ,//  "السحب جاهز دلوقتي",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                   fontSize: 19,
                   color:Colors.black54,
                   ),
                   ),
-                  SizedBox(height: 2,),
+                  SizedBox(height: 4,),
                   new Text(
-                  "أضغط و استتمع",
+                "اضغط  ابدأ اللعب ",  //"أضغط و استتمع",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                   fontWeight: FontWeight.w900,
@@ -347,9 +356,9 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                   color:Color(0xff38056e),
                   ),
                   ),
-                  SizedBox(height: 2,),
+                  SizedBox(height: 4,),
                   new Text(
-                  "دلوقتي تقدر تلعب انت و أصحابك",
+                 "وشوف حظك من مئات العروض والخصومات" ,//"دلوقتي تقدر تلعب انت و أصحابك",
                   textAlign: TextAlign.center,
                   style: TextStyle(
 
@@ -457,14 +466,19 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
       shape: CircleBorder(),
       child: InkWell(
         customBorder: CircleBorder(),
-        child: Container(
-          alignment: Alignment.center,
-          height: 68,
-          width: 68,
-          child: Center(
-            child: Text(
-              "SPIN\nNOW",
-              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold,color: Color(0xff38056E)),
+        child: Center(
+          child: Container(
+            alignment: Alignment.center,
+            height: 68,
+            width: 68,
+            child: Center(
+              child: Text(
+                "ابدأ \nاللعب",
+
+               // textDirection: TextDirection,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold,color: Color(0xff38056E),),
+              ),
             ),
           ),
         ),

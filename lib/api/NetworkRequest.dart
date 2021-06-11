@@ -357,7 +357,7 @@ class NetworkRequest{
 
   }
 
-  Future<dynamic> OffersGetPaged(bool isSpecial,String searchText) async {
+  Future<dynamic> OffersGetPaged(bool isSpecial,String searchText,lat,long) async {
 
 
     HttpClient client = new HttpClient();
@@ -370,8 +370,11 @@ class NetworkRequest{
       "filter": {
         "searchText": "",
         "isSpecial": isSpecial,
-        "latitude": "24.75007441712588",
-        "longitude": "46.775951958232405"
+
+        // "latitude": "24.75007441712588",
+        // "longitude": "46.775951958232405"
+         "latitude": lat,
+        "longitude": long
       }
     };
     var itemCount ;
@@ -492,7 +495,7 @@ class NetworkRequest{
 
   }
   String token ;
-  Future<dynamic> CategoriesGetPaged() async {
+  Future<dynamic> CategoriesGetPaged(latitude,long) async {
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -502,7 +505,9 @@ class NetworkRequest{
       "pageNumber": 1,
       "pageSize": 10,
       "filter": {
-        "name": ""
+        "name": "",
+        "latitude": latitude,
+        "longitude": long
       },
 
 

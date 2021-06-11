@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/Screen/Map.dart';
 import 'package:mahzoooz/Screen/ReservationService.dart';
@@ -51,10 +54,45 @@ var data;
   void initState() {
     gettoken();
 
-
+    initPage=false;
     // TODO: implement initState
     super.initState();
   }
+List dataS =[]; //edited line
+
+Future<String> getSWData(id) async {
+  await HelperFunctions.getUserEmailSharedPreference().then((value){
+    token  = value ;
+  });
+  HttpClient client = new HttpClient();
+  client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+  var itemCount ;
+  HttpClientRequest request = await client.getUrl(Uri.parse("http://ahmed453160-001-site1.etempurl.com/SchoolStages/GetAllStagesBySchoolType/$id"));
+  request.headers.set('content-type', 'application/json');
+  // request.headers.set('content-type', 'application/json');
+  request.headers.set('Authorization', 'Bearer $token');
+  // request.add(convert.utf8.encode(convert.json.encode(map)));
+  HttpClientResponse response = await request.close();
+  String reply = await response.transform(convert.utf8.decoder).join();
+  print(response.statusCode);
+  print(reply);
+  var jsonResponse = convert.jsonDecode(reply);
+
+  //return jsonResponse['data'];
+  // var res = await http
+  //     .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+  // var resBody = json.decode(res.body);
+  // print(resBody);
+  setState(() {
+    dataS = jsonResponse['data'];
+    // newStudentsid==data[0]["id"];
+    // newStudentsNameid=data[0]["nameAr"];
+  });
+  print(data);
+
+  return "Sucess";
+}
+bool initPage;
 Future<void> share() async {
   await FlutterShare.share(
       title: 'Example share',
@@ -80,6 +118,14 @@ Future<void> share() async {
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
+      if(snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة'){
+        if(!initPage) {
+
+                  getSWData(1);
+                  initPage=true;
+                }
+              }
+
     //  time = DateTime.parse(data['lastDate']);
       if(snapshot.data['offer']['providerLogo']!= null)
       {bytes= convert.base64.decode(snapshot.data['offer']['providerLogo'].split(',').last);}
@@ -222,7 +268,7 @@ Future<void> share() async {
                                      decoration: BoxDecoration(
                                        color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
                                      ),
-                                     child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
+                                     child:     Center(child:Icon(Icons.favorite_border,color:Colors.white,size: 20,)),
                                    ),
                                  ),
                                ),
@@ -315,7 +361,7 @@ Future<void> share() async {
 
                               padding: EdgeInsets.only(
                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: BottomSheetExample(context,"text",data),
+                              child: BottomSheetExampleRate(context,"text",data),
                             ),
                           ),
                         );
@@ -675,6 +721,166 @@ Future<void> share() async {
       ),
     );
   }
+  var rate;
+BottomSheetExampleRate(context,String text,data){
+  return
+    Container(
+      color: Colors.black45.withOpacity(0.56),
+
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color:Colors.white,
+          boxShadow: [BoxShadow(
+              color: Color.fromRGBO(34, 134, 234, .3),
+              blurRadius: 20,
+              offset: Offset(0, 10)
+          )],
+
+
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(35.0),
+            topRight: Radius.circular(35.0),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            SizedBox(height: 16,),
+            Center(
+              child: // Adobe XD layer: 'How is your trip?' (text)
+              Text(
+                'كيف كانت تجربتك ؟',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: const Color(0xff242e42),
+                  letterSpacing: 0.2894117431640625,
+                  fontWeight: FontWeight.w700,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Container(
+              //  height:342,
+              width: 90,
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(top: 16, bottom: 20),
+              color: Colors.white,
+              child:Column(
+                children: [
+                  // Adobe XD layer: 'Your feedback will h' (text)
+                  Text(
+                    'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا',
+                    style: TextStyle(
+                      fontFamily: 'DIN Next LT Arabic',
+                      fontSize: 17,
+                      color: const Color(0xff8a8a8f),
+                      letterSpacing: 0.41000000190734864,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.15,
+                    child: Center(
+                      child: RatingBar.builder(
+                        initialRating: 1,
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        glowColor:Color(0xff38056e).withOpacity(0.1),
+                        unratedColor:Colors.grey.withOpacity(0.1) ,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => Icon(
+                          Icons.star,
+                          color: Color(0xff38056e),
+                        ),
+                        onRatingUpdate: (rating) {
+                          setState(() {
+                            rate=rating;
+                          });
+                          print(rating);
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height*0.15,
+                    width:MediaQuery.of(context).size.width*0.9,
+                    child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
+                      cursorColor: Color(0xff38056e),
+                      keyboardType:TextInputType.text,
+                      autofocus: false,
+                      textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                      onChanged:(val){
+                        setState(() {
+                          //  SpecialRequest=val;
+                        });
+                      },
+                      // controller:controller ,
+                      minLines: 3,
+                      maxLines: 6,
+
+                      obscureText: false,
+                      decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                            borderSide: BorderSide(width: 0.5,color: Colors.grey[300]),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(width: 0.5,color:Color(0xff38056e))
+                          ),
+                          filled: true,
+                          fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
+                          // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+
+                          hintText:"إضافة تعليق",
+
+                          // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                            color:Color(0xff5e5e5e).withOpacity(0.48),
+                          ),
+                          labelStyle: null
+                      ),
+
+                    ),
+                  ),
+                  InkWell(
+                    onTap:()=> Navigator.pop(context),
+                    child: new Container(
+                      margin:EdgeInsets.only(right: 30, left: 30),
+                      width:MediaQuery.of(context).size.width*0.67,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                      ),
+                      child: Center(
+                        child: new Text(
+                          "إرسال",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color:Color(0xffffffff),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    );
+
+}
   BottomSheetExample(context,String text,data){
     return
       Container(
@@ -712,7 +918,7 @@ Future<void> share() async {
                 ),
               ),
               Container(
-                height:text=="الفروع المتاحة"?356:text=="القائمة"?456:142,
+                height:text=="الفروع المتاحة"?356:text=="القائمة"?456:text=="مراحل"?230:142,
                 width: 90,
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(top: 16, bottom: text=="الفروع المتاحة"?6:16),
@@ -1199,16 +1405,76 @@ Future<void> share() async {
         //   textAlign: TextAlign.right,
         // ),
         SizedBox(height: 6,),
-        Text(
-          '${data['branches'][0]['schoolStages']}',
-            style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
-            fontSize: 15,
-            color: const Color(0xff242e42),
-            fontWeight: FontWeight.w700,
+        // Text(
+        //   '${data['branches'][0]['schoolStages']}',
+        //     style: TextStyle(
+        //     fontFamily: 'DIN Next LT Arabic',
+        //     fontSize: 15,
+        //     color: const Color(0xff242e42),
+        //     fontWeight: FontWeight.w700,
+        //   ),
+          Container(
+            margin: EdgeInsets.only(top: 16, bottom: 16),
+            width: MediaQuery.of(context).size.width*0.7,
+            child: Text(
+              'المرحلة',
+              style: TextStyle(
+
+                fontSize: 15,
+                color:  Colors.black54,
+              ),
+              textAlign: TextAlign.right,
+            ),
           ),
-          textAlign: TextAlign.right,
-        )
+          Container(
+            height:150,
+            width: MediaQuery.of(context).size.width*0.8,
+            padding: EdgeInsets.all(0),
+            // margin: EdgeInsets.only(top: 16, bottom: 40),
+            color: Colors.white,
+            child: ListWheelScrollView(
+                itemExtent: 50,
+                diameterRatio: 1.2,
+                offAxisFraction: -0.4,
+                squeeze: 0.8,
+                // clipToSize: true
+                //  itemExtent: 40,
+                useMagnifier: true,
+                // onSelectedItemChanged: (int){
+                //   {setState(()=>{newStudentsid=data[int]['id'],newStudentsNameid=data[int]['nameAr']});}
+                // },
+                // diameterRatio: 1.6,
+                children: <Widget>[
+                  ...dataS.map((name) {
+                    print(name['nameAr']);
+                    print("lll");
+                    return InkWell(
+                     // onTap: ()=>{setState(()=>{newStudentsid=name['id'],newStudentsNameid=name['nameAr']}),},
+                      child: Container(
+                        width: double.infinity,
+
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                                width: 1, color: Colors.black12)),
+                        padding: EdgeInsets.all(5),
+                        margin:EdgeInsets.all(3) ,
+                        child: Center(
+                          child: Text(name['nameAr'],
+                              style: TextStyle(
+                                fontFamily: "Tajawal",fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color:Color(0xff3d3b39),
+                              )),
+                        ),
+                      ),
+                    );
+                  })
+                ]),
+          ),
+        //  textAlign: TextAlign.right,
+
       ],
     );
 

@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mahzoooz/Screen/Auth/ActivateCode.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:the_validator/the_validator.dart';
 class CreateAccount extends StatefulWidget {
   String phone;
@@ -429,6 +430,7 @@ print(error);
                   useMagnifier: true,
                 onSelectedItemChanged: (int){
                   {setState(()=>{_controllerCitiy.text=data[int]['nameAr'],city=data[int]['nameAr'],countryId=data[int]['id']});}
+                  HelperFunctions.saveUserAddressSharedPreference(data[int]['nameAr']);
                    },
                   // diameterRatio: 1.6,
                   children: <Widget>[

@@ -218,7 +218,7 @@ class _CountriesDataState extends State<CountriesData> {
                                             height: 260.0,
                                             padding:EdgeInsets.all(45),
                                             decoration: new BoxDecoration(
-                                              color:  Color(0xffF0FAF9),
+                                              color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
                                               shape: BoxShape.circle,
                                             ),
                                             child: Container(
@@ -227,31 +227,41 @@ class _CountriesDataState extends State<CountriesData> {
 
                                               padding:EdgeInsets.all(50),
                                               decoration: new BoxDecoration(
-                                                color: Color(0xffCEEAE7),
+                                                color: Color(0xffC5E696),// Color(0xffCEEAE7),
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Container(
                                                 width: 60.0,
                                                 height: 60.0,
                                                 decoration: new BoxDecoration(
-                                                  color:Color(0xff029789),
+                                                  color:Color(0xff91B958),//Color(0xff029789),
                                                   shape: BoxShape.circle,
                                                 ),
-                                                child: Icon(Icons.receipt, color: Colors.white,),
+                                                child:  Image.asset('Assets\sad.png') ,
                                               ),
                                             ),
                                           ),
                                           SizedBox(height: 25,),
                                           new Text(
-                                            "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                            "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
 
                                               fontWeight: FontWeight.w700,
-                                              fontSize: 16,
-                                              color:Color(0xff029789),
+                                              fontSize: 14,
+                                              color:Color(0xff91B958),
                                             ),
                                           ),
+                                          // new Text(
+                                          //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                          //   textAlign: TextAlign.center,
+                                          //   style: TextStyle(
+                                          //
+                                          //     fontWeight: FontWeight.w700,
+                                          //     fontSize: 16,
+                                          //     color:Color(0xff029789),
+                                          //   ),
+                                          // ),
                                         ],
                                       ),
                                     ),
@@ -319,7 +329,7 @@ class _CountriesDataState extends State<CountriesData> {
                                                             height: 260.0,
                                                             padding:EdgeInsets.all(45),
                                                             decoration: new BoxDecoration(
-                                                              color:  Color(0xffF0FAF9),
+                                                              color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
                                                               shape: BoxShape.circle,
                                                             ),
                                                             child: Container(
@@ -328,31 +338,41 @@ class _CountriesDataState extends State<CountriesData> {
 
                                                               padding:EdgeInsets.all(50),
                                                               decoration: new BoxDecoration(
-                                                                color: Color(0xffCEEAE7),
+                                                                color: Color(0xffC5E696),// Color(0xffCEEAE7),
                                                                 shape: BoxShape.circle,
                                                               ),
                                                               child: Container(
                                                                 width: 60.0,
                                                                 height: 60.0,
                                                                 decoration: new BoxDecoration(
-                                                                  color:Color(0xff029789),
+                                                                  color:Color(0xff91B958),//Color(0xff029789),
                                                                   shape: BoxShape.circle,
                                                                 ),
-                                                                child: Icon(Icons.receipt, color: Colors.white,),
+                                                                child:  Image.asset('Assets\sad.png') ,
                                                               ),
                                                             ),
                                                           ),
                                                           SizedBox(height: 25,),
                                                           new Text(
-                                                            "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                                            "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                                                             textAlign: TextAlign.center,
                                                             style: TextStyle(
 
                                                               fontWeight: FontWeight.w700,
-                                                              fontSize: 16,
-                                                              color:Color(0xff029789),
+                                                              fontSize: 13,
+                                                              color:Color(0xff91B958),
                                                             ),
                                                           ),
+                                                          // new Text(
+                                                          //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                                          //   textAlign: TextAlign.center,
+                                                          //   style: TextStyle(
+                                                          //
+                                                          //     fontWeight: FontWeight.w700,
+                                                          //     fontSize: 16,
+                                                          //     color:Color(0xff029789),
+                                                          //   ),
+                                                          // ),
                                                         ],
                                                       ),
                                                     ),

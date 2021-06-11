@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'dart:convert' as convert;
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Profile.dart';
@@ -8,22 +11,122 @@ import 'package:page_transition/page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:mahzoooz/Screen/Auth/welcome.dart';
+import 'dart:async';
+
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:location/location.dart';
+import 'package:geocoder/geocoder.dart';
+//import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'bottomNavigationBar/noDataLocation.dart';
+
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+  LatLng latLnglocation;
+  List dataLocation;
+  Future<void> checkLocationServicesInDevice() async {
+
+    Location location = new Location();
+
+    _serviceEnabled = await location.serviceEnabled();
+
+    if(_serviceEnabled)
+    {
+
+      _permissionGranted = await location.hasPermission();
+
+      if(_permissionGranted == PermissionStatus.granted)
+      {
+
+        // _location = await location.getLocation();
+
+        // print(_location.latitude.toString() + " " + _location.longitude.toString());
+
+
+        location.onLocationChanged.listen((LocationData currentLocation) async {
+          //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
+          latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
+          // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
+          HttpClient client = new HttpClient();
+          client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+          String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
+
+          Map map ={
+            "pageNumber": 1,
+            "pageSize": 10,
+            "filter": {
+              "searchText": "",
+              "isSpecial": false,
+              "latitude": latLnglocation.latitude,
+              "longitude": latLnglocation.longitude
+            }
+          };
+          var itemCount ;
+          HttpClientRequest request = await client.postUrl(Uri.parse(url));
+          request.headers.set('content-type', 'application/json');
+          request.add(convert.utf8.encode(convert.json.encode(map)));
+          HttpClientResponse response = await request.close();
+          String reply = await response.transform(convert.utf8.decoder).join();
+          print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
+          print(jsonResponse['data']['data']);
+
+          dataLocation=jsonResponse['data']['data'];
+
+        });
+      }else{
+
+        _permissionGranted = await location.requestPermission();
+        if(_permissionGranted == PermissionStatus.granted)
+        {
+          print('user allowed');
+        }else{
+          //   SystemNavigator.pop();
+        }
+
+      }
+
+    }else{
+
+      _serviceEnabled = await location.requestService();
+
+      if(_serviceEnabled)
+      {
+        _permissionGranted = await location.hasPermission();
+
+        if(_permissionGranted == PermissionStatus.granted)
+        {
+
+          print('user allowed before');
+
+        }else{
+          _permissionGranted = await location.requestPermission();
+          if(_permissionGranted == PermissionStatus.granted)
+          {
+            print('user allowed');
+          }else{
+            //   SystemNavigator.pop();
+          }}
+      }else{
+
+        //  SystemNavigator.pop();
+
+      }
+
+    }
+
+  }
 
   int _selectedIndex ;
-  List<Widget> _widgettajerAccount = <Widget>[
-    homeWidget(),
-    Discounts(),
-    Profile(),
 
-    homeWidget(),
-
-  ];
   var token;
   void gettoken()async{
     await HelperFunctions.getUserEmailSharedPreference().then((value){
@@ -106,13 +209,24 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     _selectedIndex=0;
-
+    dataLocation=[];
+    checkLocationServicesInDevice();
     // TODO: implement initState
     super.initState();
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    List<Widget> _widgettajerAccount = <Widget>[
+      homeWidget(latLnglocation),
+      Discounts(latLnglocation),
+      Profile(),
+
+      homeWidget(latLnglocation),
+
+    ];
+    return dataLocation.isEmpty?Scaffold(
+      body:noDataLocation()):
+    Scaffold(
       body: _widgettajerAccount.elementAt(_selectedIndex),
       bottomNavigationBar: bottomNavigationBar(),
     );

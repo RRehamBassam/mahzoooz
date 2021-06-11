@@ -179,6 +179,7 @@ bool isverifyPhoneNumbe=false;
                       child: Directionality(
                         textDirection: TextDirection.ltr,
                         child: InternationalPhoneInput(
+
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(30)),
                                 borderSide: BorderSide(width: 1,color:Color(0xff38056e))

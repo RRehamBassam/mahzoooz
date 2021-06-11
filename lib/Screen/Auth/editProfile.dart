@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mahzoooz/Screen/Auth/ActivateCode.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:mahzoooz/services/providerUser.dart';
 import 'package:provider/provider.dart';
 import 'package:the_validator/the_validator.dart';
@@ -22,13 +23,14 @@ var UserEmile;
  var city;
  var date;
 var phoneNumber;
+var add;
 
- editProfile(this.UserName, this.UserEmile, this.userMobile,this.gender,this.city,this.date,this.phoneNumber);
+ editProfile(this.UserName, this.UserEmile, this.userMobile,this.gender,this.city,this.date,this.phoneNumber,this.add);
 
  // editProfile();
 
   @override
-  _editProfileState createState() => _editProfileState(UserName,UserEmile,userMobile,gender,city,date,phoneNumber);
+  _editProfileState createState() => _editProfileState(UserName,UserEmile,userMobile,gender,city,date,phoneNumber,add);
 }
 
 class _editProfileState extends State<editProfile> {
@@ -38,7 +40,8 @@ class _editProfileState extends State<editProfile> {
   var cityInt;
   var dateInt;
   var phoneNumber;
-  _editProfileState(this.UserName,this.UserEmile,this.userMobile,this.genderInt,this.cityInt,this.dateInt,this.phoneNumber);
+  var add;
+  _editProfileState(this.UserName,this.UserEmile,this.userMobile,this.genderInt,this.cityInt,this.dateInt,this.phoneNumber,this.add);
 
   var userMobile;
 
@@ -100,8 +103,15 @@ class _editProfileState extends State<editProfile> {
   String name;String password;String confirmPassword;String email;
   int gender;var birthDate;
   NetworkRequest networkRequest=new NetworkRequest();
+  var Address;
+  void getAddress()async{
+    await HelperFunctions.getUserAddressSharedPreference().then((value){
+      Address  = value ;
+    });
+  }
   @override
   void initState() {
+    getAddress();
     name=UserName;
     email=UserEmile;
     birthDate=dateInt.toString();
@@ -119,7 +129,7 @@ class _editProfileState extends State<editProfile> {
     _controllerName=new TextEditingController(text: UserName);
     _controllerEmail=new TextEditingController(text: UserEmile);
     _controllerG=new TextEditingController(text:genderInt==1?"ذكر":"أنثى");
-
+    _controllerCitiy=new TextEditingController(text:add);
     _controllerD=new TextEditingController(text:dateInt);
     String nameUser =
         Provider.of<providerUser>(context, listen: true).name;

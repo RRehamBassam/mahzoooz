@@ -161,7 +161,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   decoration: BoxDecoration(
                                     color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
                                   ),
-                                  child:     Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
+                                  child:     Center(child:Icon(Icons.reply_outlined,color:Color(0xff38056e),size: 18,) ),//Image.asset("Assets/Upload.png",scale: 0.85,)
                                 ),
                               ),
                               SizedBox(width: 10,),
@@ -212,7 +212,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                     color: Color(0xffffffff)
                                     ,borderRadius: BorderRadius.circular(15.00),
                                   ),
-                                  child:     Center(child: Image.asset("Assets/Bookmark.png",scale: 0.85,)),
+                                  child:     Center(child: Icon(Icons.favorite_border,color:Color(0xff38056e),size: 18,)),
                                 ),
                               ),
                               SizedBox(width: 10,),
