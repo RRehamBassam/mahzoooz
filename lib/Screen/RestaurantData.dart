@@ -215,7 +215,7 @@ Future<void> share() async {
                                    decoration: BoxDecoration(
                                      color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
                                    ),
-                                   child:     Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
+                                   child:      Center(child:Icon(Icons.reply_outlined,color:Color(0xff38056e),size: 18,) ),// Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
                                  ),
                                ),
                                SizedBox(width: 10,),
@@ -268,7 +268,7 @@ Future<void> share() async {
                                      decoration: BoxDecoration(
                                        color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
                                      ),
-                                     child:     Center(child:Icon(Icons.favorite_border,color:Colors.white,size: 20,)),
+                                     child:     Center(child:Icon(Icons.favorite_border,color:Color(0xff38056e),size: 20,)),
                                    ),
                                  ),
                                ),
@@ -361,7 +361,7 @@ Future<void> share() async {
 
                               padding: EdgeInsets.only(
                                   bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: BottomSheetExampleRate(context,"text",data),
+                              child: BottomSheetExampleRate(context,"text",data,snapshot.data['offer']),
                             ),
                           ),
                         );
@@ -676,7 +676,7 @@ Future<void> share() async {
 
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: BottomSheetExample(context,text,data),
+              child: BottomSheetExample(context,text,data,),
             ),
           ),
         );
@@ -722,7 +722,8 @@ Future<void> share() async {
     );
   }
   var rate;
-BottomSheetExampleRate(context,String text,data){
+  var comment;
+BottomSheetExampleRate(context,String text,data,dataoffer){
   return
     Container(
       color: Colors.black45.withOpacity(0.56),
@@ -814,7 +815,7 @@ BottomSheetExampleRate(context,String text,data){
                       textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
                       onChanged:(val){
                         setState(() {
-                          //  SpecialRequest=val;
+                          comment=val;
                         });
                       },
                       // controller:controller ,
@@ -850,7 +851,24 @@ BottomSheetExampleRate(context,String text,data){
                     ),
                   ),
                   InkWell(
-                    onTap:()=> Navigator.pop(context),
+                    onTap:()=> { Navigator.pop(context),
+                      if(rate!=null)
+                        {
+
+                          addRate(comment,rate.toString() , dataoffer['id']),
+                Fluttertoast.showToast(
+                    msg:Ratemessage==null?"حاول مرة اخرى": Ratemessage,
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                    textColor: Colors.white,
+                    fontSize: 16.0
+                ),
+
+                        },
+
+                    },
                     child: new Container(
                       margin:EdgeInsets.only(right: 30, left: 30),
                       width:MediaQuery.of(context).size.width*0.67,
@@ -1494,4 +1512,12 @@ BottomSheetExampleRate(context,String text,data){
       });
     });
   }
+  var Ratemessage;
+addRate(comment,rate,id) async {
+  await  networkRequest.AddRate(comment,rate,id).then((value){
+    setState(() {
+      Ratemessage  = value;
+    });
+  });
+}
 }

@@ -371,10 +371,10 @@ class NetworkRequest{
         "searchText": "",
         "isSpecial": isSpecial,
 
-        // "latitude": "24.75007441712588",
-        // "longitude": "46.775951958232405"
-         "latitude": lat,
-        "longitude": long
+        "latitude": "24.75007441712588",
+        "longitude": "46.775951958232405"
+        //  "latitude": lat,
+        // "longitude": long
       }
     };
     var itemCount ;
@@ -737,6 +737,65 @@ class NetworkRequest{
       "id": 0,
       "tableId": tableId,
       "favouriteType": 0
+    };
+
+
+    try{
+      HttpClientRequest request = await client.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.headers.set('Authorization', 'Bearer $token');
+      request.add(convert.utf8.encode(convert.json.encode(map)));
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(reply);
+      var jsonResponse = convert.jsonDecode(reply);
+      if(jsonResponse['status']=="Created"){
+        print(jsonResponse['status']);
+        return jsonResponse['message'];
+      }
+      return jsonResponse['message'];
+      //
+      // if(response.statusCode!=200&&response.statusCode!=201 ){
+      //
+      //   print("Ok"); print(response.statusCode);
+      //   print(jsonResponse);
+      //   return "notOk";
+      // }
+      //
+      // print("Ok"); print(response.statusCode);
+      // print(jsonResponse);
+      // return "ok";
+
+    }catch(v){
+      // Fluttertoast.showToast(
+      //     msg: "لم تتم الحجز",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+      //     textColor: Color(0xffffffff),
+      //     fontSize: 16.0
+      // );
+      print(v);
+    }
+
+
+  }
+  Future<dynamic> AddRate(comment,rate,offerId) async {//String bookingTime, dayDate,numberOfPerson ,occasion
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      token  = value ;
+    });
+    // print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
+    print(token);
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Offers/AddRate';
+    //  print(id);
+    Map map ={
+      "id": 0,
+      "comment":comment,
+      "rate": rate,
+      "offerId": offerId
     };
 
 

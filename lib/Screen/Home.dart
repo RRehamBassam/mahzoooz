@@ -181,15 +181,19 @@ class _HomeState extends State<Home> {
       );
      // FlutterOpenWhatsapp.sendSingleMessage("+9665665151191", "Hello");//+972598390185
     }else  if(index==2){
+      print("pp $index");
       if(token==null) {
+        print("pp1 $index");
         getDatatoken();
       }else{
         setState(() {
+          print("pp2 $index");
           _selectedIndex = index;
         });
       }
     }else{
       setState(() {
+        print("pp3 $index");
         _selectedIndex = index;
       });
     }
@@ -210,6 +214,7 @@ class _HomeState extends State<Home> {
   void initState() {
     _selectedIndex=0;
     dataLocation=[];
+    gettoken();
     checkLocationServicesInDevice();
     // TODO: implement initState
     super.initState();
@@ -224,8 +229,8 @@ class _HomeState extends State<Home> {
       homeWidget(latLnglocation),
 
     ];
-    return dataLocation.isEmpty?Scaffold(
-      body:noDataLocation()):
+    return// dataLocation.isEmpty?Scaffold(
+    //  body:noDataLocation()):
     Scaffold(
       body: _widgettajerAccount.elementAt(_selectedIndex),
       bottomNavigationBar: bottomNavigationBar(),

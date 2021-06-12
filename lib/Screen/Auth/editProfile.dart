@@ -140,6 +140,14 @@ class _editProfileState extends State<editProfile> {
     return Scaffold(
      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        leading:  InkWell(
+          onTap:(){
+            Navigator.pop(context);
+          },
+          child: Container(
+            // margin: EdgeInsets.all(8),
+              child: Icon(Icons.arrow_back_ios,color: Colors.black,)),
+        ),
         centerTitle: true,
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),

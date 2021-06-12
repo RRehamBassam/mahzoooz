@@ -7,6 +7,7 @@ import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mahzoooz/Screen/Home.dart';
 //import 'SignIn.dart';
 class maps extends StatefulWidget {
   // Req req;
@@ -264,15 +265,20 @@ class _mapsState extends State<maps> {
             latLng=latLnglocation;
           });
         }else{
-          Fluttertoast.showToast(
-              msg: " يرجى الانتظار لحين تفعيل حسابك",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Color(0xfff99b1d).withOpacity(0.9),
-              textColor: Colors.white,
-              fontSize: 16.0
+          Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_){
+                return  Home() ;//
+              })
           );
+          // Fluttertoast.showToast(
+          //     msg: " يرجى الانتظار لحين تفعيل حسابك",
+          //     toastLength: Toast.LENGTH_SHORT,
+          //     gravity: ToastGravity.BOTTOM,
+          //     timeInSecForIosWeb: 1,
+          //     backgroundColor: Color(0xfff99b1d).withOpacity(0.9),
+          //     textColor: Colors.white,
+          //     fontSize: 16.0
+          // );
           // Navigator.of(context).pushAndRemoveUntil(
           //     MaterialPageRoute(builder: (_){
           //       return  SignIn();
@@ -293,7 +299,7 @@ class _mapsState extends State<maps> {
               blurRadius: 20,
               offset: Offset(0, 10)
           )],
-          color: Color(0xfff99b1d),borderRadius: BorderRadius.circular(50.00),
+          color: Color(0xff80AB40),borderRadius: BorderRadius.circular(50.00),
         ),
         child: Center(
           child: Row(

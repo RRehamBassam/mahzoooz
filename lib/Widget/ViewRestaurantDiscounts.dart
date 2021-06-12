@@ -298,7 +298,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
 
                                             padding: EdgeInsets.only(
                                                 bottom: MediaQuery.of(context).viewInsets.bottom),
-                                            child: BottomSheetExample(context,"text",data),
+                                            child: BottomSheetExample(context,"text",data,data),
                                           ),
                                         ),
                                       );
@@ -487,45 +487,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                           transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),
                                             child: Image.asset('Assets/Send.png',scale: 0.8,)),
                                       )
-                                      // new Container(
-                                      //   height: 22.00,
-                                      //   width: 60.00,
-                                      //   decoration: BoxDecoration(
-                                      //     color: Color(0xff38056e),
-                                      //     border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(12.00),
-                                      //   ),
-                                      //   child: Center(
-                                      //     child: new Text(
-                                      //       "نسخ الكود",
-                                      //       textAlign: TextAlign.center,
-                                      //       style: TextStyle(
-                                      //         fontWeight: FontWeight.w500,
-                                      //         fontSize: 9,
-                                      //         color:Color(0xffffffff),
-                                      //       ),
-                                      //     ),
-                                      //   ) ,
-                                      // ),
-                                      // SizedBox(width: 8,),
-                                      // new Container(
-                                      //     height: 22.00,
-                                      //     width: 60.00,
-                                      //     decoration: BoxDecoration(
-                                      //
-                                      //       border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(12.00),
-                                      //     ),
-                                      //     child: Center(
-                                      //       child: new Text(
-                                      //         "DFD23322#",
-                                      //         textAlign: TextAlign.center,
-                                      //         style: TextStyle(
-                                      //           fontWeight: FontWeight.w500,
-                                      //           fontSize: 9,
-                                      //           color:Color(0xff38056e),
-                                      //         ),
-                                      //       ),
-                                      //     )
-                                      // )
+
                                     ],
                                   )
                                 ],
@@ -577,7 +539,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
           ) ),
     ):Container();
   }
-  BottomSheetExample(context,String text,data){
+  var comment;
+  BottomSheetExample(context,String text,data,dataoffer){
     return
       Container(
         color: Colors.black45.withOpacity(0.56),
@@ -669,7 +632,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
                         onChanged:(val){
                           setState(() {
-                          //  SpecialRequest=val;
+                            comment=val;
                           });
                         },
                         // controller:controller ,
@@ -705,7 +668,24 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                       ),
                     ),
                     InkWell(
-                      onTap:()=> Navigator.pop(context),
+                      onTap:()=> { Navigator.pop(context),
+                        if(rate!=null)
+                          {
+
+                            addRate(comment, rate.toString(), dataoffer['id']),
+                            Fluttertoast.showToast(
+                                msg: Ratemessage,
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                textColor: Colors.white,
+                                fontSize: 16.0
+                            ),
+
+                          },
+
+                      },
                       child: new Container(
                         margin:EdgeInsets.only(right: 30, left: 30),
                         width:MediaQuery.of(context).size.width*0.67,
@@ -736,6 +716,14 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
       );
 
 }
+  var Ratemessage;
+  addRate(comment,rate,id) async {
+    await  networkRequest.AddRate(comment,rate ,id).then((value){
+      setState(() {
+        Ratemessage  = value;
+      });
+    });
+  }
  var message;
   addFavourites() async {
     await  networkRequest.AddFavourites(data['id']).then((value){

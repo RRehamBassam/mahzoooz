@@ -45,7 +45,7 @@ class _noDataLocationState extends State<noDataLocation> {
                     color:Color(0xff91B958),//Color(0xff029789),
                     shape: BoxShape.circle,
                   ),
-                  child:  Image.asset('Assets\sad.png') ,
+                  child:  Image.asset("Assets/sad.png") ,
                 ),
               ),
             ),

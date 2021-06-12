@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mahzoooz/Screen/ProfileScreen/aboutApp.dart';
+import 'package:mahzoooz/Screen/mapLoc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_restart/flutter_restart.dart';
@@ -335,7 +336,9 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 4,),
                   Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
+                  Box("غيير موقعك",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
+                  SizedBox(height: 4,),
+      Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
                   Box("عن التطبيق",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
@@ -418,7 +421,10 @@ class _ProfileState extends State<Profile> {
         launch('http://mahzoooz.com/'),
           }else if(text =="عن التطبيق"){
             Navigator.push(context, new MaterialPageRoute(builder: (context)=>  aboutApp())),
-          },
+          }else if(text =="غيير موقعك"){
+        Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()))
+
+  },
 
 
       },

@@ -144,7 +144,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.date_range_outlined,size: 22,),
-                   Text(" ${data['expireDate'].toString().split('T')[0]} ",style: TextStyle(fontSize: 9),)
+                   Text(" ${data['expireDate'].toString().split('T')[0] }  لغايه قبل التاريخ ",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
