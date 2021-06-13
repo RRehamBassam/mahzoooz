@@ -476,7 +476,6 @@ class NetworkRequest{
       "pageSize": 10,
       "filter": {
         "isFavourite": true,
-
         "latitude": "24.75007441712588",
         "longitude": "46.775951958232405"
       }
@@ -632,13 +631,13 @@ class NetworkRequest{
       //request.add(convert.utf8.encode(convert.json.encode(map)));
       HttpClientResponse response = await request.close();
       String reply = await response.transform(convert.utf8.decoder).join();
-      print(reply);
+     // print(reply);
       var jsonResponse = convert.jsonDecode(reply);
       if(jsonResponse['status']=="OK"){
-        print(jsonResponse['status']);
+       // print(jsonResponse['status']);
         return jsonResponse['data'];
       }else {
-        print(jsonResponse['status']);
+       // print(jsonResponse['status']);
         return jsonResponse['message'];
       }
       return "no";
@@ -794,8 +793,8 @@ class NetworkRequest{
     Map map ={
       "id": 0,
       "comment":comment,
-      "rate": rate,
-      "offerId": offerId
+      "rate": 3,
+      "offerId": 4
     };
 
 

@@ -237,18 +237,18 @@ class _CountriesDataState extends State<CountriesData> {
                                                   color:Color(0xff91B958),//Color(0xff029789),
                                                   shape: BoxShape.circle,
                                                 ),
-                                                child:  Image.asset('Assets\sad.png') ,
+                                                child: Image.asset("Assets/sad.png") ,
                                               ),
                                             ),
                                           ),
-                                          SizedBox(height: 25,),
+                                          SizedBox(height: 45,),
                                           new Text(
                                             "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
 
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 14,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 16,
                                               color:Color(0xff91B958),
                                             ),
                                           ),
@@ -300,7 +300,7 @@ class _CountriesDataState extends State<CountriesData> {
                                                     if(subcategoriesDatabody['data'][i]['categoryId']==appState.id){
                                                       appState.updateCountEmpty(1);
                                                       print("jjjjjj");
-                                                      break;
+                                                   
 
 
                                                       print(count);
@@ -316,65 +316,63 @@ class _CountriesDataState extends State<CountriesData> {
                                                 // AppCategoris.updateCategory(index,snapshot.data[index]['nameAr']);
                                                 return appState.CountEmpty==-1? Expanded(
                                                   child: Container(
-
-                                                    child: Center(
-                                                      child: Column(
-                                                        crossAxisAlignment:CrossAxisAlignment.center ,
-                                                        mainAxisAlignment:MainAxisAlignment.center ,
-                                                        children: [
+                                                 height: MediaQuery.of(context).size.height*0.6,
+                                                    child: Column(
+                                                      crossAxisAlignment:CrossAxisAlignment.center ,
+                                                      mainAxisAlignment:MainAxisAlignment.center ,
+                                                      children: [
+                                                      // Container(
+                                                      // height: 50.0,),
                                                         Container(
-                                                        height: 20.0,),
-                                                          Container(
-                                                            width: 260.0,
-                                                            height: 260.0,
-                                                            padding:EdgeInsets.all(45),
+                                                          width: 260.0,
+                                                          height: 260.0,
+                                                          padding:EdgeInsets.all(45),
+                                                          decoration: new BoxDecoration(
+                                                            color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+                                                            shape: BoxShape.circle,
+                                                          ),
+                                                          child: Container(
+                                                            width: 120.0,
+                                                            height: 120.0,
+
+                                                            padding:EdgeInsets.all(50),
                                                             decoration: new BoxDecoration(
-                                                              color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+                                                              color: Color(0xffC5E696),// Color(0xffCEEAE7),
                                                               shape: BoxShape.circle,
                                                             ),
                                                             child: Container(
-                                                              width: 120.0,
-                                                              height: 120.0,
-
-                                                              padding:EdgeInsets.all(50),
+                                                              width: 60.0,
+                                                              height: 60.0,
                                                               decoration: new BoxDecoration(
-                                                                color: Color(0xffC5E696),// Color(0xffCEEAE7),
+                                                                color:Color(0xff91B958),//Color(0xff029789),
                                                                 shape: BoxShape.circle,
                                                               ),
-                                                              child: Container(
-                                                                width: 60.0,
-                                                                height: 60.0,
-                                                                decoration: new BoxDecoration(
-                                                                  color:Color(0xff91B958),//Color(0xff029789),
-                                                                  shape: BoxShape.circle,
-                                                                ),
-                                                                child:  Image.asset('Assets\sad.png') ,
-                                                              ),
+                                                              child: Image.asset("Assets/sad.png") ,
                                                             ),
                                                           ),
-                                                          SizedBox(height: 25,),
-                                                          new Text(
-                                                            "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                                                            textAlign: TextAlign.center,
-                                                            style: TextStyle(
+                                                        ),
+                                                        SizedBox(height: 45,),
+                                                        new Text(
+                                                          "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                                          textAlign: TextAlign.center,
+                                                          style: TextStyle(
 
-                                                              fontWeight: FontWeight.w700,
-                                                              fontSize: 13,
-                                                              color:Color(0xff91B958),
-                                                            ),
+                                                            fontWeight: FontWeight.w800,
+                                                            fontSize: 16,
+                                                            color:Color(0xff91B958),
                                                           ),
-                                                          // new Text(
-                                                          //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                                                          //   textAlign: TextAlign.center,
-                                                          //   style: TextStyle(
-                                                          //
-                                                          //     fontWeight: FontWeight.w700,
-                                                          //     fontSize: 16,
-                                                          //     color:Color(0xff029789),
-                                                          //   ),
-                                                          // ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                        // new Text(
+                                                        //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                                        //   textAlign: TextAlign.center,
+                                                        //   style: TextStyle(
+                                                        //
+                                                        //     fontWeight: FontWeight.w700,
+                                                        //     fontSize: 16,
+                                                        //     color:Color(0xff029789),
+                                                        //   ),
+                                                        // ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ): snapshot.data['data'][index]['categoryId']==appState.id?ViewRestaurantDiscounts(snapshot.data['data'][index]):Container(height: 0,)   ;    }),

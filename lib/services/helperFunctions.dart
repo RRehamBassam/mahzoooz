@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperFunctions{
@@ -10,6 +12,8 @@ class HelperFunctions{
   static String sharedPreferenceUserAdminKey = "USERAdminKEY";
   static String sharedPreferenceUserImageKey = "USERImageKEY";
   static String sharedPreferenceUserIsRecevidInKey ="isRecevid";
+  static String sharedPreferenceUserlocationLatKey = "locationLat";
+  static String sharedPreferenceUserlocationLngKey = "locationLng";
   /// saving data to sharedpreference
   static Future<bool> saveUserLoggedInSharedPreference(bool isUserLoggedIn) async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -24,6 +28,14 @@ class HelperFunctions{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPreferenceUserNameKey, userName);
   }
+  static Future<bool> saveUserlocationLatSharedPreference( double Lat) async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setDouble(sharedPreferenceUserlocationLatKey, Lat);
+  }
+  static Future<bool> saveUserlocationlngSharedPreference(double Lat) async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setDouble(sharedPreferenceUserlocationLngKey, Lat);
+  }
   static Future<bool> saveUserMobileSharedPreference(String userName) async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPreferenceUserMobileKey, userName);
@@ -32,6 +44,7 @@ class HelperFunctions{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPreferenceUserIdKey, userName);
   }
+
   static Future<bool> saveUserAddressSharedPreference(String userName) async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPreferenceUserAddressKey, userName);
@@ -61,6 +74,15 @@ class HelperFunctions{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.getString(sharedPreferenceUserIsRecevidInKey);
   }
+  static Future<double> getUserLatInSharedPreference() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.getDouble(sharedPreferenceUserlocationLatKey);
+  }
+  static Future<double> getUserLngSharedPreference() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.getDouble(sharedPreferenceUserlocationLngKey);
+  }
+
 
   static Future<String> getUserNameSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();

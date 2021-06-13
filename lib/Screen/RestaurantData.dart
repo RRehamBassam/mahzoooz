@@ -110,8 +110,8 @@ Future<void> share() async {
   Widget build(BuildContext context) {
     final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
     print(timeago.format(fifteenAgo));
-   // DateTime time = DateTime.parse('2021-04-28T01:31:35.3605982');
-    // print(timeago.format(time));
+   DateTime time = DateTime.parse('2021-04-28T01:31:35.3605982');
+    print(timeago.format(time));
     return Scaffold(
       backgroundColor:Color(0xffffffff),
       body: FutureBuilder<dynamic>(
@@ -125,8 +125,10 @@ Future<void> share() async {
                   initPage=true;
                 }
               }
-
-    //  time = DateTime.parse(data['lastDate']);
+      if(snapshot.data['lastDate']==null)
+        time = DateTime.parse('2021-04-28T01:31:35.3605982');
+      else
+        time = DateTime.parse(snapshot.data['lastDate']);
       if(snapshot.data['offer']['providerLogo']!= null)
       {bytes= convert.base64.decode(snapshot.data['offer']['providerLogo'].split(',').last);}
       if(snapshot.data['offer']['offerImages'][0]['imageName']!=null)
@@ -401,15 +403,15 @@ Future<void> share() async {
                               color:Color(0xff909090),
                             ),
                           ),
-                          // new Text(//{data['lastDate'].toString().split('T')[1]}
-                          //   " ${timeago.format(time)}",
-                          //   textAlign: TextAlign.center,
-                          //   style: TextStyle(
-                          //     fontWeight: FontWeight.w500,
-                          //     fontSize: 10,
-                          //     color:Color(0xff909090),
-                          //   ),
-                          // ),
+                          new Text(//{data['lastDate'].toString().split('T')[1]}
+                            " ${timeago.format(time)}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color:Color(0xff909090),
+                            ),
+                          ),
 
                         ],
                       ),

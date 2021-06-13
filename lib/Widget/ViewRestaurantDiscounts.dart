@@ -668,11 +668,11 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                       ),
                     ),
                     InkWell(
-                      onTap:()=> { Navigator.pop(context),
+                      onTap:()async { Navigator.pop(context);
                         if(rate!=null)
                           {
 
-                            addRate(comment, rate.toString(), dataoffer['id']),
+                            await  addRate(comment, rate, dataoffer['id']);
                             Fluttertoast.showToast(
                                 msg: Ratemessage,
                                 toastLength: Toast.LENGTH_SHORT,
@@ -681,9 +681,9 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                 backgroundColor: Color(0xff38056e).withOpacity(0.9),
                                 textColor: Colors.white,
                                 fontSize: 16.0
-                            ),
+                            );
 
-                          },
+                          };
 
                       },
                       child: new Container(

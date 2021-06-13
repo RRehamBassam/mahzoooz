@@ -8,6 +8,7 @@ import 'package:geocoder/geocoder.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Screen/Home.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 //import 'SignIn.dart';
 class maps extends StatefulWidget {
   // Req req;
@@ -45,9 +46,9 @@ class _mapsState extends State<maps> {
   PermissionStatus _permissionGranted;
   @override
   void initState() {
-
+    markers = [];
     // getIdInState();
-    markers=[];
+
     super.initState();
 
     checkLocationServicesInDevice();
@@ -76,15 +77,15 @@ class _mapsState extends State<maps> {
           //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
           latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
-          setState(() {
+
             markers = [
-              // Marker(
-              //     markerId: MarkerId('first place'),
-              //     infoWindow: InfoWindow(
-              //         title: 'this place is so nice'
-              //     ),
-              //     position: LatLng(currentLocation.latitude,currentLocation.longitude)
-              // ),
+              Marker(
+                  markerId: MarkerId('my Location'),
+                  infoWindow: InfoWindow(
+                      title: 'this place is so nice'
+                  ),
+                  position: LatLng(currentLocation.latitude,currentLocation.longitude)
+              ),
               // Marker(
               //     markerId: MarkerId('place 3'),
               //     infoWindow: InfoWindow(
@@ -93,7 +94,7 @@ class _mapsState extends State<maps> {
               //     position: LatLng(41.0240567,29.0840848)
               // ),
             ];
-          });
+
 
 
         });
@@ -169,12 +170,14 @@ class _mapsState extends State<maps> {
       addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
       setState(() {
         // tappedPoint2=tappedPoint;
-        markers=[];
+      markers=[];
         //adddd=latLng;
         print("${addresses.first.featureName} hhhh  ${addresses.first.addressLine}");
         add1 = addresses.first.featureName;
         add2= addresses.first.addressLine;
         //latLng=tappedPoint;
+      HelperFunctions.saveUserlocationLatSharedPreference(tappedPoint.latitude);
+      HelperFunctions.saveUserlocationlngSharedPreference(tappedPoint.longitude);
         markers.add(Marker(
           markerId: MarkerId(tappedPoint.toString()),
           position: tappedPoint,

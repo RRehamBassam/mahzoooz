@@ -56,17 +56,18 @@ class _noDataLocationState extends State<noDataLocation> {
               textAlign: TextAlign.center,
               style: TextStyle(
 
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w800,
                 fontSize: 14,
                 color:Color(0xff91B958),
               ),
             ),
+            SizedBox(height: 11,),
             new Text(
               "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
               textAlign: TextAlign.center,
               style: TextStyle(
 
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w800,
                 fontSize: 13,
                 color:Color(0xff91B958),
               ),

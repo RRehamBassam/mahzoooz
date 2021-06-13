@@ -336,7 +336,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 4,),
                   Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("غيير موقعك",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
+                  Box("غيير موقعك",Icon(Icons.location_on,color:Color(0xff38056e) ,),snapshot.data),//Image.asset('Assets/Setting.png',color:  Color(0xff38056e),)
                   SizedBox(height: 4,),
       Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),

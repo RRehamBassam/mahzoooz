@@ -7,6 +7,7 @@ import 'package:location/location.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Profile.dart';
+import 'package:mahzoooz/Widget/loading.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
@@ -25,15 +26,35 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'bottomNavigationBar/noDataLocation.dart';
 
 class Home extends StatefulWidget {
+
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
   LatLng latLnglocation;
   List dataLocation;
+  double lat;
+  double lng;
+  getLatInState() async {
+    await HelperFunctions.getUserLatInSharedPreference().then((value){
+      setState(() {
+        lat  = value;
+      });
+    });
+    await HelperFunctions.getUserLngSharedPreference().then((value){
+      setState(() {
+        lat  = value;
+      });
+    });
+    await checkLocationServicesInDevice();
+  }
+  getLngInState() async {
+
+  }
   Future<void> checkLocationServicesInDevice() async {
 
     Location location = new Location();
@@ -55,7 +76,13 @@ class _HomeState extends State<Home> {
 
         location.onLocationChanged.listen((LocationData currentLocation) async {
           //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
-          latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
+          if(lat==null){
+
+            latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
+          }else{
+            latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
+
+          }
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
           HttpClient client = new HttpClient();
           client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -67,8 +94,8 @@ class _HomeState extends State<Home> {
             "filter": {
               "searchText": "",
               "isSpecial": false,
-              "latitude": latLnglocation.latitude,
-              "longitude": latLnglocation.longitude
+              "latitude": "24.75007441712588",
+              "longitude": "46.775951958232405"
             }
           };
           var itemCount ;
@@ -79,8 +106,11 @@ class _HomeState extends State<Home> {
           String reply = await response.transform(convert.utf8.decoder).join();
           print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
           print(jsonResponse['data']['data']);
+setState(() {
+  dataLocation=jsonResponse['data']['data'];
+  loud=true;
+});
 
-          dataLocation=jsonResponse['data']['data'];
 
         });
       }else{
@@ -147,15 +177,25 @@ class _HomeState extends State<Home> {
           fontSize: 16.0
       );
       await getData();
-      Navigator.push(context,PageTransition(
-        type: PageTransitionType.leftToRight,
-        duration: Duration(milliseconds: 550) ,
-        reverseDuration: Duration(milliseconds: 700),
-        child: welcome(true),
-      ),);
+
+        if (!initSign){
+          Navigator.push(
+            context,
+            PageTransition(
+              type: PageTransitionType.leftToRight,
+              duration: Duration(milliseconds: 550),
+              reverseDuration: Duration(milliseconds: 700),
+              child: welcome(true),
+            ),
+          );
+          setState(() {
+            initSign=true;
+          });
+      }
     }
 
   }
+  bool initSign;
   Future<String> getData() async {
     await Future<void>.delayed(Duration(seconds: 3));
   }
@@ -211,12 +251,17 @@ class _HomeState extends State<Home> {
   //   // The "launch" method is part of "url_launcher".
   //   await launch('$link');
   // }
+  bool loud;
   @override
   void initState() {
+    getLatInState();
+    getLngInState();
     _selectedIndex=0;
     dataLocation=[];
+    initSign=false;
     gettoken();
-    checkLocationServicesInDevice();
+    loud=false;
+    //checkLocationServicesInDevice();
     // TODO: implement initState
     super.initState();
   }
@@ -230,12 +275,92 @@ class _HomeState extends State<Home> {
       homeWidget(latLnglocation),
 
     ];
-    return// dataLocation.isEmpty?Scaffold(
-    //  body:noDataLocation()):
+    return loud? dataLocation.isEmpty?Scaffold(
+      body:noDataLocation()):
     Scaffold(
       body: _widgettajerAccount.elementAt(_selectedIndex),
       bottomNavigationBar: bottomNavigationBar(),
-    );
+    ):Scaffold(
+        body:Container(
+
+
+          child: Center(
+            child: Column(
+              crossAxisAlignment:CrossAxisAlignment.center ,
+              mainAxisAlignment:MainAxisAlignment.center ,
+              children: [
+
+                Container(
+                  width: 260.0,
+                  height: 260.0,
+                  padding:EdgeInsets.all(45),
+                  decoration: new BoxDecoration(
+                    color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+                    shape: BoxShape.circle,
+                  ),
+                  child: Container(
+                    width: 120.0,
+                    height: 120.0,
+
+                    padding:EdgeInsets.all(50),
+                    decoration: new BoxDecoration(
+                      color: Color(0xffC5E696),// Color(0xffCEEAE7),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Container(
+                      width: 60.0,
+                      height: 60.0,
+                      decoration: new BoxDecoration(
+                        color:Color(0xff91B958),//Color(0xff029789),
+                        shape: BoxShape.circle,
+                      ),
+                      child:  Image.asset("Assets/sad.png") ,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 68,),
+                // new Text(
+                //   "لايوجد عروض متوفرة في موقعك الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                //   textAlign: TextAlign.center,
+                //   style: TextStyle(
+                //
+                //     fontWeight: FontWeight.w800,
+                //     fontSize: 14,
+                //     color:Color(0xff91B958),
+                //   ),
+                // ),
+                //SizedBox(height: 11,),
+                new Text(
+                  "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+
+                    fontWeight: FontWeight.w800,
+                    fontSize: 16,
+                    color:Color(0xff91B958),
+                  ),
+                ),
+                SizedBox(height: 88,),
+                // InkWell(
+                //   onTap: (){
+                //     Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
+                //   },
+                //   child:    new Text(
+                //     "تغيير الموقع الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                //     textAlign: TextAlign.center,
+                //     style: TextStyle(
+                //
+                //       fontWeight: FontWeight.w600,
+                //       fontSize: 14,
+                //       color:Colors.black,
+                //     ),
+                //   ),
+                // )
+
+              ],
+            ),
+          ),
+        ));
   }
   Widget bottomNavigationBar(){
     return Container(
