@@ -36,7 +36,7 @@ class _CountriesDataState extends State<CountriesData> {
   void initState() {
     isEmpty=false;
     count=1;
-    bytesback= convert.base64.decode(data['imageName'].split(',').last);
+   // bytesback= convert.base64.decode(data['imageName'].split(',').last);
     final dataCategory = Category(
       categoryId: 0,
       name: "مطاعم غربية",

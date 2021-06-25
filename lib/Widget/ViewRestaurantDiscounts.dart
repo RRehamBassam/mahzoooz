@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mahzoooz/Screen/CouponDiscount.dart';
 import 'package:mahzoooz/Screen/RestaurantData.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
@@ -74,7 +75,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   DateTime now = DateTime.now();
 
   //print(now.hour.toString() + ":" + now.minute.toString() + ":" + now.second.toString());{data['lastDate'].toString().split('T')[1]}
-  Uint8List bytes; Uint8List bytesback;
+ // Uint8List bytes; Uint8List bytesback;
 
   var token;
   void gettoken()async{
@@ -85,10 +86,10 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   @override
   void initState() {
     gettoken();
-        if(data['providerLogo']!= null)
-       {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}
-       if(data['offerImages'][0]['imageName']!=null)
-       {  bytesback= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);}
+       //  if(data['providerLogo']!= null)
+       // {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}
+       // if(data['offerImages'][0]['imageName']!=null)
+       // {  bytesback= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);}
 
     // TODO: implement initState
     super.initState();
@@ -96,16 +97,16 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   @override
   Widget build(BuildContext context) {
     final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
-    print(timeago.format(fifteenAgo));
+   // print(timeago.format(fifteenAgo));
     DateTime time = DateTime.parse(data['lastDate']);
-    print(timeago.format(time));
+   // print(timeago.format(time));
    // print(now.hour.toString() + ":" + now.minute.toString() + ":" + now.second.toString());
   //  print(data['providerLogo']);print(data['offerImages'][0]['imageName']);
 
     //  bytes = convert.base64.decode(data['offerImages'][0]['imageName']);
     //bytes= convert.base64.decode(data['providerLogo']);
 
-    return bytes!= null ||bytesback!=null? InkWell(
+    return data['providerLogo']!= null ||data['offerImages'][0]['imageName']!=null? InkWell(
       onTap: (){
         Navigator.push(context,PageTransition(
           type: PageTransitionType.leftToRight,
@@ -143,7 +144,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10.0),
                           image: DecorationImage(
-                            image:data['offerImages'][0]['imageName']==null?AssetImage('Assets/ModalPanel.png',): MemoryImage(bytesback),
+                            image:data['offerImages'][0]['imageName']==null?AssetImage('Assets/ModalPanel.png',):NetworkImage(data['offerImages'][0]['imageName']),//, MemoryImage(bytesback),
                             fit: BoxFit.cover,
                           ),
                         ),),
@@ -265,14 +266,14 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                               SizedBox(height:16,),
                              Row(
                                children: [
-                                 SizedBox(width: 16,),
+                                 SizedBox(width: 4,),
                                  new Text(
                                    data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],
                                    textAlign: TextAlign.right,
                                    style: TextStyle(
                                      fontWeight: FontWeight.w700,
                                      fontFamily: "Tajawal",
-                                     fontSize: 15,
+                                     fontSize: 14,
                                      color:Color(0xff242e42),
                                    ),
                                  ),
@@ -283,31 +284,44 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                 children: [
                                   InkWell(
                                     onTap: (){
-                                      showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) => SingleChildScrollView(
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color:Colors.white,
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
+                                      if(!data['canComment']){
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          builder: (context) => SingleChildScrollView(
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color:Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(20.0),
+                                                  topRight: Radius.circular(20.0),
+                                                ),
                                               ),
-                                            ),
 
-                                            padding: EdgeInsets.only(
-                                                bottom: MediaQuery.of(context).viewInsets.bottom),
-                                            child: BottomSheetExample(context,"text",data,data),
+                                              padding: EdgeInsets.only(
+                                                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                                              child: BottomSheetExample(context,"text",data,data),
+                                            ),
                                           ),
-                                        ),
-                                      );
+                                        );
+                                      }else{
+                                        Fluttertoast.showToast(
+                                            msg: "قمت بالتقييم من قبل ب ${data['rate']}",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                            textColor: Colors.white,
+                                            fontSize: 16.0
+                                        );
+                                      }
+
                                     },
                                     child: Row(
                                       children: [
                                         Icon(Icons.star,color:Color(0xff38056e) ,),
                                         new Text(
-                                          data['rate'].toString(),
+                                          data['rate'].toString().split(".").first,
                                           style: TextStyle(
 
                                             fontSize: 15,
@@ -380,30 +394,40 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   Spacer(),
                                   Row(
                                     children: [
-                                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container(
-                                      alignment: Alignment.centerLeft,
-                                      height: 34.00,
-                                      width: 82.00,
-                                      padding: EdgeInsets.all(5) ,
-                                      decoration: BoxDecoration(
-                                        color:Color(0xff38056e),
-                                        border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
-                                      ),
-                                      child: Directionality(
-                                        textDirection:translator.currentLanguage == 'ar' ? TextDirection.rtl:TextDirection.ltr,
-                                        child: Center(
-                                          child: new Text(
-                                              "كوبون خصم",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 12,
-                                              color: Color(0xffffffff),
+                                      data['schoolType']!=null?InkWell(
+                                        onTap: (){
+                                          Navigator.push(context,PageTransition(
+                                            type: PageTransitionType.bottomToTop,
+                                            duration: Duration(milliseconds: 550) ,
+                                            reverseDuration: Duration(milliseconds: 700),
+                                            child:CouponDiscount(data),
+                                          ),);
+                                        },
+                                        child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 34.00,
+                                        width: 82.00,
+                                        padding: EdgeInsets.all(5) ,
+                                        decoration: BoxDecoration(
+                                          color:Color(0xff38056e),
+                                          border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                                        ),
+                                        child: Directionality(
+                                          textDirection:translator.currentLanguage == 'ar' ? TextDirection.rtl:TextDirection.ltr,
+                                          child: Center(
+                                            child: new Text(
+                                              translator.translate("كوبون خصم"),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 12,
+                                                color: Color(0xffffffff),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      )
-                                  ):  ClipSwitch(
+                                        )
+                                  ),
+                                      ):  ClipSwitch(
                                         pathBuilder:	PathBuilders.slideRight,
                                         value: _bool,
                                         onChanged: _toggleBool,
@@ -477,7 +501,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                       ),
                                       SizedBox(width: 6,),
 
-                                      data['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container(): InkWell(
+                                      data['schoolType']!=null?Container(): InkWell(
                                         onTap: () => setState(() {
                                           launch(data['webSite']);
 
@@ -506,7 +530,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
 
                             borderRadius: BorderRadius.circular(5.0),
                             image: DecorationImage(
-                              image:data['providerLogo']==null? AssetImage('Assets/download.png'): MemoryImage(bytes),
+                              image:data['providerLogo']==null? AssetImage('Assets/download.png'):NetworkImage(data['providerLogo']),// MemoryImage(bytes),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -524,7 +548,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
 
                             borderRadius: BorderRadius.circular(5.0),
                             image: DecorationImage(
-                              image:data['providerLogo']==null? AssetImage('Assets/download.png'): MemoryImage(bytes),
+                              image:data['providerLogo']==null? AssetImage('Assets/download.png'):NetworkImage(data['providerLogo']),// MemoryImage(bytes),
                               fit: BoxFit.cover,
                             ),
                           ),),
@@ -617,7 +641,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                             setState(() {
                               rate=rating;
                             });
-                            print(rating);
+                        //    print(rating);
                           },
                         ),
                       ),
@@ -672,7 +696,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         if(rate!=null)
                           {
 
-                            await  addRate(comment, rate, dataoffer['id']);
+                            await  addRate(comment, int.parse(rate.toString().split(".").first),
+                              dataoffer['id']);
                             Fluttertoast.showToast(
                                 msg: Ratemessage,
                                 toastLength: Toast.LENGTH_SHORT,

@@ -1,6 +1,7 @@
 import 'dart:math'show pi;
 
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Models/Luck.dart';
 import 'arrow_view.dart';
 
@@ -95,7 +96,7 @@ class _BoardViewState extends State<BoardView> {
             angle:pi/2,
             alignment: Alignment.center,
            // transform:   Matrix4.rotationY(math.pi),
-            child: Center(child: Text(luck.asset,  textAlign: TextAlign.center, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 9,
+            child: Center(child: Text(translator.currentLanguage == 'ar' ?luck.asset:luck.assetEn,  textAlign: TextAlign.center, overflow: TextOverflow.ellipsis,style: TextStyle(fontWeight:FontWeight.bold,fontSize: 9,
               color: luck.color==Color(0xffE2E2E2)?Color(0xff38056e):Colors.white,))),
           ),
         ),

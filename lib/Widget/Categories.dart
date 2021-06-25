@@ -23,7 +23,7 @@ class _CategoriesState extends State<Categories> {
   Uint8List bytesback;
 @override
   void initState() {
-  bytesback= convert.base64.decode(data['imageName'].split(',').last);
+//  bytesback= convert.base64.decode(data['imageName'].split(',').last);
     // TODO: implement initState
     super.initState();
   }
@@ -66,7 +66,7 @@ class _CategoriesState extends State<Categories> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
               image: DecorationImage(
-                image: MemoryImage(bytesback),
+                image:NetworkImage(data['imageName']),// MemoryImage(bytesback),
                 fit: BoxFit.cover,
               ),
             ),),

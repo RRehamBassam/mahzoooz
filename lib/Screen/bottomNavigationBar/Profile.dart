@@ -81,9 +81,21 @@ class _ProfileState extends State<Profile> {
     return "Sucess";
   }
 
+
+
+  getImageInState() async {
+    await HelperFunctions.getUserImageSharedPreference().then((value){
+      setState(() {
+
+    //    bytes = convert.base64.decode(value);
+      });
+    });
+  }
+bool initData;
   @override
   void initState() {
-
+    getImageInState();
+    initData=true;
     getDatatoken();
     // TODO: implement initState
     super.initState();
@@ -96,16 +108,17 @@ class _ProfileState extends State<Profile> {
         future: networkRequest.getProfile(),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
+      if(initData){
       context.read<providerUser>().updateName(snapshot.data['name']);
       context.read<providerUser>().updatMobile(snapshot.data['phone'].toString());
       context.read<providerUser>().updateGender(snapshot.data['gender'].toString());
       context.read<providerUser>().updateEmail(snapshot.data['email']);
-      getSWData(snapshot.data['countryId']);
-      if(snapshot.data['imageName']==null){
+      initData=false;
 
-      }else {
-                bytes = convert.base64.decode(snapshot.data['imageName']);
-              }
+      getSWData(snapshot.data['countryId']);
+      }
+
+
               return  Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -172,7 +185,7 @@ class _ProfileState extends State<Profile> {
                               child: Row(
                                 children: [
 
-                                  snapshot.data['imageName']==""|| snapshot.data['imageName']==null|| snapshot.data['imageName'].Length==0?Row(
+                                  snapshot.data['imageName']==""|| snapshot.data['imageName']==null?Row(
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -187,14 +200,14 @@ class _ProfileState extends State<Profile> {
 
                                     ],
                                   ):Container(
-                                    width: 48,
-                                    height: 48,
+                                    width: 68,
+                                    height: 68,
                                     // margin: EdgeInsets.all(16.0),
                                     decoration: BoxDecoration(
 
                                       borderRadius: BorderRadius.circular(14.0),
                                       image: DecorationImage(
-                                        image: MemoryImage(bytes),
+                                        image: NetworkImage(snapshot.data['imageName']),//MemoryImage(bytes),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -338,7 +351,7 @@ class _ProfileState extends State<Profile> {
                   SizedBox(height: 4,),
                   Box("غيير موقعك",Icon(Icons.location_on,color:Color(0xff38056e) ,),snapshot.data),//Image.asset('Assets/Setting.png',color:  Color(0xff38056e),)
                   SizedBox(height: 4,),
-      Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
+                 Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
                   Box("عن التطبيق",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
@@ -416,7 +429,7 @@ class _ProfileState extends State<Profile> {
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new myCouponDiscount())),
           }else if(text=="الصفحة الشخصية"){
-            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['countryId'].toString(),data['gender']==1?"ذكر":"أنثى",data['birthDate'].toString().split("T")[0],data['phone'],edAdd))),
+            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['countryId'].toString(),data['gender']==1?"ذكر":"أنثى",data['birthDate'].toString().split("T")[0],data['phone'],edAdd,data))),
           }else if(text=="اتصل بنا عبر صفحتنا"){
         launch('http://mahzoooz.com/'),
           }else if(text =="عن التطبيق"){
@@ -450,7 +463,7 @@ class _ProfileState extends State<Profile> {
                 widget,
                 SizedBox(width: 16,),
                 new Text(
-                  text,
+                  translator.translate(text),
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,

@@ -18,6 +18,9 @@ class CategoryWidget extends StatelessWidget {
       onTap: () {
         if (!isSelected) {
           appState.updateCategory(category.categoryId);
+          if(appState.selectedCategory==0)
+            appState.updateColId("IsBestOffer");
+
         }
       },
       child: Container(

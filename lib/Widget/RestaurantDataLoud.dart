@@ -139,7 +139,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
               ),
               child:ListView(
                 children: [
-
+                //  BoxTow(),
 
                   SizedBox(height: 30,),
                   Box("وسائل الإتصال",Image.asset('Assets/Calling.png',color:  Color(0xff38056e),)),
@@ -147,6 +147,8 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
                   Box("ساعات العمل",Image.asset('Assets/Time Square.png',color:  Color(0xff38056e),)),
                   SizedBox(height: 8,),
                   Box("شروط الاستخدام وتفاصيل الخصم",Image.asset('Assets/Group 39851.png',color:  Color(0xff38056e),)),
+                  SizedBox(height: 8,),
+                  Box("الفروع المتاحة",Image.asset('Assets/Location.png',color:  Color(0xff38056e),)),
                   SizedBox(height: 8,),
                   Box("الفروع المتاحة",Image.asset('Assets/Location.png',color:  Color(0xff38056e),)),
                   SizedBox(height: 8,),
@@ -162,6 +164,48 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
       ),
     )])
     ;
+  }
+
+  Widget BoxTow(){
+    return     InkWell(
+
+      child:    Shimmer.fromColors(
+        baseColor: Colors.grey[200],
+        highlightColor: Colors.grey[100],
+        enabled: _enabled,
+        child: Container(
+          width: MediaQuery.of(context).size.width*0.4,
+          decoration: BoxDecoration(
+            color: Color(0xffffffff),//borderRadius: BorderRadius.circular(11.00),
+          ),
+          margin:EdgeInsets.all(2) ,
+          child: Material(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(11.00),
+            child: new Container(
+              height: 25.00,
+
+              width: MediaQuery.of(context).size.width*0.4,
+              padding:EdgeInsets.symmetric(vertical: 8,horizontal: 12) ,
+              decoration: BoxDecoration(
+                color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
+              ),
+              child: Row(
+                children: [
+
+
+                  SizedBox(width: 16,),
+
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios,color: Color(0xffD9D9D9),size: 18,)
+
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
   Widget Box(String text,Widget widget){
     return     InkWell(

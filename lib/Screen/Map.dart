@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:async';
@@ -159,15 +157,15 @@ class _mapsState extends State<maps> {
 
 
       setState(() {
-        markers=[];
-        print("${addresses.first.featureName} hhhh  ${addresses.first.addressLine}");
-        add1 = addresses.first.featureName;
-        add2= addresses.first.addressLine;
-        latLng=LatLng(lat, lng);
-        markers.add(Marker(
-          markerId: MarkerId(tappedPoint.toString()),
-          position: tappedPoint,
-        ));
+     //   markers=[];
+        // print("${addresses.first.featureName} hhhh  ${addresses.first.addressLine}");
+        // add1 = addresses.first.featureName;
+        // add2= addresses.first.addressLine;
+        // latLng=LatLng(lat, lng);
+        // markers.add(Marker(
+        //   markerId: MarkerId(tappedPoint.toString()),
+        //   position: tappedPoint,
+        // ));
       });
     }
     return Scaffold(

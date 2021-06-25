@@ -4,9 +4,12 @@ import 'package:animated_clipper/animated_clipper.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/Screen/Map.dart';
+import 'package:mahzoooz/Screen/OpenMap.dart';
 import 'package:mahzoooz/Screen/ReservationService.dart';
+import 'package:mahzoooz/Screen/branches.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Widget/RestaurantDataLoud.dart';
@@ -48,7 +51,7 @@ var data;
       _bool = newValue;
     });
   }
-  Uint8List bytes; Uint8List bytesback;Uint8List bytesMenu;
+ // Uint8List bytes; Uint8List bytesback;Uint8List bytesMenu;
 
   @override
   void initState() {
@@ -108,6 +111,7 @@ Future<void> share() async {
   }
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor( Color(0x0038056e));
     final fifteenAgo = new DateTime.now().subtract(new Duration(minutes: 15));
     print(timeago.format(fifteenAgo));
    DateTime time = DateTime.parse('2021-04-28T01:31:35.3605982');
@@ -118,7 +122,7 @@ Future<void> share() async {
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
-      if(snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة'){
+      if(snapshot.data['offer']['schoolType']!=null){
         if(!initPage) {
 
                   getSWData(1);
@@ -129,12 +133,12 @@ Future<void> share() async {
         time = DateTime.parse('2021-04-28T01:31:35.3605982');
       else
         time = DateTime.parse(snapshot.data['lastDate']);
-      if(snapshot.data['offer']['providerLogo']!= null)
-      {bytes= convert.base64.decode(snapshot.data['offer']['providerLogo'].split(',').last);}
-      if(snapshot.data['offer']['offerImages'][0]['imageName']!=null)
-      {  bytesback= convert.base64.decode(snapshot.data['offer']['offerImages'][0]['imageName'].split(',').last);}
-      if(snapshot.data['menu']!= null)
-      {bytesMenu= convert.base64.decode(snapshot.data['menu'].split(',').last);}
+      //if(snapshot.data['offer']['providerLogo']!= null)
+      //{bytes= convert.base64.decode(snapshot.data['offer']['providerLogo'].split(',').last);}
+     // if(snapshot.data['offer']['offerImages'][0]['imageName']!=null)
+      //{  bytesback= convert.base64.decode(snapshot.data['offer']['offerImages'][0]['imageName'].split(',').last);}
+     // if(snapshot.data['menu']!= null)
+     // {bytesMenu= convert.base64.decode(snapshot.data['menu'].split(',').last);}
     return     Column(
       //shrinkWrap: true,
         children: [   Container(
@@ -150,17 +154,20 @@ Future<void> share() async {
             // return  ImageItem(name);
             // },
             //       ),
-                  new Container(
-                    height: 203.79,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: MemoryImage(bytesback),
-                      ),
-                      //border: Border.all(width: 1.00, color: Color(0xfff5f5f5).withOpacity(0.4),), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.00), bottomRight: Radius.circular(12.00), ),
-                    ),
-                  ),
+            ...snapshot.data['offer']['offerImages'].map((name) {
+              return   new Container(
+              height: 203.79,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+              image: DecorationImage(
+              fit: BoxFit.fill,
+              image:NetworkImage(name['imageName']) //MemoryImage(bytesback),
+              ),
+              //border: Border.all(width: 1.00, color: Color(0xfff5f5f5).withOpacity(0.4),), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.00), bottomRight: Radius.circular(12.00), ),
+              ),
+              );
+              })
+
 
 
                 ],
@@ -383,7 +390,7 @@ Future<void> share() async {
                         ),
                       ),
                       SizedBox(width: 60,),
-                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Text(
+                      snapshot.data['offer']['schoolType']!=null?Text(
                         "للبنين",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -392,7 +399,7 @@ Future<void> share() async {
                         ),
                       ):Container(),
                       Spacer(),
-                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container():    Row(
+                      snapshot.data['offer']['schoolType']!=null?Container():    Row(
                         children: [
                           new Text(//{data['lastDate'].toString().split('T')[1]}
                             "استعمل مؤخراً منذ",
@@ -515,11 +522,11 @@ Future<void> share() async {
                       SizedBox(height: 4,),
                       Box("الفروع المتاحة",Image.asset('Assets/Location.png',color:  Color(0xff38056e),),snapshot.data,data),
                       SizedBox(height: 4,),
-                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data) :snapshot.data['menu']!=null?Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+                      snapshot.data['offer']['schoolType']!=null?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data) :snapshot.data['menu']!=null?Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
                       SizedBox(height: 4,),
-                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("خدمة الحجز",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
+                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("خدمةالحجز",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
                       snapshot.data['branches'][0]['hasBooking']&&snapshot.data['bookingSettings'].length!=0?SizedBox(height: 4,):Container(),
-                      snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+                      snapshot.data['offer']['schoolType']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
 
                          ],
                   ),
@@ -540,7 +547,7 @@ Future<void> share() async {
 
                     borderRadius: BorderRadius.circular(12.0),
                     image: DecorationImage(
-                      image: MemoryImage(bytes),
+                      image:NetworkImage(snapshot.data['offer']['providerLogo']),// MemoryImage(bytes),
                       fit: BoxFit.cover,
                     ),
                   ),),
@@ -559,13 +566,13 @@ Future<void> share() async {
 
                     borderRadius: BorderRadius.circular(12.0),
                     image: DecorationImage(
-                      image: MemoryImage(bytes),
+                      image:NetworkImage(snapshot.data['offer']['providerLogo']),// MemoryImage(bytes),
                       fit: BoxFit.cover,
                     ),
                   ),),
               ),
             ),
-            snapshot.data['offer']['providerNameAr'].toString().split(' ')[0]=='مدرسة' ?Container():   translator.currentLanguage == 'ar' ?snapshot.data['offer']['discount'].toString().split('.')[0]==0?Container():  Positioned(
+            snapshot.data['offer']['schoolType']!=null?Container():  data['discount']==0.0?Container():  translator.currentLanguage == 'ar' ?snapshot.data['offer']['discount'].toString().split('.')[0]==0?Container():  Positioned(
               left: 22,
               top: 178,
 
@@ -646,7 +653,7 @@ Future<void> share() async {
   Widget Box(String text,Widget widget,data,dataRestaurantData){
     return     InkWell(
       onTap:(){
-        if(text=="خدمة الحجز"){
+        if(text=="خدمةالحجز"){
           print("${data['offer']['id']}  id");
           Navigator.push(context,PageTransition(
             type: PageTransitionType.bottomToTop,
@@ -660,8 +667,12 @@ Future<void> share() async {
             type: PageTransitionType.bottomToTop,
             duration: Duration(milliseconds: 550) ,
             reverseDuration: Duration(milliseconds: 700),
-            child:CouponDiscount(data),
+            child:CouponDiscount(data['offer']),
           ),);
+        }else if(text=="الفروع المتاحة"){
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context) => new branches(data['branches'])));
+
         }else
         showModalBottomSheet(
           context: context,
@@ -705,7 +716,7 @@ Future<void> share() async {
                 widget,
                 SizedBox(width: 16,),
                 new Text(
-                  text,
+                translator.translate(text),
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
@@ -857,7 +868,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                       if(rate!=null)
                         {
 
-                          addRate(comment,rate.toString() , dataoffer['id']),
+                          addRate(comment,int.parse(rate.toString().split(".").first) , dataoffer['id']),
                 Fluttertoast.showToast(
                     msg:Ratemessage==null?"حاول مرة اخرى": Ratemessage,
                     toastLength: Toast.LENGTH_SHORT,
@@ -938,12 +949,12 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                 ),
               ),
               Container(
-                height:text=="الفروع المتاحة"?356:text=="القائمة"?456:text=="مراحل"?230:142,
+            //    height:text=="الفروع المتاحة"?356:text=="القائمة"?456:text=="مراحل"?230:142,
                 width: 90,
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(top: 16, bottom: text=="الفروع المتاحة"?6:16),
                 color: Colors.white,
-               child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="الفروع المتاحة"?Branches(data):text=="مراحل"?SchoolStages(data):text=="القائمة"?menu(data):text=="شروط الاستخدام وتفاصيل الخصم"?condition(data):Column(
+               child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="مراحل"?SchoolStages(data):text=="القائمة"?menu(data):text=="شروط الاستخدام وتفاصيل الخصم"?condition(data):Column( //text=="الفروع المتاحة"?Branches(data):
                  children: [
                    text=="ساعات العمل"?Text(
                'يعمل الفرع في الاولاوقات التالية',
@@ -1018,7 +1029,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
   }
   Widget Branches(data){
     return Container(
-      height: 20,
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1031,7 +1042,29 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
             ),
             textAlign: TextAlign.right,
           ),
-          SizedBox(height: 6,),
+          InkWell(
+            onTap: (){
+              Navigator.push(context,
+                  new MaterialPageRoute(builder: (context) => new maps(data['branches'][0]['latitude'],data['branches'][0]['longitude'])));
+
+            },
+            child: Row(
+              children: [
+                Icon(Icons.location_on,color: Color(0xff38056e),size: 16,),
+                SizedBox(width: 6,),
+                Text(
+                  translator.currentLanguage == 'ar' ? data['branches'][0]['addressAr']: data['branches'][0]['addressEn'],
+                  style: TextStyle(
+             fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                    color:Colors.black,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 4,),
           Text(
             'فيس بوك',
             style: TextStyle(
@@ -1061,7 +1094,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
             ],),
           ),
 
-          SizedBox(height: 6,),
+          SizedBox(height: 4,),
           Text(
             'تويتر',
             style: TextStyle(
@@ -1202,11 +1235,13 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
 
             ],),
           ),
-          SizedBox(height: 16,),
+          SizedBox(height: 12,),
           InkWell(
             onTap: (){
-              Navigator.push(context,
-                  new MaterialPageRoute(builder: (context) => new maps(data['branches'][0]['latitude'],data['branches'][0]['longitude'])));
+              MapUtils.openMap(data['branches'][0]['latitude'],data['branches'][0]['longitude']);
+
+            //   Navigator.push(context,
+            //       new MaterialPageRoute(builder: (context) => new maps(data['branches'][0]['latitude'],data['branches'][0]['longitude'])));
             },
             child: Row(
               children: [
@@ -1381,7 +1416,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
             image: DecorationImage(
 
               fit: BoxFit.fill,
-              image: MemoryImage(bytesMenu),
+              image: NetworkImage(data['menu'])//MemoryImage(bytesMenu),
             ),
             //border: Border.all(width: 1.00, color: Color(0xfff5f5f5).withOpacity(0.4),), borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12.00), bottomRight: Radius.circular(12.00), ),
           ),

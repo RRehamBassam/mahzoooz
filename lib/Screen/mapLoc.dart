@@ -8,6 +8,7 @@ import 'package:geocoder/geocoder.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Screen/Home.dart';
+import 'package:mahzoooz/main.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 //import 'SignIn.dart';
 class maps extends StatefulWidget {
@@ -73,10 +74,14 @@ class _mapsState extends State<maps> {
         // print(_location.latitude.toString() + " " + _location.longitude.toString());
 
 
-        location.onLocationChanged.listen((LocationData currentLocation) {
+        location.onLocationChanged.listen((LocationData currentLocation) async {
           //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
           latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
+          final coordinates2= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
+         // addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates2);
+         //  print("kkkkkkk${addresses.first.addressLine}");
+         //  HelperFunctions.saveUserAddressLocalSharedPreference(' ${addresses.first.addressLine}');
 
             markers = [
               Marker(
@@ -168,6 +173,7 @@ class _mapsState extends State<maps> {
       print(tappedPoint);
       final coordinates= new Coordinates(tappedPoint.latitude,tappedPoint.longitude);
       addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");//${addresses.first.featureName}
       setState(() {
         // tappedPoint2=tappedPoint;
       markers=[];
@@ -198,6 +204,7 @@ class _mapsState extends State<maps> {
 
                 // Map(),
                 Container(
+                  margin: EdgeInsets.only(top:13),
                   child:  GoogleMap(
 
                     myLocationButtonEnabled: true,
@@ -263,16 +270,25 @@ class _mapsState extends State<maps> {
 
     return   InkWell(
       onTap:(){
+        if(markers.length!=0){
+        print("llh");
         if(latLng==null){
+          print("llk");
           setState(() {
             latLng=latLnglocation;
           });
         }else{
-          Navigator.of(context).pushReplacement(
+          print("ll");
+          Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (_){
-                return  Home() ;//
-              })
+                return MyApp();
+              }),(route)=> false
           );
+          // Navigator.of(context).pushReplacement(
+          //     MaterialPageRoute(builder: (_){
+          //       return  MyApp() ;//
+          //     })
+          // );
           // Fluttertoast.showToast(
           //     msg: " يرجى الانتظار لحين تفعيل حسابك",
           //     toastLength: Toast.LENGTH_SHORT,
@@ -289,6 +305,16 @@ class _mapsState extends State<maps> {
           // );
           // serverAddresses.addAddress(userId,"${latLng.longitude}","${latLng.latitude}");
           // Navigator.push(context, new MaterialPageRoute(builder: (context)=>new Payment(req,"$add1 / $add2")));
+        }}else{
+          Fluttertoast.showToast(
+              msg: "عليك تحديد موقع",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xff38056e).withOpacity(0.9),
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
         }
         //Navigator.popAndPushNamed(context, '/activateCode');
       } ,

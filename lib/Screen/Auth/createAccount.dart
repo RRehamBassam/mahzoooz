@@ -178,8 +178,13 @@ bool eeName=false;
                       if (_formKey.currentState.validate()) {
                         await  getUserHasAccount();
                         if(message=="Rigisterd Successfully"){
-                          Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                         // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
                           // phoneNumber == null ? null : verifyPhoneNumber(context);
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(builder: (_){
+                                return  Home();
+                              }),(route)=> false
+                          );
                         }
                         // If the form is valid, display a Snackbar.
                         ScaffoldMessenger.of(context)

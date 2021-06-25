@@ -15,7 +15,7 @@ class _myReservationsState extends State<myReservations> {
     return Scaffold(
       appBar: appBar(),
         body:Container(
-         // height: 100,
+         // height:MediaQuery.of(context).size.height*0.82,
           margin: EdgeInsets.all(12),
           child: Column(
             children: [

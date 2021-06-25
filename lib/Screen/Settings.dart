@@ -395,19 +395,19 @@ class _SettingsState extends State<Settings> {
                     SizedBox(height: 15,),
                     GestureDetector(
                       onTap:()=> {
-                        print("ooo"),
+                        print(appState.selectedCategory),
                       translator.setNewLanguage(
                       context,
                       newLanguage:appState.selectedCategory==1? 'ar':'en',
                       remember: true,
-
                       ),
                       Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_){
                       return MyApp();
                       }),(route)=> false
                       ),
-                        Navigator.pop(context)},
+                       // Navigator.pop(context)
+                      },
                       child: new Container(
                         margin:EdgeInsets.only(right: 30, left: 30),
                         width:20,

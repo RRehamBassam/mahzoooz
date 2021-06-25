@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Models/category.dart';
+import 'package:mahzoooz/Widget/ScolBottomDiscounts.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscounts.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscountsLoud.dart';
 import 'package:mahzoooz/Widget/loading.dart';
@@ -47,6 +49,7 @@ class _DiscountsState extends State<Discounts> {
   }
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor( Color(0xff38056e));
 
     return SafeArea(
       child: Scaffold(
@@ -79,7 +82,7 @@ class _DiscountsState extends State<Discounts> {
                               children: <Widget>[
                                 //  SizedBox(height: 15.0),
                               FutureBuilder<dynamic>(
-                                future: networkRequest.OffersGetPaged(true,"",latLnglocation.latitude,latLnglocation.longitude),
+                                future: networkRequest.OffersGetPaged(true,"",latLnglocation.latitude,latLnglocation.longitude,"CreatedDate"),
                                 builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                  return  CarouselSlider(
@@ -151,6 +154,7 @@ class _DiscountsState extends State<Discounts> {
                                                         builder: (context, snapshot) {
                                                         if (snapshot.hasData) {
                                                         return  Container(
+                                                          margin: EdgeInsets.only(right: 5),
                                                           width:    MediaQuery.of(context).size.width,
                                                           child: ListView.builder(
                                                           shrinkWrap: true,
@@ -240,78 +244,8 @@ class _DiscountsState extends State<Discounts> {
                             ))),
                     ),
                   ),
-                  DraggableScrollableSheet(
-                      maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.999: 0.999,
-                      minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.57,
-                      initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.57 ,
-                      builder: (BuildContext context, ScrollController scrolController){
-                        return Stack(
-                          children: [
-                            // Positioned(
-                            //   child:   MyTabs(),
-                            // ),
-                            Container(
+                  ScolBottomDiscounts(latLnglocation),
 
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-
-                                // boxShadow: [BoxShadow(
-                                //     color: Colors.black45,
-                                //     blurRadius: 1,
-                                //     offset: Offset(2, 1)
-                                // )],
-                                borderRadius: BorderRadius.circular(2.0),),
-                              child:ListView(
-                                shrinkWrap: true,
-                                controller: scrolController,
-                                // controller: controller,
-                                children: [
-                                  MediaQuery.of(context).size.height< 743.4285714285714?  SizedBox(height: 72,):SizedBox(height: 72,),
-                            FutureBuilder<dynamic>(
-                            future: networkRequest.OffersGetPaged(false,"",latLnglocation.latitude,latLnglocation.longitude),
-                            builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              print(snapshot.data.length);
-                            return
-                              Container(
-                                margin: EdgeInsets.only(top: 16),
-                              //  height: MediaQuery.of(context).size.height,
-                                child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount:snapshot.data.length,
-                                          physics: BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) {
-                                            return ViewRestaurantDiscounts(snapshot.data[index]);
-                                          }),
-                              ); }
-                            else if (snapshot.hasError) {
-                            return Center(child: Text("تأكد من إتصال بالإنرنت"));
-                            }
-                        // By default, show a loading spinner.
-                                return Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                SizedBox(height: 30,),
-                                  ViewRestaurantDiscountsLoud(),
-                                  ViewRestaurantDiscountsLoud()
-                               // Loading(),
-                        // Center(
-                        //   child: PixLoader(
-                        //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
-                        // )
-                        //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
-                        ],
-                        );}),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              color:Colors.white,
-                                child: MyTabs(categories))
-                          ],
-                        );}
-                  ),
                 ],
               ),
             ),

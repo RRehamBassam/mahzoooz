@@ -8,6 +8,7 @@ import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Profile.dart';
 import 'package:mahzoooz/Widget/loading.dart';
+import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
@@ -39,6 +40,18 @@ class _HomeState extends State<Home> {
   List dataLocation;
   double lat;
   double lng;
+  bool DataEmapty;
+  getDataEmptyState() async {
+    await HelperFunctions.getDataEmptyInSharedPreference().then((value){
+      if(value!=null) {
+        setState(() {
+          DataEmapty = value;
+          print("kdkd");
+          print(DataEmapty);
+        });
+      }
+    });
+  }
   getLatInState() async {
     await HelperFunctions.getUserLatInSharedPreference().then((value){
       setState(() {
@@ -47,10 +60,11 @@ class _HomeState extends State<Home> {
     });
     await HelperFunctions.getUserLngSharedPreference().then((value){
       setState(() {
-        lat  = value;
+        lng  = value;
+        latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
       });
     });
-    await checkLocationServicesInDevice();
+   // await checkLocationServicesInDevice();
   }
   getLngInState() async {
 
@@ -87,15 +101,16 @@ class _HomeState extends State<Home> {
           HttpClient client = new HttpClient();
           client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
           String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
-
+        print(latLnglocation);
+        print("ppp");
           Map map ={
             "pageNumber": 1,
             "pageSize": 10,
             "filter": {
               "searchText": "",
               "isSpecial": false,
-              "latitude": "24.75007441712588",
-              "longitude": "46.775951958232405"
+               "latitude": "${latLnglocation.latitude}",
+              "longitude": "${latLnglocation.longitude}"
             }
           };
           var itemCount ;
@@ -104,12 +119,17 @@ class _HomeState extends State<Home> {
           request.add(convert.utf8.encode(convert.json.encode(map)));
           HttpClientResponse response = await request.close();
           String reply = await response.transform(convert.utf8.decoder).join();
-          print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
-          print(jsonResponse['data']['data']);
-setState(() {
-  dataLocation=jsonResponse['data']['data'];
-  loud=true;
-});
+         // print(response.statusCode);
+          var jsonResponse = convert.jsonDecode(reply);
+
+          setState(() {
+            dataLocation=jsonResponse['data']['data'];
+
+            loud=true;
+          });
+
+
+          print(dataLocation);
 
 
         });
@@ -254,10 +274,13 @@ setState(() {
   bool loud;
   @override
   void initState() {
+  //  getImageInState();
+    getDataEmptyState();
     getLatInState();
     getLngInState();
     _selectedIndex=0;
     dataLocation=[];
+    DataEmapty=true;
     initSign=false;
     gettoken();
     loud=false;
@@ -275,93 +298,98 @@ setState(() {
       homeWidget(latLnglocation),
 
     ];
-    return loud? dataLocation.isEmpty?Scaffold(
+    return  //dataLocation.isEmpty?
+    DataEmapty?Scaffold(
       body:noDataLocation()):
     Scaffold(
       body: _widgettajerAccount.elementAt(_selectedIndex),
       bottomNavigationBar: bottomNavigationBar(),
-    ):Scaffold(
-        body:Container(
-
-
-          child: Center(
-            child: Column(
-              crossAxisAlignment:CrossAxisAlignment.center ,
-              mainAxisAlignment:MainAxisAlignment.center ,
-              children: [
-
-                Container(
-                  width: 260.0,
-                  height: 260.0,
-                  padding:EdgeInsets.all(45),
-                  decoration: new BoxDecoration(
-                    color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
-                    shape: BoxShape.circle,
-                  ),
-                  child: Container(
-                    width: 120.0,
-                    height: 120.0,
-
-                    padding:EdgeInsets.all(50),
-                    decoration: new BoxDecoration(
-                      color: Color(0xffC5E696),// Color(0xffCEEAE7),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Container(
-                      width: 60.0,
-                      height: 60.0,
-                      decoration: new BoxDecoration(
-                        color:Color(0xff91B958),//Color(0xff029789),
-                        shape: BoxShape.circle,
-                      ),
-                      child:  Image.asset("Assets/sad.png") ,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 68,),
-                // new Text(
-                //   "لايوجد عروض متوفرة في موقعك الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //
-                //     fontWeight: FontWeight.w800,
-                //     fontSize: 14,
-                //     color:Color(0xff91B958),
-                //   ),
-                // ),
-                //SizedBox(height: 11,),
-                new Text(
-                  "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-
-                    fontWeight: FontWeight.w800,
-                    fontSize: 16,
-                    color:Color(0xff91B958),
-                  ),
-                ),
-                SizedBox(height: 88,),
-                // InkWell(
-                //   onTap: (){
-                //     Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
-                //   },
-                //   child:    new Text(
-                //     "تغيير الموقع الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                //     textAlign: TextAlign.center,
-                //     style: TextStyle(
-                //
-                //       fontWeight: FontWeight.w600,
-                //       fontSize: 14,
-                //       color:Colors.black,
-                //     ),
-                //   ),
-                // )
-
-              ],
-            ),
-          ),
-        ));
+    );
+    //:Scaffold(
+     //   body:Loading());
+    // Container(
+    //
+    //
+    //   child: Center(
+    //     child: Column(
+    //       crossAxisAlignment:CrossAxisAlignment.center ,
+    //       mainAxisAlignment:MainAxisAlignment.center ,
+    //       children: [
+    //
+    //         Container(
+    //           width: 260.0,
+    //           height: 260.0,
+    //           padding:EdgeInsets.all(45),
+    //           decoration: new BoxDecoration(
+    //             color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+    //             shape: BoxShape.circle,
+    //           ),
+    //           child: Container(
+    //             width: 120.0,
+    //             height: 120.0,
+    //
+    //             padding:EdgeInsets.all(50),
+    //             decoration: new BoxDecoration(
+    //               color: Color(0xffC5E696),// Color(0xffCEEAE7),
+    //               shape: BoxShape.circle,
+    //             ),
+    //             child: Container(
+    //               width: 60.0,
+    //               height: 60.0,
+    //               decoration: new BoxDecoration(
+    //                 color:Color(0xff91B958),//Color(0xff029789),
+    //                 shape: BoxShape.circle,
+    //               ),
+    //               child:  Image.asset("Assets/sad.png") ,
+    //             ),
+    //           ),
+    //         ),
+    //         SizedBox(height: 68,),
+    //         // new Text(
+    //         //   "لايوجد عروض متوفرة في موقعك الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+    //         //   textAlign: TextAlign.center,
+    //         //   style: TextStyle(
+    //         //
+    //         //     fontWeight: FontWeight.w800,
+    //         //     fontSize: 14,
+    //         //     color:Color(0xff91B958),
+    //         //   ),
+    //         // ),
+    //         //SizedBox(height: 11,),
+    //         new Text(
+    //           "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+    //           textAlign: TextAlign.center,
+    //           style: TextStyle(
+    //
+    //             fontWeight: FontWeight.w800,
+    //             fontSize: 16,
+    //             color:Color(0xff91B958),
+    //           ),
+    //         ),
+    //         SizedBox(height: 88,),
+    //         // InkWell(
+    //         //   onTap: (){
+    //         //     Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
+    //         //   },
+    //         //   child:    new Text(
+    //         //     "تغيير الموقع الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+    //         //     textAlign: TextAlign.center,
+    //         //     style: TextStyle(
+    //         //
+    //         //       fontWeight: FontWeight.w600,
+    //         //       fontSize: 14,
+    //         //       color:Colors.black,
+    //         //     ),
+    //         //   ),
+    //         // )
+    //
+    //       ],
+    //     ),
+    //   ),
+    // )
   }
+  NetworkRequest networkRequest=new NetworkRequest();
+
   Widget bottomNavigationBar(){
     return Container(
 
@@ -428,7 +456,7 @@ setState(() {
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  "خدمة العملاء",
+                  translator.translate("customers service"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -482,7 +510,7 @@ setState(() {
                       children: [
 
                         new Text(
-                          "تواصل معنا عبر WhatsApp",
+                    translator.translate( " Contact us via WhatsApp "),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,

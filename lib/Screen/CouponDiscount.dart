@@ -171,7 +171,7 @@ color: Colors.white,
            // ),
            SizedBox(
              width: MediaQuery.of(context).size.width,
-             child: Text(translator.translate(datapath['offer']['providerNameAr']),
+             child: Text(translator.translate(datapath['providerNameAr']),
                style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
              ),
            ),
@@ -316,7 +316,7 @@ color: Colors.white,
                 SizedBox(height: 8,),
                 Container
                   (width: MediaQuery.of(context).size.width,
-                  child: Text(translator.translate( datapath['offer']['offerExpireDate'].toString().split('T')[0]),
+                  child: Text(translator.translate( datapath['offerExpireDate'].toString().split('T')[0]),
                     style: TextStyle(fontWeight:FontWeight.w500,fontSize: 18,color:Color(0xff38056e) ),
                   ),
                 ),
@@ -331,7 +331,7 @@ color: Colors.white,
               StudentsData.length==0?SizedBox():  Center(
                 child: InkWell(
                   onTap: ()async{
-                    await getLoggedInState(datapath['offer']['offerExpireDate'],datapath['offer']['id']);
+                    await getLoggedInState(datapath['offerExpireDate'],datapath['id']);
                     if(result=='Created'){
                       Fluttertoast.showToast(
                           msg: "تم الحصول على كوبون الخصم للمدرسة",

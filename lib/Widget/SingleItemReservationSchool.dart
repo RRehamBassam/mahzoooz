@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert' as convert;
 import 'dart:typed_data';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:mahzoooz/Screen/OpenMap.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:mahzoooz/Screen/Map.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
@@ -25,8 +26,8 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
   Uint8List bytes; Uint8List bytesback;
   @override
   void initState() {
-    if(data['logo']!= null)
-    {bytes= convert.base64.decode(data['logo'].split(',').last);}
+    // if(data['logo']!= null)
+    // {bytes= convert.base64.decode(data['logo'].split(',').last);}
 
 
     // TODO: implement initState
@@ -64,7 +65,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                   borderRadius: BorderRadius.circular(10.0),
                   image: DecorationImage(
 
-                    image:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,): MemoryImage(bytes,),
+                    image:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,):NetworkImage("${data['logo']}"),// MemoryImage(bytes,),
 
                     fit: BoxFit.cover,
                   ),
@@ -103,7 +104,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          Text(data['isCanceled']?"تم إلغاء":"إلغاء",style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
+                          Text(data["isFinished"]?translator.translate("إنتهاء مدة الخصم"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
                         ],
                       ),
                     ),
@@ -144,7 +145,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.date_range_outlined,size: 22,),
-                   Text(" ${data['expireDate'].toString().split('T')[0] }  لغايه قبل التاريخ ",style: TextStyle(fontSize: 9),)
+                   Text(" لغايه قبل التاريخ ${data['expireDate'].toString().split('T')[0] }",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
@@ -159,9 +160,9 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                // Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
                 InkWell(
                   onTap: (){
-                     Navigator.push(context,
-                        new MaterialPageRoute(builder: (context) => new maps(data['latitude'],data['longitude'])));
-
+                   //  Navigator.push(context,
+                     //   new MaterialPageRoute(builder: (context) => new maps(data['latitude'],data['longitude'])));
+                     MapUtils.openMap(double.parse(data['latitude']),double.parse(data['longitude']));
                   },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -224,6 +225,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
               child: Text("إلغاء"),
               onPressed:  () {
                 Navigator.pop(context);
+
               },
             ),
             FlatButton(

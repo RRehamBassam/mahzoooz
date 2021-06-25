@@ -20,8 +20,8 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
 
   @override
   Widget build(BuildContext context) {
-    print(data);
-    Uint8List bytes= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);
+    // print(data);
+    // Uint8List bytes= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);
     return   Stack(
       children: [
         data['offerImages'][0]['imageName']==null?Container():  Container(
@@ -29,7 +29,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: DecorationImage(
-              image: MemoryImage(bytes),
+              image:NetworkImage(data['offerImages'][0]['imageName']),// MemoryImage(bytes),
               fit: BoxFit.cover,
             ),
           ),

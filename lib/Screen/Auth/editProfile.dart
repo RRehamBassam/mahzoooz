@@ -24,13 +24,14 @@ var UserEmile;
  var date;
 var phoneNumber;
 var add;
+var dataApi;
 
- editProfile(this.UserName, this.UserEmile, this.userMobile,this.gender,this.city,this.date,this.phoneNumber,this.add);
+ editProfile(this.UserName, this.UserEmile, this.userMobile,this.gender,this.city,this.date,this.phoneNumber,this.add,this.dataApi);
 
  // editProfile();
 
   @override
-  _editProfileState createState() => _editProfileState(UserName,UserEmile,userMobile,gender,city,date,phoneNumber,add);
+  _editProfileState createState() => _editProfileState(UserName,UserEmile,userMobile,gender,city,date,phoneNumber,add,dataApi);
 }
 
 class _editProfileState extends State<editProfile> {
@@ -40,8 +41,8 @@ class _editProfileState extends State<editProfile> {
   var cityInt;
   var dateInt;
   var phoneNumber;
-  var add;
-  _editProfileState(this.UserName,this.UserEmile,this.userMobile,this.genderInt,this.cityInt,this.dateInt,this.phoneNumber,this.add);
+  var add;var dataApi;
+  _editProfileState(this.UserName,this.UserEmile,this.userMobile,this.genderInt,this.cityInt,this.dateInt,this.phoneNumber,this.add,this.dataApi);
 
   var userMobile;
 
@@ -111,12 +112,13 @@ class _editProfileState extends State<editProfile> {
   }
   @override
   void initState() {
+    getPassInState();
     getAddress();
     name=UserName;
     email=UserEmile;
     birthDate=dateInt.toString();
    gender=1;
-
+    init=false;
     super.initState();
     this.getSWData();
   }
@@ -124,13 +126,29 @@ class _editProfileState extends State<editProfile> {
   var _blankFocusNode = new FocusNode();
   var focusNode = new FocusNode();
   final _formKey = GlobalKey<FormState>();
+
+  var pas;
+  getPassInState() async {
+    await HelperFunctions.  getUserPassSharedPreference().then((value){
+      setState(() {
+        pas  = value;
+      });
+    });
+  }
+  bool init;
   @override
   Widget build(BuildContext context) {
-    _controllerName=new TextEditingController(text: UserName);
-    _controllerEmail=new TextEditingController(text: UserEmile);
-    _controllerG=new TextEditingController(text:genderInt==1?"ذكر":"أنثى");
-    _controllerCitiy=new TextEditingController(text:add);
-    _controllerD=new TextEditingController(text:dateInt);
+    if(!init) {
+      _controllerName = new TextEditingController(text: UserName);
+      _controllerEmail = new TextEditingController(text: UserEmile);
+      _controllerG =
+          new TextEditingController(text: genderInt == 1 ? "ذكر" : "أنثى");
+      _controllerCitiy = new TextEditingController(text: add);
+      _controllerD = new TextEditingController(text: dateInt);
+      setState(() {
+        init=true;
+      });
+    }
     String nameUser =
         Provider.of<providerUser>(context, listen: true).name;
     // String mobileUser =
@@ -143,6 +161,7 @@ class _editProfileState extends State<editProfile> {
         leading:  InkWell(
           onTap:(){
             Navigator.pop(context);
+
           },
           child: Container(
             // margin: EdgeInsets.all(8),
@@ -152,7 +171,7 @@ class _editProfileState extends State<editProfile> {
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
         title: new Text(
-          "انشاء حساب",
+          "تعديل صفحتى",
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -171,7 +190,7 @@ class _editProfileState extends State<editProfile> {
                   base64Image=v;
                 });
 
-              }),
+              },image:dataApi['imageName']),
               // new Container(
               //   height: 88.00,
               //   width: 90.00,
@@ -181,11 +200,11 @@ class _editProfileState extends State<editProfile> {
               //   ),
               // ),
 
-              SizedBox(height: 10,),
+              SizedBox(height: 20,),
               Container(
-                height:ee? MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height*0.76: MediaQuery.of(context).size.height*0.76
+                height:ee? MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height*0.66: MediaQuery.of(context).size.height*0.66
 
-                    : MediaQuery.of(context).size.height*0.52,
+                    : MediaQuery.of(context).size.height*0.44,
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -193,16 +212,17 @@ class _editProfileState extends State<editProfile> {
                     children: [
                       textFiled("الإسم",(val)=>setState(()=>name=val,),_controllerName,UserName),
                       textFiled("البريد الإلكتروني",(val)=>setState(()=>email=val),_controllerEmail,UserEmile),
-                      textFiled("كلمة المرور",(val)=>setState(()=>password=val),_controllerPass,null),
-                      textFiled("تأكيد كلمة المرور",(val)=>setState(()=>confirmPassword=val),_controllerCpass,null),
+                      // textFiled("كلمة المرور",(val)=>setState(()=>password=val),_controllerPass,null),
+                      // textFiled("تأكيد كلمة المرور",(val)=>setState(()=>confirmPassword=val),_controllerCpass,null),
                       textFiled("النوع",(val)=>setState(()=>gender=val),_controllerG,genderInt==1?"ذكر":"أنثى"),
                       textFiled("تاريخ الميلاد",(val)=>setState(()=>birthDate=val),_controllerD,dateInt),
-                      textFiled("الدولة",(val)=>setState(()=>city=val),_controllerCitiy,null),
+                      textFiled("الدولة",(val)=>setState(()=>city=val),_controllerCitiy,Address),
                     ],
                   ),
 
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height*0.08,),
               Container(
                   height: MediaQuery.of(context).size.height*0.2,
                   child: Center(
@@ -253,7 +273,12 @@ class _editProfileState extends State<editProfile> {
                                     textColor: Colors.white,
                                     fontSize: 16.0
                                 );
-                                Navigator.pop(context);
+
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (_){
+                                      return Home();
+                                    }),(route)=> false
+                                );
                              //   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
                                 // phoneNumber == null ? null : verifyPhoneNumber(context);
                               }else{
@@ -271,6 +296,7 @@ class _editProfileState extends State<editProfile> {
                             // networkRequest.Register( name, password, confirmPassword, email, phone,
                             //      gender, birthDate, generatedCode);
                           },
+
                           child: new Container(
                               height: 48.00,
                               width: 311.00,
@@ -326,9 +352,9 @@ class _editProfileState extends State<editProfile> {
         autofocus: false,
         textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
         onChanged:onChanged ,
-        controller:text=="الدولة" ?controller :null,
+       controller:controller ,
         obscureText: false,
-        initialValue: initialValue,
+       // initialValue: initialValue,
 
         onTap:(){
           if (text=="الدولة"|| text=="النوع"||text=="تاريخ الميلاد")
@@ -512,13 +538,14 @@ class _editProfileState extends State<editProfile> {
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
                       {setState(()=>{_controllerCitiy.text=data[int]['nameAr'],city=data[int]['nameAr'],countryId=data[int]['id']});}
+                      HelperFunctions.saveUserAddressSharedPreference(data[int]['nameAr']);
                     },
                     // diameterRatio: 1.6,
                     children: <Widget>[
                       ...data.map((name) {
                         print(name['nameAr']);
                         return InkWell(
-                         onTap: ()=>{setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id']}),},
+                          onTap: ()=>{setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id']}),},
                           child: Container(
                             width: double.infinity,
 
@@ -660,14 +687,14 @@ class _editProfileState extends State<editProfile> {
                     //  itemExtent: 40,
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
-                      {setState(()=>{_controllerG.text=dataG[int],gender==int+1});}
+                      {setState(()=>{_controllerG.text=dataG[int],gender=int+1});}
                     },
                     // diameterRatio: 1.6,
                     children: <Widget>[
                       ...dataG.map<Widget>((name) {
                         //  print(name['nameAr']);
                         return InkWell(
-                         onTap: ()=>{setState(()=>{_controllerG.text=name,}),},
+                          onTap: ()=>{setState(()=>{_controllerG.text=name}),},
                           child: Container(
                             width: double.infinity,
 
@@ -778,7 +805,7 @@ class _editProfileState extends State<editProfile> {
                     DateFormat formatter = DateFormat('yyyy-MM-dd');
                     setState(() {
                       _chosenDateTime=newDateTime;birthDate="${formatter.format(newDateTime).split(" ")[0]}";
-                     _controllerD.text="${formatter.format(newDateTime).split(" ")[0]}";
+                      _controllerD.text="${formatter.format(newDateTime).split(" ")[0]}";
                     });
                     // Do something
                   },
@@ -823,7 +850,7 @@ class _editProfileState extends State<editProfile> {
       );
   }
   getUserHasAccount() async {
-    await  networkRequest.UpdateUserProfile( name, password, confirmPassword, email, phoneNumber,
+    await  networkRequest.UpdateUserProfile( name, pas, confirmPassword, email, phoneNumber,
         gender, birthDate,base64Image,countryId).then((value){
       setState(() {
         message  = value;

@@ -11,7 +11,7 @@ final trainCategory = Category(
 
 final busCategory = Category(
   categoryId: 1,
-  name: "Best Seller",
+  name:"closest to you"// "Best Seller",
 );
 
 final planeCategory = Category(
@@ -46,9 +46,6 @@ final categories = [
   busCategory,
   planeCategory,
   trainCategory1,
-  trainCategory2,
-  busCategory3,
-  planeCategory4,
-  trainCategory5,
+
 
 ];

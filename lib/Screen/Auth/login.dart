@@ -89,10 +89,17 @@ String Password;
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
                 decoration: InputDecoration(
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: const BorderSide(color:  Color(0xff38056e), width: 0.0),
+                  ),
+                  focusColor: Color(0xff38056e),
+
                   border: new OutlineInputBorder(
+
                     borderRadius: const BorderRadius.all(
                       const Radius.circular(30),
                     ),
+
                   ),
                 ),
                 onChanged: (value) {
@@ -185,6 +192,7 @@ String Password;
                       onChanged: (val){
                         setState(() {
                           Password=val;
+                          HelperFunctions.saveUserPassWordSharedPreference(val);
                         });
                       },
 
@@ -330,7 +338,7 @@ String Password;
                         children: [
                           Image.asset('Assets/Group 39810.png'),
                           new Text(
-                            "Change to English",
+                            translator.translate('Change to English'),
                             textAlign: TextAlign.right,
                             style: TextStyle(
                               fontFamily: "DIN Next LT Arabic",fontWeight: FontWeight.w500,

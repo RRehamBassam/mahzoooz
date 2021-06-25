@@ -26,7 +26,8 @@ class _SearchState extends State<Search> {
                 keyboardType:TextInputType.text,
                 autofocus: false,
                 textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
-
+                showCursor: true,
+                readOnly: true,
                 obscureText: false,
                 onTap: (){
                   Navigator.push(context,PageTransition(
