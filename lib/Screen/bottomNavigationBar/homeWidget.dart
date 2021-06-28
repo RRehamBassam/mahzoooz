@@ -301,7 +301,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                              // SizedBox(width: 2,),
                              Container(
                                  margin: EdgeInsets.only(top: 3),
-                                 child: Text("تغيي الى الموقعك الان", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40),fontSize: 10),)),
+                                 child: Text("تغيير الموقع الى الموقعك الان", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40),fontSize: 10),)),
                              Spacer(),
 
 

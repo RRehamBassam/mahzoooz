@@ -382,13 +382,16 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                              // SizedBox(height: 20,),
                               Row(
                                 children: [
-                                  new Text(
-                                    data['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
-                                    textAlign: TextAlign.right,
-                                    style: TextStyle(
-                                      fontFamily: "Tajawal",fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                      color:Colors.black,
+                                 Container (
+                                   width:MediaQuery.of(context).size.width*0.48,
+                                    child: new Text(
+                                      data['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
+                                      textAlign: TextAlign.right,
+                                      style: TextStyle(
+                                        fontFamily: "Tajawal",fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                        color:Colors.black,
+                                      ),
                                     ),
                                   ),
                                   Spacer(),

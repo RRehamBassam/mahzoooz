@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:convert' as convert;
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -52,6 +53,27 @@ class _HomeState extends State<Home> {
       }
     });
   }
+  var DataEmapty2;//             "latitude": "24.75007441712588",
+//             "longitude": "46.775951958232405"
+  getDataRandom() async {
+    await networkRequest.getLuck(latLnglocation).then((value){
+      try {
+        DataEmapty2 = null;
+        if (value != null) {
+          setState(() {
+            DataEmapty2 = value['data'];
+
+            print(DataEmapty);
+          });
+        }
+      }catch(val){
+        DataEmapty2 = null;
+      }
+      setState(() {
+
+      });
+    });
+  }
   getLatInState() async {
     await HelperFunctions.getUserLatInSharedPreference().then((value){
       setState(() {
@@ -64,6 +86,7 @@ class _HomeState extends State<Home> {
         latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
       });
     });
+    getDataRandom();
    // await checkLocationServicesInDevice();
   }
   getLngInState() async {
@@ -275,6 +298,7 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
   //  getImageInState();
+    DataEmapty2="1";
     getDataEmptyState();
     getLatInState();
     getLngInState();
@@ -290,6 +314,7 @@ class _HomeState extends State<Home> {
   }
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor( Color(0x00ffffff));
     List<Widget> _widgettajerAccount = <Widget>[
       homeWidget(latLnglocation),
       Discounts(latLnglocation),
@@ -299,7 +324,8 @@ class _HomeState extends State<Home> {
 
     ];
     return  //dataLocation.isEmpty?
-    DataEmapty?Scaffold(
+      DataEmapty2=="1"?Scaffold(
+          body:Container(child: Loading())): DataEmapty2==null?Scaffold(
       body:noDataLocation()):
     Scaffold(
       body: _widgettajerAccount.elementAt(_selectedIndex),

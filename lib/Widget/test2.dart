@@ -9,18 +9,17 @@ import 'dart:typed_data';
 import 'package:mahzoooz/services/helperFunctions.dart';
 
 class test extends StatefulWidget {
-  var image;
   final Function(String) callback;
 
-  test(this.callback, {this.image});
+  test(this.callback);
 
   @override
-  _CameraConnectState createState() => _CameraConnectState(callback,imageback: image);
+  _CameraConnectState createState() => _CameraConnectState(callback);
 }
 class _CameraConnectState extends State<test> {
   final Function(String) callback;
-  var imageback;
-  _CameraConnectState(this.callback, {this.imageback});
+
+  _CameraConnectState(this.callback);
 
   String base64Image;
   File image;
@@ -61,7 +60,7 @@ class _CameraConnectState extends State<test> {
       fileName = image.path.split('/').last;
       base64Image = base64Encode(_image.readAsBytesSync());
       HelperFunctions.saveUserImageSharedPreference(base64Image);
-      callback("data:image/jpg;base64$base64Image");
+      callback(base64Image);
     });
   }
   void _showPicker(context) {
@@ -106,8 +105,6 @@ class _CameraConnectState extends State<test> {
   @override
   void initState() {
     getImageInState();
-    print("ppk");
-    print(imageback);
     // TODO: implement initState
     super.initState();
   }
@@ -117,7 +114,6 @@ class _CameraConnectState extends State<test> {
           Center(
             child: GestureDetector(
               onTap: () {
-                print(image);
                 _showPicker(context);
                 print(base64Image);
               },
@@ -141,7 +137,7 @@ class _CameraConnectState extends State<test> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(16.00),
-                            child:Image.asset("Assets/profileImage.png",fit: BoxFit.fitWidth,height: 80.0,width: 80.0,),
+                            child: Image.asset("Assets/profileImage.png",fit: BoxFit.fitWidth,height: 80.0,width: 80.0,),
                           ),
                           // new Container(
                           //   height: 60.00,

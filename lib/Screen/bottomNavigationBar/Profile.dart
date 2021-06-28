@@ -429,7 +429,7 @@ bool initData;
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new myCouponDiscount())),
           }else if(text=="الصفحة الشخصية"){
-            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['countryId'].toString(),data['gender']==1?"ذكر":"أنثى",data['birthDate'].toString().split("T")[0],data['phone'],edAdd,data))),
+            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['genderNameAr'],data['countryNameAr'],data['birthDate'].toString().split("T")[0],data['phone'],edAdd,data))),
           }else if(text=="اتصل بنا عبر صفحتنا"){
         launch('http://mahzoooz.com/'),
           }else if(text =="عن التطبيق"){

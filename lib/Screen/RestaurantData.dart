@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Screen/Map.dart';
 import 'package:mahzoooz/Screen/OpenMap.dart';
 import 'package:mahzoooz/Screen/ReservationService.dart';
@@ -290,7 +291,11 @@ Future<void> share() async {
                          right: 40,
                          top: 50,
                          child: InkWell(
-                           onTap: ()=>Navigator.pop(context),
+                           onTap: ()=>Navigator.of(context).pushAndRemoveUntil(
+                               MaterialPageRoute(builder: (_){
+                                 return Home();
+                               }),(route)=> false
+                           ),
                            child: Row(
                              children: [
                                Center(child: Image.asset("Assets/IconLeft.png",)),
@@ -572,7 +577,7 @@ Future<void> share() async {
                   ),),
               ),
             ),
-            snapshot.data['offer']['schoolType']!=null?Container():  data['discount']==0.0?Container():  translator.currentLanguage == 'ar' ?snapshot.data['offer']['discount'].toString().split('.')[0]==0?Container():  Positioned(
+           data['discount']==0.0?Container():  translator.currentLanguage == 'ar' ?snapshot.data['offer']['discount'].toString().split('.')[0]==0?Container():  Positioned(
               left: 22,
               top: 178,
 
@@ -864,11 +869,13 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                     ),
                   ),
                   InkWell(
-                    onTap:()=> { Navigator.pop(context),
+                    onTap:() async{ Navigator.pop(context);
                       if(rate!=null)
-                        {
+                        {print(comment);
+                          print(rate);
+                          print( dataoffer['id']);
 
-                          addRate(comment,int.parse(rate.toString().split(".").first) , dataoffer['id']),
+                          await  addRate(comment,int.parse(rate.toString().split(".").first) , dataoffer['id']);
                 Fluttertoast.showToast(
                     msg:Ratemessage==null?"حاول مرة اخرى": Ratemessage,
                     toastLength: Toast.LENGTH_SHORT,
@@ -877,9 +884,9 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
                     textColor: Colors.white,
                     fontSize: 16.0
-                ),
+                );
 
-                        },
+                        };
 
                     },
                     child: new Container(

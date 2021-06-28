@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor( Color(0x0038056e));
+    FlutterStatusbarcolor.setStatusBarColor( Color(0xff38056e));
     return MaterialApp(
       title: 'محظوظ',
       debugShowCheckedModeBanner: false,
@@ -70,6 +70,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   bool userIsLoggedIn;
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
@@ -79,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var addresses;
   double lng;
   var currentLocation;
+
   getUserLocation() async {//call this async method from whereever you need
 
     LocationData myLocation;
@@ -157,40 +159,47 @@ class _MyHomePageState extends State<MyHomePage> {
             HelperFunctions.saveUserlocationLatSharedPreference(currentLocation.latitude);
             HelperFunctions.saveUserlocationlngSharedPreference(currentLocation.longitude);
             latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
-            getUserLocation();
+           // getUserLocation();
 
           }else{
 
-
+print("1");
             latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
 
           }
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
-          HttpClient client = new HttpClient();
-          client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-          String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetRandomOffers';
-         
-          Map map ={
-            // "latitude": "24.75007441712588",
-            // "longitude": "46.775951958232405"
-              "latitude": "${latLnglocation.latitude}",
-              "longitude": "${latLnglocation.longitude}"
-          };
-          var itemCount ;
-          HttpClientRequest request = await client.postUrl(Uri.parse(url));
-          request.headers.set('content-type', 'application/json');
-          request.add(convert.utf8.encode(convert.json.encode(map)));
-          HttpClientResponse response = await request.close();
-          String reply = await response.transform(convert.utf8.decoder).join();
-          // print(reply);
-          var jsonResponse = convert.jsonDecode(reply);
-            if (jsonResponse['data']==null){
-              HelperFunctions.saveDataEmptyInSharedPreference(true);
-            }else{
-              dataLocation=jsonResponse['data']['data'];
-              //loud=true;
-              HelperFunctions.saveDataEmptyInSharedPreference(false);
-            }
+//           HttpClient client = new HttpClient();
+//           client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+//           String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetRandomOffers';
+//           print("3");
+//           Map map ={
+//             "latitude": "24.75007441712588",
+//             "longitude": "46.775951958232405"
+//             //   "latitude": "${latLnglocation.latitude}",
+//             //   "longitude": "${latLnglocation.longitude}"
+//           };
+//           var itemCount ;
+//           HttpClientRequest request = await client.postUrl(Uri.parse(url));
+//           request.headers.set('content-type', 'application/json');
+//           request.add(convert.utf8.encode(convert.json.encode(map)));
+//           HttpClientResponse response = await request.close();
+//           String reply = await response.transform(convert.utf8.decoder).join();
+//           // print(reply);
+//           print("2");
+//           var jsonResponse = convert.jsonDecode(reply);
+//         //  await Future<void>.delayed(Duration(seconds: 2));
+// try{
+//             if (jsonResponse['data']==null){
+//               print("7");
+//               HelperFunctions.saveDataEmptyInSharedPreference(true);
+//             }else{
+//               dataLocation=jsonResponse['data']['data'];
+//               print("8");
+//               //loud=true;
+//               HelperFunctions.saveDataEmptyInSharedPreference(false);
+//             }}catch(val){
+//   HelperFunctions.saveDataEmptyInSharedPreference(true);  print("9");
+//             }
 
 
 
@@ -241,18 +250,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   }
 
-  // getLoggedInState() async {
-  //   await HelperFunctions.getUserLoggedInSharedPreference().then((value){
-  //     setState(() {
-  //       userIsLoggedIn  = value;
-  //     });
-  //   });
-  // }
+  getLoctoinState() async {
+    await HelperFunctions.getUserLoggedInSharedPreference().then((value){
+      setState(() {
+        userIsLoggedIn  = value;
+      });
+    });
+  }
 
   void initState(){
      getLatInState();
-
-    userIsLoggedIn=false;
+     getLoctoinState();
+     userIsLoggedIn=false;
     checkLocationServicesInDevice();
     //getLoggedInState();
     getLoggedInState();
@@ -272,8 +281,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _enabled = true;
   @override
   Widget build(BuildContext context) {
-
-
+    FlutterStatusbarcolor.setStatusBarColor( Color(0x00ffffff));
 
     // TODO: implement build
     return  Scaffold(

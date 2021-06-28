@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +44,15 @@ class _mapsState extends State<maps> {
   //     });
   //   });
   // }
+  bool init;
   bool _serviceEnabled;
   PermissionStatus _permissionGranted;
   @override
   void initState() {
     markers = [];
+    init=true;
     // getIdInState();
-
+    addresses="";
     super.initState();
 
     checkLocationServicesInDevice();
@@ -76,20 +79,27 @@ class _mapsState extends State<maps> {
 
         location.onLocationChanged.listen((LocationData currentLocation) async {
           //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
-          latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
+          latLnglocation= LatLng(currentLocation.latitude,currentLocation.longitude);
+          print("$latLnglocation kkk");
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
-          final coordinates2= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
-         // addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates2);
-         //  print("kkkkkkk${addresses.first.addressLine}");
-         //  HelperFunctions.saveUserAddressLocalSharedPreference(' ${addresses.first.addressLine}');
-
+       //     final coordinates2= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
+       //    addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates2);
+       // //
+         // print("kkkkkkk${addresses.first.addressLine}");
+         // HelperFunctions.saveUserAddressLocalSharedPreference(' ${addresses.first.addressLine}');
+         //  await markers.add(Marker(
+         //    markerId: MarkerId(latLnglocation.toString()),
+         //    position: latLnglocation,
+         //  ));
+          if(init) {
             markers = [
               Marker(
                   markerId: MarkerId('my Location'),
                   infoWindow: InfoWindow(
                       title: 'this place is so nice'
                   ),
-                  position: LatLng(currentLocation.latitude,currentLocation.longitude)
+                  position: LatLng(
+                      currentLocation.latitude, currentLocation.longitude)
               ),
               // Marker(
               //     markerId: MarkerId('place 3'),
@@ -99,8 +109,11 @@ class _mapsState extends State<maps> {
               //     position: LatLng(41.0240567,29.0840848)
               // ),
             ];
+            init=false;
+            setState(() {
 
-
+            });
+          }
 
         });
       }else{
@@ -153,8 +166,9 @@ class _mapsState extends State<maps> {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor( Color(0xff38056e));
     Completer<GoogleMapController> _controller = Completer();
-
+    FlutterStatusbarcolor.setStatusBarColor( Color(0xffffffff));
     final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(37.42796133580664, -122.085749655962),
       zoom: 14.4746,
@@ -198,6 +212,7 @@ class _mapsState extends State<maps> {
       // _goToTheLake();
     }
     return Scaffold(
+
         body:Material(
             child:Stack(
               children: <Widget>[
@@ -229,6 +244,25 @@ class _mapsState extends State<maps> {
                     ) ,
                   ),
                 ),
+      Positioned(
+
+                    top:25,
+                    child:
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [BoxShadow(
+                            color: Color.fromRGBO(34, 134, 234, .3),
+                            blurRadius: 10,
+                            offset: Offset(0, 5)
+                        )],
+
+                      ),
+                      height: 55,
+                      padding: EdgeInsets.all(12),
+                      width: MediaQuery.of(context).size.width,
+                      child: Center(child: Text(addresses==""?"قم بإختيار الموقع":addresses.first.addressLine)),
+                    )),
                 Positioned(
                     right: 30,
                     left: 30,

@@ -262,7 +262,7 @@ class NetworkRequest{
 
     };
     var itemCount ;
-    try {
+
       HttpClientRequest request = await client.putUrl(Uri.parse(url));
       request.headers.set('content-type', 'application/json');
       request.headers.set('Authorization', 'Bearer $token');
@@ -276,10 +276,7 @@ class NetworkRequest{
 
 
       return jsonResponse['message'];
-    }catch(v){   print("kkj");
-      print(v);
 
-    }
   }
   Future<dynamic> Countries() async {
     HttpClient client = new HttpClient();
@@ -734,7 +731,7 @@ print(colId);print(colId);
       "latitude": "${latLnglocation.latitude}",
       "longitude": "${latLnglocation.longitude}"
     };
-    try{
+
 
       HttpClientRequest request = await client.postUrl(Uri.parse(url));
       request.headers.set('content-type', 'application/json');
@@ -763,19 +760,6 @@ print(colId);print(colId);
       // print("Ok"); print(response.statusCode);
       // print(jsonResponse);
       // return "ok";
-
-    }catch(v){
-      // Fluttertoast.showToast(
-      //     msg: "لم تتم الحجز",
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.BOTTOM,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Color(0xff38056e).withOpacity(0.9),
-      //     textColor: Color(0xffffffff),
-      //     fontSize: 16.0
-      // );
-      print(v);
-    }
 
 
   }
@@ -841,7 +825,7 @@ print(colId);print(colId);
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
     });
-    // print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
+    print(" $comment, $rate,$offerId lll");
     print(token);
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);

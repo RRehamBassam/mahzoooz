@@ -142,8 +142,8 @@ class _editProfileState extends State<editProfile> {
       _controllerName = new TextEditingController(text: UserName);
       _controllerEmail = new TextEditingController(text: UserEmile);
       _controllerG =
-          new TextEditingController(text: genderInt == 1 ? "ذكر" : "أنثى");
-      _controllerCitiy = new TextEditingController(text: add);
+          new TextEditingController(text: genderInt);
+      _controllerCitiy = new TextEditingController(text: cityInt);
       _controllerD = new TextEditingController(text: dateInt);
       setState(() {
         init=true;
@@ -244,7 +244,12 @@ class _editProfileState extends State<editProfile> {
                                     textColor: Colors.white,
                                     fontSize: 16.0
                                 );
-                                Navigator.pop(context);
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(builder: (_){
+                                      return Home();
+                                    }),(route)=> false
+                                );
+                             //   Navigator.pop(context);
                                // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
                                 // phoneNumber == null ? null : verifyPhoneNumber(context);
                               }else{
@@ -273,12 +278,12 @@ class _editProfileState extends State<editProfile> {
                                     textColor: Colors.white,
                                     fontSize: 16.0
                                 );
-
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(builder: (_){
                                       return Home();
                                     }),(route)=> false
                                 );
+
                              //   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
                                 // phoneNumber == null ? null : verifyPhoneNumber(context);
                               }else{
@@ -545,7 +550,8 @@ class _editProfileState extends State<editProfile> {
                       ...data.map((name) {
                         print(name['nameAr']);
                         return InkWell(
-                          onTap: ()=>{setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id']}),},
+                          onTap: ()=>{        HelperFunctions.saveUserAddressSharedPreference(name['nameAr']),
+                            setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id']}),},
                           child: Container(
                             width: double.infinity,
 
