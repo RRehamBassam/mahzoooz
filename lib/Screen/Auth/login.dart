@@ -157,7 +157,23 @@ String Password;
                   child:Column(
                     //   crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text(
+
+                      setPass?Container(
+                        width: 210,
+                        child: Center(
+                          child: new Text(
+
+                            "من فضلك ادخل كلمة المرور الجديدة ",
+                            textAlign: TextAlign.center,
+
+                            style: TextStyle(fontWeight: FontWeight.w700,
+                              fontSize: 20,
+
+                              color:Colors.black54.withOpacity(0.65),
+                            ),
+                          ),
+                        ),
+                      ): new Text(
                         "اهلاً بيك في محظوووظ",
                         // textAlign: TextAlign.right,gt3
                         style: TextStyle(fontWeight: FontWeight.w700,
@@ -166,7 +182,7 @@ String Password;
                         ),
                       ),
                       SizedBox(height: 16,),
-                      new Text(
+                      setPass?Container(): new Text(
                         "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد",
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
@@ -335,7 +351,7 @@ String Password;
                         ),
                         child: Center(
                           child: new Text(
-                            "دخول",
+                           setPass?"حفظ": "دخول",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
@@ -351,7 +367,7 @@ String Password;
 
 
 
-              InkWell(
+            setPass?Container():  InkWell(
                 onTap: ()=>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  welcomeChangePass(false))),
                 child: new Text(
                   "لقد نسيت رقم السر",
@@ -363,7 +379,7 @@ String Password;
                   ),
                 ),
               ),
-              InkWell(
+              setPass?Container():   InkWell(
                 onTap:(){
                   translator.setNewLanguage(
                     context,

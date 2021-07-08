@@ -105,10 +105,8 @@ class _CountriesDataState extends State<CountriesData> {
             child: Consumer<AppCategoris>(
               builder: (context, appState, _) {
 
-                return      loud?Container(
-                    height:MediaQuery.of(context).size.height*0.5,
-                    child: Loading()): FutureBuilder<dynamic>(
-                    future:appState.show||appState.id==-1?networkRequest.subCategoriesGetPaged(id):appState.id==id?networkRequest.subCategoriesGetPaged(id):networkRequest.subCategoriesGetPaged(appState.id),
+                return     FutureBuilder<dynamic>(
+                    future:appState.id!=-1?networkRequest.subCategoriesGetPaged(appState.id):networkRequest.subCategoriesGetPaged(4),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if(appState.show){
@@ -168,7 +166,7 @@ class _CountriesDataState extends State<CountriesData> {
                                           ),
                                         ),
                                       ),
-                                      ListView.builder(
+                                     ListView.builder(
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
                                           itemCount:subcategoriesData.length,
@@ -185,7 +183,9 @@ class _CountriesDataState extends State<CountriesData> {
                                                 });
                                                 getData();
                                                 appState.updateCountEmpty(-1);
-                                                appState.updateid(id);
+                                                appState.updateid(subcategoriesData[index]['id']);
+
+                                                print(subcategoriesData[index]['id']);
                                                 appState.updateCount(index);
 
 
@@ -211,7 +211,9 @@ class _CountriesDataState extends State<CountriesData> {
                                     ],
                                   ) , //dayBox(selectDay==index, timing));}),
                                 ):Container(),
-                                snapshot.data['data'].length==0?Expanded(
+                                loud? Container(
+                                    height: MediaQuery.of(context).size.height*0.58,
+                                    child: Loading()):  snapshot.data['data'].length==0?Expanded(
                                   child: Container(
 
                                     child: Center(
@@ -297,7 +299,7 @@ class _CountriesDataState extends State<CountriesData> {
                                           // height: MediaQuery.of(context).size.height*0.89,
                                           child: ListView.builder(
                                               shrinkWrap: true,
-                                              itemCount:subcategoriesDatabody['data'].length,
+                                              itemCount:snapshot.data['data'].length,
                                               physics: BouncingScrollPhysics(),
                                               itemBuilder: (context, index) {
 
@@ -359,7 +361,7 @@ class _CountriesDataState extends State<CountriesData> {
                                                height: MediaQuery.of(context).size.height*0.772,
                                               child: ListView.builder(
                                                   shrinkWrap: true,
-                                                  itemCount:subcategoriesDatabody['data'].length,
+                                                  itemCount:snapshot.data['data'].length,
                                                   physics: BouncingScrollPhysics(),
                                                   itemBuilder: (context, index) {
                                                     // categoriesData.add(new Category(

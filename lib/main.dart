@@ -139,11 +139,12 @@ class _MyHomePageState extends State<MyHomePage> {
     await getLatInState();
     // "latitude": "24.75007441712588",
     // "longitude": "46.775951958232405"
-    HelperFunctions.saveUserlocationLatSharedPreference(
-    24.75007441712588);
-    HelperFunctions.saveUserlocationlngSharedPreference(
-    46.775951958232405);
-
+    if(lat==null) {
+      HelperFunctions.saveUserlocationLatSharedPreference(
+          24.75007441712588);
+      HelperFunctions.saveUserlocationlngSharedPreference(
+          46.775951958232405);
+    }
     try {
       // await Geolocator.requestPermission().then((value) async {
       //   await Geolocator.getCurrentPosition().then((value) async{

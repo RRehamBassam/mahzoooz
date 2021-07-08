@@ -46,8 +46,8 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
           child: Consumer<AppState>(
     builder: (context, appState, _) => DraggableScrollableSheet(
         maxChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.999: 0.999,
-        minChildSize:MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.57,
-        initialChildSize: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.57 ,
+        minChildSize:MediaQuery.of(context).size.height< 663.4285714285714?0.42: MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.57,
+        initialChildSize:MediaQuery.of(context).size.height< 663.4285714285714?0.42: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.57 ,
         builder: (BuildContext context, ScrollController scrolController){
           if(appState.count==0)
             appState.updateColId("IsBestOffer");

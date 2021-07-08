@@ -46,6 +46,7 @@ dependencies:
   localize_and_translate: ^3.0.3
   flutter_rating_bar: ^3.2.0+1
   pin_entry_text_field: ^0.1.4
+
   the_validator: ^1.0.4
   fluttertoast: ^7.1.6
   carousel_pro: ^1.0.0
@@ -79,8 +80,11 @@ dependencies:
 
 dev_dependencies:
   flutter_launcher_icons: ^0.8.0
+  flutter_launcher_name: "^0.0.1"
   flutter_test:
     sdk: flutter
+flutter_launcher_name:
+  name: "محظوووظ"
 flutter_icons:
   android: "launcher_icon"
   ios: true

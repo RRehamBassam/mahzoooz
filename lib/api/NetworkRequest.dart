@@ -221,7 +221,7 @@ class NetworkRequest{
       return jsonResponse;
     }
     catch(e){
-      return {"data":null,"status":"NotFound","message":"Wrong Password","exception":null};
+      return {"data":null,"status":"NotFound","message":"عفوا كلمة المرور غير صحيحة","exception":null};
     }
     // if (reply == "Name +966111122222 is already taken.") {
     //   itemCount="Name +966111122222 is already taken.";
@@ -267,7 +267,7 @@ class NetworkRequest{
       return jsonResponse;
     }
     catch(e){
-      return {"data":null,"status":"NotFound","message":"WrongPassword Password","exception":null};
+      return {"data":null,"status":"NotFound","message":"عفوا كلمة المرور غير صحيحة","exception":null};
     }
     // if (reply == "Name +966111122222 is already taken.") {
     //   itemCount="Name +966111122222 is already taken.";

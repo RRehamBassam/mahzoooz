@@ -108,26 +108,42 @@ bool isverifyPhoneNumbe=false;
                   child:Column(
                 //   crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text(
-                     translator.translate("Welcome to Mahzoooz"),
-                       // textAlign: TextAlign.right,
-                        style: TextStyle(fontWeight: FontWeight.w700,
-                          fontSize: 23,
-                          color:Colors.black54.withOpacity(0.7),
-                        ),
-                      ),
-                      SizedBox(height: 16,),
-                      new Text( translator.translate("Mahzoooz for"),
-                       // translator.translate("محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
-                       textAlign: TextAlign.center,
-                         overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color:Color(0xff707070),
-                        ),
-                      )
+                     Container(
+                      width: 210,
+                       child: Center(
+                         child: new Text(
+
+                            "من فضلك ادخل رقم جوالك لاستعادة كلمة المرور",
+                             textAlign: TextAlign.center,
+
+                            style: TextStyle(fontWeight: FontWeight.w700,
+                              fontSize: 18,
+
+                              color:Colors.black54.withOpacity(0.65),
+                            ),
+                          ),
+                       ),
+                     )
+                     //  new Text(
+                     // translator.translate("Welcome to Mahzoooz"),
+                     //   // textAlign: TextAlign.right,
+                     //    style: TextStyle(fontWeight: FontWeight.w700,
+                     //      fontSize: 23,
+                     //      color:Colors.black54.withOpacity(0.7),
+                     //    ),
+                     //  ),
+                     //  SizedBox(height: 16,),
+                     //  new Text( translator.translate("Mahzoooz for"),
+                     //   // translator.translate("محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
+                     //   textAlign: TextAlign.center,
+                     //     overflow: TextOverflow.ellipsis,
+                     //    maxLines: 3,
+                     //    style: TextStyle(
+                     //      fontWeight: FontWeight.w500,
+                     //      fontSize: 15,
+                     //      color:Color(0xff707070),
+                     //    ),
+                     //  )
                     ],
                   )),
 
@@ -294,8 +310,8 @@ bool isverifyPhoneNumbe=false;
                           color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                         ),
                         child: Center(
-                          child: new Text(
-                            translator.translate('Login'),
+                          child: new Text("استعادة كلمة المرور",
+                            //translator.translate('Login'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,

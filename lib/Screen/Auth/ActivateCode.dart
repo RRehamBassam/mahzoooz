@@ -56,7 +56,7 @@ class _ActivateCodeState extends State<ActivateCode> {
               child: Column(
                 children: [
                   new Text(
-                    "أدخل الكورد الذي ارسلناه لك",
+                    setPass?"من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور":"أدخل الكورد الذي ارسلناه لك",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "DIN Next LT Arabic",
@@ -134,7 +134,7 @@ class _ActivateCodeState extends State<ActivateCode> {
                   ),
                   child:Center(
                     child: new Text(
-                      "دخول",
+                     setPass?"استعادة كلمة المرور" :"دخول",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,

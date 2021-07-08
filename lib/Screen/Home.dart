@@ -216,9 +216,20 @@ var addresses;
   //   await launch('$link');
   // }
   bool loud;
+  var dataProfile;
+  getProfileState() async {
+    NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.getProfile().then((value){
+      setState(() {
+        dataProfile=value;
+        //    bytes = convert.base64.decode(value);
+      });
+    });
+  }
   @override
   void initState() {
   //  getImageInState();
+    getProfileState();
     DataEmapty2="1";
     getDataEmptyState();
     getAddressChangeState();
@@ -441,7 +452,7 @@ var addresses;
               ),
               GestureDetector(
                 onTap:()=> {
-                FlutterOpenWhatsapp.sendSingleMessage("+966566515191", "Hello"),
+                FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
                   print("ooo"),
                   Navigator.pop(context)},
                 child: new Container(
@@ -458,7 +469,7 @@ var addresses;
                       children: [
 
                         new Text(
-                    translator.translate( " Contact us via WhatsApp "),
+                    translator.translate( "Contact us via WhatsApp"),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,

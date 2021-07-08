@@ -625,7 +625,7 @@ Future<void> share() async {
                       SizedBox(height: 4,),
                       snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("احجز طاولة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
                       snapshot.data['branches'][0]['hasBooking']&&snapshot.data['bookingSettings'].length!=0?SizedBox(height: 4,):Container(),
-                      snapshot.data['offer']['schoolTypeAr']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+                      snapshot.data['offer']['schoolTypeAr']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/SchoolIcon.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
 
                          ],
                   ),

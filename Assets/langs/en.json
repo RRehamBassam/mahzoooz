@@ -42,7 +42,7 @@
     "Enjoy your time now": "Enjoy your time now",
     "Click start playing":"Click start playing",
     "check your luck from hundreds of offers and discounts": "check your luck from hundreds of offers and discounts",
-    "customers service": "customers service",
+    "customers service": "We are happy to serve you through",
     "Contact us via WhatsApp": "Contact us via WhatsApp",
     "Congratulations you won": "Congratulations you won",
     "الفروع المتاحة": "Available branches",
@@ -60,7 +60,7 @@
     "المفضلة":"Favorite",
     "الاعدادت": "Settings",
     "غيير موقعك":"Change your location",
-    "اتصل بنا عبر صفحتنا":"Contact us via our page",
+    "اتصل بنا عبر صفحتنا":"Contact now",
     "عن التطبيق": "About the application",
     "خروج": "Exit",
     "كوبون خصم": "discount coupon",
@@ -72,5 +72,6 @@
     "اكتب جزء من اسم المكان": "Type a part of the place name",
     "تعديل": "edit",
     "تعديل بياناتي":"Edit my data",
-    "موقع": "Location"
+    "موقع": "Location",
+    "قيم":"rate"
 }

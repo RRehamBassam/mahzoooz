@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mahzoooz/Screen/ProfileScreen/aboutApp.dart';
@@ -352,9 +353,14 @@ bool initData;
                   SizedBox(height: 4,),
                   // Box("غيير موقعك",Icon(Icons.location_on,color:Color(0xff38056e) ,),snapshot.data),//Image.asset('Assets/Setting.png',color:  Color(0xff38056e),)
                   // SizedBox(height: 4,),
-                 Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
+                  Box("قيم",Icon(
+                    Icons.star,
+                    color: Color(0xff38056e),
+                  ),snapshot.data),
                   SizedBox(height: 4,),
                   Box("عن التطبيق",Image.asset('Assets/Group 39851.png',color:  Color(0xff38056e),),snapshot.data),
+                  SizedBox(height: 4,),
+                  Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
                   Box("خروج",Image.asset('Assets/Login.png',color:  Color(0xff38056e),),snapshot.data),
                 //  SizedBox(height: 4,),
@@ -438,7 +444,29 @@ bool initData;
           }else if(text =="غيير موقعك"){
         Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()))
 
-  },
+  }else if(text=="قيم"){
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => SingleChildScrollView(
+          child: Container(
+            decoration: BoxDecoration(
+              color:Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: BottomSheetExample(context,"text",data,data),
+          ),
+        ),
+      )
+
+          },
 
 
       },
@@ -481,5 +509,202 @@ bool initData;
         ),
       ),
     );
+  }
+  var comment;
+  BottomSheetExample(context,String text,data,dataoffer){
+    return
+      Container(
+        color: Colors.black45.withOpacity(0.56),
+
+        child: Container(
+          padding: EdgeInsets.all(20.0),
+          decoration: BoxDecoration(
+            color:Colors.white,
+            boxShadow: [BoxShadow(
+                color: Color.fromRGBO(34, 134, 234, .3),
+                blurRadius: 20,
+                offset: Offset(0, 10)
+            )],
+
+
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(35.0),
+              topRight: Radius.circular(35.0),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              SizedBox(height: 16,),
+              Center(
+                child: // Adobe XD layer: 'How is your trip?' (text)
+                Text(
+                  'كيف كانت تجربتك ؟',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: const Color(0xff242e42),
+                    letterSpacing: 0.2894117431640625,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Container(
+                //  height:342,
+                width: 90,
+                padding: EdgeInsets.all(8),
+                margin: EdgeInsets.only(top: 16, bottom: 20),
+                color: Colors.white,
+                child:Column(
+                  children: [
+                    // Adobe XD layer: 'Your feedback will h' (text)
+                    Text(
+                      'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا',
+                      style: TextStyle(
+                        fontFamily: 'DIN Next LT Arabic',
+                        fontSize: 17,
+                        color: const Color(0xff8a8a8f),
+                        letterSpacing: 0.41000000190734864,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.15,
+                      child: Center(
+                        child: RatingBar.builder(
+                          initialRating: 1,
+                          minRating: 0,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          glowColor:Color(0xff38056e).withOpacity(0.1),
+                          unratedColor:Colors.grey.withOpacity(0.1) ,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Color(0xff38056e),
+                          ),
+                          onRatingUpdate: (rating) {
+                            setState(() {
+                              rate=rating;
+                            });
+                            //    print(rating);
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.15,
+                      width:MediaQuery.of(context).size.width*0.9,
+                      child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
+                        cursorColor: Color(0xff38056e),
+                        keyboardType:TextInputType.text,
+                        autofocus: false,
+                        textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                        onChanged:(val){
+                          setState(() {
+                            comment=val;
+                          });
+                        },
+                        // controller:controller ,
+                        minLines: 3,
+                        maxLines: 6,
+
+                        obscureText: false,
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              borderSide: BorderSide(width: 0.5,color: Colors.grey[300]),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide(width: 0.5,color:Color(0xff38056e))
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
+                            // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+
+                            hintText:"إضافة تعليق",
+
+                            // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+                            hintStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color:Color(0xff5e5e5e).withOpacity(0.48),
+                            ),
+                            labelStyle: null
+                        ),
+
+                      ),
+                    ),
+                    InkWell(
+                      onTap:()async { Navigator.pop(context);
+                      if(rate!=null)
+                      {
+                        if(token==null){
+                          Fluttertoast.showToast(
+                              msg: "عفوا سجل دخولك اولا",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                        }else{
+                          await  addRate(comment, int.parse(rate.toString().split(".").first),
+                              dataoffer['id']);
+                          Fluttertoast.showToast(
+                              msg: Ratemessage,
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+
+                        };}
+
+                      },
+                      child: new Container(
+                        margin:EdgeInsets.only(right: 30, left: 30),
+                        width:MediaQuery.of(context).size.width*0.67,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                        ),
+                        child: Center(
+                          child: new Text(
+                            "إرسال",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color:Color(0xffffffff),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      );
+
+  }
+  var rate;
+  var Ratemessage;
+  addRate(comment,rate,id) async {
+    await  networkRequest.AddRate(comment,rate ,id).then((value){
+      setState(() {
+        Ratemessage  = value;
+      });
+    });
   }
 }
