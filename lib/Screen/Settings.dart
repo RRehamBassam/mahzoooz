@@ -1,4 +1,5 @@
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:mahzoooz/Screen/mapLoc.dart';
 import 'package:provider/provider.dart';
 import 'package:custom_switch/custom_switch.dart';
 import 'package:flutter/material.dart';
@@ -214,6 +215,78 @@ class _SettingsState extends State<Settings> {
                     ],
                   ),
                 ),
+              ),InkWell(
+                onTap: (){
+                  Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width*0.85,
+                  height: MediaQuery.of(context).size.height*0.08,
+                  margin: EdgeInsets.symmetric(vertical:8),
+                  padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: 12) ,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(28.0),
+                    color: const Color(0xfff8f8f8),
+                  ),
+                  child: Center(
+                    child: Row(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          children: [
+// Adobe XD layer: 'text' (text)
+                            SizedBox(
+                              width: 60.0,
+                              child: Text(
+                                translator.translate("موقع"),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: const Color(0x801a1824),
+                                  height: 1.5,
+                                ),
+                                textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                            SizedBox(height: 8,),// Adobe XD layer: 'text' (text)
+                            SizedBox(
+                              width: 66.0,
+                              child: Text(
+                                appState.selectedCategory==1 || translator.currentLanguage == 'ar' ?translator.translate("غيير موقعك"):translator.translate("غيير موقعك"),
+                                style: TextStyle(
+
+                                  fontSize: 12,
+                                  color: const Color(0xff1a1824),
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.4166666666666667,
+                                ),
+                                textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        // Adobe XD layer: 'text' (text)
+                        SizedBox(
+                          width: 38.0,
+                          child: Text(
+                            translator.translate('change'),
+                            style: TextStyle(
+
+                              fontSize: 12,
+                              color: const Color(0xff38056e),
+                              letterSpacing: -0.12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
           // Adobe XD layer: 'Bg' (shape)
               Container(
@@ -294,6 +367,8 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ),
+
+
             ],
           ),
         )
@@ -437,6 +512,7 @@ class _SettingsState extends State<Settings> {
                     // //  clipToSize: true
                     //
                     // )
+
                   ],
                 ),
               ),

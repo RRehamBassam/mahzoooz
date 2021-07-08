@@ -9,6 +9,7 @@ import 'package:geocoder/geocoder.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Screen/Home.dart';
+import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/main.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 //import 'SignIn.dart';
@@ -34,7 +35,33 @@ class _mapsState extends State<maps> {
   String userId;
   String add1;
   String add2;
+  LatLng pp;
   bool resetToggle = false;
+  var lng;
+  var lat;
+  getLatInState() async {
+    await HelperFunctions.getUserLatInSharedPreference().then((value){
+      setState(() {
+        lat  = value;
+      });
+    });
+    await HelperFunctions.getUserLngSharedPreference().then((value){
+      setState(() {
+        lng  = value;
+        latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
+      });
+
+    });
+    print("${latLnglocation.latitude} ljlj");
+    final coordinates= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
+    addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+    HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");
+    setState(() {
+
+    });
+   // getDataRandom();
+    // await checkLocationServicesInDevice();
+  }
   // getIdInState() async {
   //   await HelperFunctions.getUserIdSharedPreference().then((value){
   //     setState(() {
@@ -51,11 +78,14 @@ class _mapsState extends State<maps> {
   void initState() {
     markers = [];
     init=true;
+    lat=24.75007441712588;
+    lng=46.775951958232405;
+    getLatInState();
     // getIdInState();
-    addresses="";
+    addresses=null;
     super.initState();
-
-    checkLocationServicesInDevice();
+    getLoggedaddressInState();
+  //  checkLocationServicesInDevice();
 
   }
   Future<void> checkLocationServicesInDevice() async {
@@ -79,28 +109,30 @@ class _mapsState extends State<maps> {
 
         location.onLocationChanged.listen((LocationData currentLocation) async {
           //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
-          latLnglocation= LatLng(currentLocation.latitude,currentLocation.longitude);
+         // latLnglocation= LatLng(currentLocation.latitude,currentLocation.longitude);
           print("$latLnglocation kkk");
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
-       //     final coordinates2= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
-       //    addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates2);
+
        // //
          // print("kkkkkkk${addresses.first.addressLine}");
          // HelperFunctions.saveUserAddressLocalSharedPreference(' ${addresses.first.addressLine}');
-         //  await markers.add(Marker(
-         //    markerId: MarkerId(latLnglocation.toString()),
-         //    position: latLnglocation,
-         //  ));
+          await markers.add(Marker(
+            markerId: MarkerId(latLnglocation.toString()),
+            position: latLnglocation,
+          ));
+          // final coordinates2= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
+          // addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates2);
+          // addresses=addresses.first.addressLine;
           if(init) {
             markers = [
-              Marker(
-                  markerId: MarkerId('my Location'),
-                  infoWindow: InfoWindow(
-                      title: 'this place is so nice'
-                  ),
-                  position: LatLng(
-                      currentLocation.latitude, currentLocation.longitude)
-              ),
+              // Marker(
+              //     markerId: MarkerId('my Location'),
+              //     infoWindow: InfoWindow(
+              //         title: 'this place is so nice'
+              //     ),
+              //     position: LatLng(
+              //         currentLocation.latitude, currentLocation.longitude)
+              // ),
               // Marker(
               //     markerId: MarkerId('place 3'),
               //     infoWindow: InfoWindow(
@@ -159,7 +191,13 @@ class _mapsState extends State<maps> {
 
   }
   String _address = ""; // create this variable
-
+  getLoggedaddressInState() async {
+    await HelperFunctions.getUserAddressChangeSharedPreference().then((value){
+      setState(() {
+        addresses  = value;
+      });
+    });
+  }
 
   List<Marker> markers ;
 
@@ -188,20 +226,21 @@ class _mapsState extends State<maps> {
       final coordinates= new Coordinates(tappedPoint.latitude,tappedPoint.longitude);
       addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
       HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");//${addresses.first.featureName}
+      addresses=addresses.first.addressLine;
       setState(() {
         // tappedPoint2=tappedPoint;
       markers=[];
         //adddd=latLng;
-        print("${addresses.first.featureName} hhhh  ${addresses.first.addressLine}");
-        add1 = addresses.first.featureName;
-        add2= addresses.first.addressLine;
+        // print("${addresses.first.featureName} hhhh  ${addresses.first.addressLine}");
+        // add1 = addresses.first.featureName;
+        // add2= addresses.first.addressLine;
         //latLng=tappedPoint;
       HelperFunctions.saveUserlocationLatSharedPreference(tappedPoint.latitude);
       HelperFunctions.saveUserlocationlngSharedPreference(tappedPoint.longitude);
-        markers.add(Marker(
-          markerId: MarkerId(tappedPoint.toString()),
-          position: tappedPoint,
-        ));
+        // markers.add(Marker(
+        //   markerId: MarkerId(tappedPoint.toString()),
+        //   position: tappedPoint,
+        // ));
       });
       final GoogleMapController controller = await _controller.future;
       controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -220,13 +259,57 @@ class _mapsState extends State<maps> {
                 // Map(),
                 Container(
                   margin: EdgeInsets.only(top:13),
-                  child:  GoogleMap(
+                  child: GoogleMap(
 
                     myLocationButtonEnabled: true,
                     myLocationEnabled: true,
                     zoomGesturesEnabled: true,
                     zoomControlsEnabled: true,
-                    markers:markers.toSet(),
+                  //  markers:markers.toSet(),
+                onCameraMoveStarted:() {
+
+                },
+                    onCameraIdle: () async {
+                      final coordinates= new Coordinates(pp.latitude,pp.longitude);
+                      addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+                      HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");
+                      HelperFunctions.saveUserlocationLatSharedPreference(
+                          pp.latitude);
+                      HelperFunctions.saveUserlocationlngSharedPreference(
+                          pp.longitude);
+                      print('$addresses');
+                      print('pppppppp');
+                      setState(() {
+                        lat=pp.latitude;
+                        lng=pp.longitude;
+
+                      });
+
+                    },
+                    onCameraMove: (position) async {
+                      print(position.target
+                          .latitude); //لطباعة خط الطول اللي في مركز الخريطةوطبعا بيتغير كل ما حركنا الخريطة
+                      print(position
+                          .target.longitude);
+                      HelperFunctions.saveUserlocationLatSharedPreference(position.target
+                          .latitude);
+                      HelperFunctions.saveUserlocationlngSharedPreference(position
+                          .target.longitude);
+setState(() {
+  pp=position
+      .target;
+});
+                      // final coordinates= new Coordinates(position.target.latitude,position.target.longitude);
+                      // addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+                      // HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");
+                      // print('$addresses');
+                      // print('pppppppp');
+                      // setState(() {
+                      //
+                      // });
+
+                      //لطباعة خط العرض كل ماحركنا الخريطة
+                    },
                     onMapCreated: (GoogleMapController controlle)async {
                       _controller.complete(controlle);
                       //                   final GoogleMapController controller = await _controller.future;
@@ -239,11 +322,25 @@ class _mapsState extends State<maps> {
                     },
                     onTap: _handel,
                     initialCameraPosition: CameraPosition(
-                      target: LatLng(22.774265, 46.738586),
-                      zoom: 4.0,
+                      target: LatLng(lat,lng),//LatLng(latLnglocation.latitude, latLnglocation.longitude),
+                      zoom: 8.0,
                     ) ,
                   ),
                 ),
+                Center(
+                  child: InkWell(
+                    onTap: () async {
+                      final coordinates= new Coordinates(lat,lng);
+                      addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+                      HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");
+                      addresses=addresses.first.addressLine;
+                      setState(() {
+
+                      });
+                    },
+                      child: Icon(Icons.location_on,size: 38,color: Color(0xff80AB40),)),
+                ),
+
       Positioned(
 
                     top:25,
@@ -261,8 +358,32 @@ class _mapsState extends State<maps> {
                       height: 55,
                       padding: EdgeInsets.all(12),
                       width: MediaQuery.of(context).size.width,
-                      child: Center(child: Text(addresses==""?"قم بإختيار الموقع":addresses.first.addressLine)),
-                    )),
+                      child:Row(
+                        children: [
+                          InkWell(
+                            onTap:(){
+                     Navigator.pop(context);
+                    },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.1,
+                            child:Icon(Icons.arrow_forward_ios,size: 18,),
+                      ),
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width*0.8,
+                            child: Row(
+
+                              children: [
+                      Center(child: Container(
+                          width: MediaQuery.of(context).size.width*0.78,
+                          child: Text(addresses is String?addresses==null?"":"$addresses":addresses==null?"":"${addresses.first.addressLine}"))
+
+
+                            )
+                        ],
+                      ),
+                          ),
+                   ]) )),
                 Positioned(
                     right: 30,
                     left: 30,
@@ -304,15 +425,16 @@ class _mapsState extends State<maps> {
 
     return   InkWell(
       onTap:(){
-        if(markers.length!=0){
-        print("llh");
+
+        HelperFunctions.saveUserlocationLatSharedPreference(lat);
+        HelperFunctions.saveUserlocationlngSharedPreference(lng);
         if(latLng==null){
-          print("llk");
+          print("3");
           setState(() {
             latLng=latLnglocation;
           });
         }else{
-          print("ll");
+          print("4");
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (_){
                 return MyApp();
@@ -339,16 +461,6 @@ class _mapsState extends State<maps> {
           // );
           // serverAddresses.addAddress(userId,"${latLng.longitude}","${latLng.latitude}");
           // Navigator.push(context, new MaterialPageRoute(builder: (context)=>new Payment(req,"$add1 / $add2")));
-        }}else{
-          Fluttertoast.showToast(
-              msg: "عليك تحديد موقع",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Color(0xff38056e).withOpacity(0.9),
-              textColor: Colors.white,
-              fontSize: 16.0
-          );
         }
         //Navigator.popAndPushNamed(context, '/activateCode');
       } ,
@@ -370,7 +482,7 @@ class _mapsState extends State<maps> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "اعتماد",
+                "تأكيد العنوان",
                 style: TextStyle(
                   fontFamily: "Tajawal",fontWeight: FontWeight.w700,
                   fontSize: 16,
@@ -392,4 +504,5 @@ class _mapsState extends State<maps> {
         bearing: 90.0,
         tilt: 45.0)));
   }
+
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscounts.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
@@ -29,6 +30,7 @@ class _SearchState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body:  ChangeNotifierProvider<AppCategoris>(
         create: (_) => AppCategoris(),
         child: Consumer<AppCategoris>(
@@ -50,7 +52,7 @@ class _SearchState extends State<SearchScreen> {
                       Navigator.pop(context);
             },
                     child: Container(
-                        margin: EdgeInsets.all(8),
+                        margin: EdgeInsets.only(right: 14,top: 10,bottom: 10),
                         child: Icon(Icons.arrow_back_ios,color: Colors.white,)),
                   ),
                   Container(
@@ -98,12 +100,12 @@ class _SearchState extends State<SearchScreen> {
                           fillColor:Colors.white,// Color(0xFFF8F8F8).withOpacity(0.7),
                           // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                          hintText:"ابحث في العروض",
+                          hintText:translator.translate("Search"),
 
                           // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                           hintStyle:TextStyle(
-                            fontSize: 15,
-                            color:Color(0xffd9d9d9),
+                            fontSize: 13,
+                            color:Color(0xffc0c0c0),
                           ),
                           labelStyle: null
                       ),
@@ -141,24 +143,104 @@ class _SearchState extends State<SearchScreen> {
               width: MediaQuery.of(context).size.width*0.8,
             //  height: MediaQuery.of(context).size.height*0.65,
               child: Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.search,size: 82,),
-                    SizedBox(height: 22,),
-                    Text(
-                      "هتبحث على ايه؟!", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
+                child:Container(
+                  margin: EdgeInsets.only(top: 16),
+                  height: MediaQuery.of(context).size.height*0.6,
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment:CrossAxisAlignment.center ,
+                      mainAxisAlignment:MainAxisAlignment.center ,
+                      children: [
+                        // SizedBox(height: 22,),
+                        Container(
+                          width: 260.0,
+                          height: 260.0,
+                          padding:EdgeInsets.all(45),
+                          decoration: new BoxDecoration(
+                            color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+                            shape: BoxShape.circle,
+                          ),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
 
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color:Colors.black,
-                      ),
-                    )
-                  ],
-                ),
+                            padding:EdgeInsets.all(50),
+                            decoration: new BoxDecoration(
+                              color: Color(0xffC5E696),// Color(0xffCEEAE7),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Container(
+                              width: 60.0,
+                              height: 60.0,
+                              decoration: new BoxDecoration(
+                                color:Color(0xff91B958),//Color(0xff029789),
+                                shape: BoxShape.circle,
+                              ),
+                              child:  Icon(Icons.search,size: 46,color: Colors.white,),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 62,),
+
+                        new Text(
+                          translator.translate("ياترى بتبحث عن ايه؟!"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                            color:Color(0xff91B958),
+                          ),
+                        ),
+                        SizedBox(height: 13,),
+                        new Text(
+                          translator.translate("اكتب جزء من اسم المكان"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+
+                            fontWeight: FontWeight.w800,
+                            fontSize: 11,
+                            color:Color(0xffC5E696),
+                          ),
+                        ),
+                        SizedBox(height: 88,),
+                        // InkWell(
+                        //   onTap: (){
+                        //     Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
+                        //   },
+                        //   child:    new Text(
+                        //     "تغيير الموقع الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                        //     textAlign: TextAlign.center,
+                        //     style: TextStyle(
+                        //
+                        //       fontWeight: FontWeight.w600,
+                        //       fontSize: 14,
+                        //       color:Colors.black,
+                        //     ),
+                        //   ),
+                        // )
+
+                      ],
+                    ),
+                  ),
+                ),//  Column(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Icon(Icons.search,size: 82,),
+                //     SizedBox(height: 22,),
+                //     Text(
+                //       "هتبحث على ايه؟!", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                //       textAlign: TextAlign.center,
+                //       style: TextStyle(
+                //
+                //         fontWeight: FontWeight.w700,
+                //         fontSize: 16,
+                //         color:Colors.black,
+                //       ),
+                //     )
+                //   ],
+                // ),
               ),
             ),
           ):FutureBuilder<dynamic>(

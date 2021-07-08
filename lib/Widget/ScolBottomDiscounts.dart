@@ -147,10 +147,12 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
                   color:Colors.white,
                   child:Padding(
                     padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
+
                     child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Container(
                           height: 42.0,
+                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.height< 740.4285714285714?5:12),
                          // width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(18.0),

@@ -48,6 +48,8 @@ class _CameraConnectState extends State<test> {
     await HelperFunctions.getUserImageSharedPreference().then((value){
       setState(() {
         userImage  = value;
+        base64Image=userImage;
+        callback('data:image/jpeg;base64,$base64Image');
         bytes = convert.base64.decode(userImage);
       });
     });
@@ -58,10 +60,12 @@ class _CameraConnectState extends State<test> {
     );
     setState(() {
       _image = image;
-      fileName = image.path.split('/').last;
-      base64Image = base64Encode(_image.readAsBytesSync());
+      print('kk');
+    print(image);
+      fileName = _image.path.split('/').last;
+      base64Image = base64Encode(image.readAsBytesSync());
       HelperFunctions.saveUserImageSharedPreference(base64Image);
-      callback("data:image/jpg;base64$base64Image");
+      callback('data:image/jpeg;base64,$base64Image');
     });
   }
   void _showPicker(context) {
@@ -126,12 +130,23 @@ class _CameraConnectState extends State<test> {
                 borderRadius: BorderRadius.circular(6.00),
                 child: Image.file(
                   _image,
-                  height: 60.00,
-                  width: 60.00,
+                  height: 85.00,
+                  width: 85.00,
                   fit: BoxFit.fill,
                 ),
               )
-                  : userImage==null?Stack(
+                  : userImage==null?   imageback!=null?Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.00),
+                    image: DecorationImage(
+                      image: NetworkImage("$imageback"),//MemoryImage(bytes),
+                      fit: BoxFit.cover,
+                    )
+               //   image:  NetworkImage("$imageback"),
+                ),
+                  width: 85,
+                  height: 85.00,
+                  ):Stack(
                 children: [
                   Container(
                     width: 85,
@@ -139,7 +154,7 @@ class _CameraConnectState extends State<test> {
 
                       Row(
                         children: [
-                          ClipRRect(
+                       ClipRRect(
                             borderRadius: BorderRadius.circular(16.00),
                             child:Image.asset("Assets/profileImage.png",fit: BoxFit.fitWidth,height: 80.0,width: 80.0,),
                           ),

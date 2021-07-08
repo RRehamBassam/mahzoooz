@@ -63,7 +63,7 @@ class _ProfileState extends State<Profile> {
   var edAdd;
   Future<String> getSWData(cityInt) async {
     var res = await http
-        .get(Uri.encodeFull('http://ahmed453160-001-site1.etempurl.com/Countries/GetAll'), headers: {"Accept": "application/json"});
+        .get(Uri.parse(Uri.encodeFull('http://ahmed453160-001-site1.etempurl.com/Countries/GetAll')), headers: {"Accept": "application/json"});
     var resBody = json.decode(res.body);
     print(resBody);
     setState(() {
@@ -135,12 +135,13 @@ bool initData;
           children: [
             Column(
               children: [
-                SizedBox(height: 16,),
+                SizedBox(height: 18,),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset("Assets/Image-2.png")
+                    Image.asset("Assets/mohzoooz2.png",scale: 4.4,)
+                   // Image.asset("Assets/Image-2.png")
                   ],
                 )
 
@@ -148,7 +149,7 @@ bool initData;
 
               ],
             ),
-            SizedBox(height: 8,),
+          //   SizedBox(height: 8,),
             Container(
               height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height*0.74: MediaQuery.of(context).size.height*0.742,
 
@@ -337,11 +338,11 @@ bool initData;
                  // SizedBox(height: 0,),
                   Box("الصفحة الشخصية",Image.asset('Assets/ProfilePage.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("حجوزاتي",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),snapshot.data),
+                  Box("حجوزاتي",Image.asset('Assets/ReservationIcon.png',scale: 2.8,),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("كوبونات خصم للمدراس",Image.asset('Assets/Ticket.png',color:  Color(0xff38056e),),snapshot.data),
+                  Box("كوبونات خصم للمدراس",Image.asset('Assets/SchoolIcon.png',scale: 2.8),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("المفضلة",Image.asset('Assets/Bookmark2.png',color:  Color(0xff38056e),),snapshot.data),
+                  Box("المفضلة",Image.asset('Assets/heart.png',color:  Color(0xff38056e),),snapshot.data),
                   //  SizedBox(height: 4,),
                   // Box("العروض المرسلة",Image.asset('Assets/TicketStar.png',color:  Color(0xff38056e),),),
                   // SizedBox(height: 4,),
@@ -349,11 +350,11 @@ bool initData;
                   SizedBox(height: 4,),
                   Box("الاعدادت",Image.asset('Assets/Setting.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("غيير موقعك",Icon(Icons.location_on,color:Color(0xff38056e) ,),snapshot.data),//Image.asset('Assets/Setting.png',color:  Color(0xff38056e),)
-                  SizedBox(height: 4,),
+                  // Box("غيير موقعك",Icon(Icons.location_on,color:Color(0xff38056e) ,),snapshot.data),//Image.asset('Assets/Setting.png',color:  Color(0xff38056e),)
+                  // SizedBox(height: 4,),
                  Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("عن التطبيق",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data),
+                  Box("عن التطبيق",Image.asset('Assets/Group 39851.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
                   Box("خروج",Image.asset('Assets/Login.png',color:  Color(0xff38056e),),snapshot.data),
                 //  SizedBox(height: 4,),
@@ -429,7 +430,7 @@ bool initData;
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new myCouponDiscount())),
           }else if(text=="الصفحة الشخصية"){
-            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['name'],data['email'],data['phone'],data['genderNameAr'],data['countryNameAr'],data['birthDate'].toString().split("T")[0],data['phone'],edAdd,data))),
+            Navigator.push(context, new MaterialPageRoute(builder: (context)=>  editProfile(data['id'],data['gender'],data['countryId'],data['name'],data['email'],data['phone'],data['genderNameAr'],data['countryNameAr'],data['birthDate'].toString().split("T")[0],data['phone'],edAdd,data))),
           }else if(text=="اتصل بنا عبر صفحتنا"){
         launch('http://mahzoooz.com/'),
           }else if(text =="عن التطبيق"){

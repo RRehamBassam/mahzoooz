@@ -123,7 +123,7 @@ Future<void> share() async {
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
-      if(snapshot.data['offer']['schoolType']!=null){
+      if(snapshot.data['offer']['schoolTypeAr']!=null){
         if(!initPage) {
 
                   getSWData(1);
@@ -194,15 +194,15 @@ Future<void> share() async {
                              crossAxisAlignment: CrossAxisAlignment.center,
                              mainAxisAlignment: MainAxisAlignment.center,
                              children: [
-                               new Text(
-                                 snapshot.data['offer']['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? snapshot.data['offer']['providerNameAr']:snapshot.data['offer']['providerNameEn'],
-                                 textAlign: TextAlign.center,
-                                 style: TextStyle(
-                               fontWeight: FontWeight.w700,
-                                   fontSize: 14,
-                                   color:Color(0xffffffff),
-                                 ),
-                               )
+                               // new Text(
+                               //   snapshot.data['offer']['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? snapshot.data['offer']['providerNameAr']:snapshot.data['offer']['providerNameEn'],
+                               //   textAlign: TextAlign.center,
+                               //   style: TextStyle(
+                               // fontWeight: FontWeight.w700,
+                               //     fontSize: 14,
+                               //     color:Color(0xffffffff),
+                               //   ),
+                               // )
                              ],
                            ),
                          ],
@@ -233,7 +233,7 @@ Future<void> share() async {
                                  onTap: ()async{
                                    if(token==null){
                                      Fluttertoast.showToast(
-                                         msg: "يجب عليك تسجيل الدخول",
+                                         msg: "عفوا سجل دخولك اولا",
                                          toastLength: Toast.LENGTH_SHORT,
                                          gravity: ToastGravity.BOTTOM,
                                          timeInSecForIosWeb: 1,
@@ -290,17 +290,21 @@ Future<void> share() async {
                        Positioned(
                          right: 40,
                          top: 50,
-                         child: InkWell(
-                           onTap: ()=>Navigator.of(context).pushAndRemoveUntil(
-                               MaterialPageRoute(builder: (_){
-                                 return Home();
-                               }),(route)=> false
-                           ),
-                           child: Row(
-                             children: [
-                               Center(child: Image.asset("Assets/IconLeft.png",)),
-                               SizedBox(width: 10,),
-                             ],
+                         child: Container(
+                           child: InkWell(
+                             onTap: () {
+                               Navigator.pop(context);
+                               FlutterStatusbarcolor.setStatusBarColor( Color(0xff38056e));
+                             },
+                             child: Container(
+
+                               child: Row(
+                                 children: [
+                                   Center(child: Image.asset("Assets/IconLeft.png",scale: 0.7,color:Colors.white ,)),
+                                   SizedBox(width: 0,),
+                                 ],
+                               ),
+                             ),
                            ),
                          ),
                        ),
@@ -318,7 +322,7 @@ Future<void> share() async {
                  // margin:EdgeInsets.only(top:190) ,
                  // height: MediaQuery.of(context).size.height*0.9,
                   width:  MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(bottom: 16,right: 16,left: 16,top: 4) ,
+                  padding: EdgeInsets.only(bottom: 16,top: 4) ,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                         colors: [Colors.white,  Color(0xffffffff).withOpacity(0.9)],
@@ -342,88 +346,169 @@ Future<void> share() async {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment:MainAxisAlignment.start ,
                         children: [
-                          Align(
-                            alignment:translator.currentLanguage == 'ar' ? Alignment.centerRight:Alignment.centerLeft,
-                            child: new Text(
-                              snapshot.data['offer']['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? snapshot.data['offer']['providerNameAr']:snapshot.data['offer']['providerNameEn'],
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color:Color(0xff242e42),
+                          Container(
+                           margin: EdgeInsets.symmetric(horizontal: 16),
+                            width: MediaQuery.of(context).size.width,
+                            child: Align(
+                              alignment:translator.currentLanguage == 'ar' ? Alignment.centerRight:Alignment.centerLeft,
+                              child: new Text(
+                                snapshot.data['offer']['branchNameAr'] ==null? "":translator.currentLanguage == 'ar' ? snapshot.data['offer']['branchNameAr']:snapshot.data['offer']['branchNameEn'],
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color:Color(0xff242e42),
+                                ),
                               ),
                             ),
                           ),
                         ],
                       ),
                       SizedBox(height: 8,),
-                  Row(
+                      snapshot.data['offer']['schoolTypeAr']!=null?Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            color: Color(0xff38056e),
+                            width:MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(onTap: (){
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => SingleChildScrollView(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color:Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20.0),
+                                            topRight: Radius.circular(20.0),
+                                          ),
+                                        ),
+
+                                        padding: EdgeInsets.only(
+                                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: BottomSheetExampleRate(context,"text",data,snapshot.data['offer']),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.star,color:Colors.white,),
+                                      new Text(
+                                        snapshot.data['offer']['rate'] .toString(),
+                                        style: TextStyle(
+
+                                          fontSize: 15,
+                                          color:Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  translator.currentLanguage == 'ar' ?snapshot.data['offer']['addressAr']:snapshot.data['offer']['schoolTypeEn'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                    color:Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  snapshot.data['offer']['schoolStudentType'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                    color:Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  translator.currentLanguage == 'ar' ? snapshot.data['offer']['schoolTypeAr']:snapshot.data['offer']['schoolTypeEn'],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                    color:Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                          : Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        width: MediaQuery.of(context).size.width,
+
+                            child: Row(
                     children: [
                       InkWell(onTap: (){
                         showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20.0),
-                                  topRight: Radius.circular(20.0),
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) => SingleChildScrollView(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0),
+                                  ),
                                 ),
-                              ),
 
-                              padding: EdgeInsets.only(
-                                  bottom: MediaQuery.of(context).viewInsets.bottom),
-                              child: BottomSheetExampleRate(context,"text",data,snapshot.data['offer']),
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                                child: BottomSheetExampleRate(context,"text",data,snapshot.data['offer']),
+                              ),
                             ),
-                          ),
                         );
                       },
-                        child: Row(
-                          children: [
-                            Icon(Icons.star,color:Color(0xff38056e) ,),
-                            new Text(
-                              snapshot.data['offer']['rate'] .toString(),
-                              style: TextStyle(
+                        child:  Row(
+                            children: [
+                              Icon(Icons.star,color:Color(0xff38056e) ,),
+                              new Text(
+                                snapshot.data['offer']['rate'] .toString(),
+                                style: TextStyle(
 
-                                fontSize: 15,
-                                color:Color(0xffc8c7cc),
+                                  fontSize: 15,
+                                  color:Color(0xffc8c7cc),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
                         ),
                       ),
                       SizedBox(width: 60,),
-                      snapshot.data['offer']['schoolType']!=null?Text(
-                        "للبنين",
+                      snapshot.data['offer']['schoolTypeAr']!=null?Text(
+                        snapshot.data['offer']['schoolStudentType'],
                         style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15,
-                          color:Color(0xff080700),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color:Color(0xff080700),
                         ),
                       ):Container(),
                       Spacer(),
-                      snapshot.data['offer']['schoolType']!=null?Container():    Row(
+                      snapshot.data['offer']['schoolTypeAr']!=null?Container():    Row(
                         children: [
-                          new Text(//{data['lastDate'].toString().split('T')[1]}
-                            "استعمل مؤخراً منذ",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                              color:Color(0xff909090),
+                            new Text(//{data['lastDate'].toString().split('T')[1]}
+                              "استعمل مؤخراً منذ",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                                color:Color(0xff909090),
+                              ),
                             ),
-                          ),
-                          new Text(//{data['lastDate'].toString().split('T')[1]}
-                            " ${timeago.format(time)}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                              color:Color(0xff909090),
+                            new Text(//{data['lastDate'].toString().split('T')[1]}
+                              " ${timeago.format(time)}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                                color:Color(0xff909090),
+                              ),
                             ),
-                          ),
 
                         ],
                       ),
@@ -438,14 +523,19 @@ Future<void> share() async {
                       // )
                     ],
                   ),
-                      SizedBox(height: 8,),
-                      new Text(
-                        translator.currentLanguage == 'ar' ? snapshot.data['offer']['descriptionAr']: snapshot.data['offer']['descriptionEn'],
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color:Color(0xff909090),
+                          ),
+                      SizedBox(height: 12,),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        width: MediaQuery.of(context).size.width,
+                        child: new Text(
+                          translator.currentLanguage == 'ar' ? snapshot.data['offer']['descriptionAr']: snapshot.data['offer']['descriptionEn'],
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color:Color(0xff909090),
+                          ),
                         ),
                       ),
                       SizedBox(height: 8,),
@@ -454,69 +544,73 @@ Future<void> share() async {
                         height: 1,
                       ),
                       SizedBox(height: 8,),
-                      Row(
-                        children: [
-                          new Text(
-                            snapshot.data['offer']['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?snapshot.data['offer']['titeAr']:snapshot.data['offer']['titleEn'],
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
-                              color:Color(0xffc8c7cc),
-                            ),
-                          ),
-                    Spacer(),
-                          // Row(
-                          //   children: [
-                          //     ClipSwitch(
-                          //       value: _bool,
-                          //       onChanged: _toggleBool,
-                          //       inactiveWidget: Container(
-                          //         alignment: Alignment.center,
-                          //         height: 34.00,
-                          //         width: 72.00,
-                          //         decoration: BoxDecoration(
-                          //           color: Color(0xff38056e),
-                          //           border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
-                          //         ),
-                          //         child: Center(
-                          //           child: new Text(
-                          //             "نسخ الكود",
-                          //             textAlign: TextAlign.center,
-                          //             style: TextStyle(
-                          //               fontWeight: FontWeight.w500,
-                          //               fontSize: 11,
-                          //               color:Color(0xffffffff),
-                          //             ),
-                          //           ),
-                          //         ) ,
-                          //       ),
-                          //       activeWidget: Container(
-                          //           alignment: Alignment.center,
-                          //           height: 34.00,
-                          //           width: 72.00,
-                          //           decoration: BoxDecoration(
-                          //             color: Color(0xffffffff),
-                          //             border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
-                          //           ),
-                          //           child: Center(
-                          //             child: new Text(
-                          //               "DFD23322#",
-                          //               textAlign: TextAlign.center,
-                          //               style: TextStyle(
-                          //                 fontWeight: FontWeight.w500,
-                          //                 fontSize: 9,
-                          //                 color:Color(0xff38056e),
-                          //               ),
-                          //             ),
-                          //           )
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 16),
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            // new Text(
+                            //   snapshot.data['offer']['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?snapshot.data['offer']['titeAr']:snapshot.data['offer']['titleEn'],
+                            //   textAlign: TextAlign.right,
+                            //   style: TextStyle(
+                            //     fontWeight: FontWeight.w500,
+                            //     fontSize: 14,
+                            //     color:Colors.grey.withOpacity(0.9),
+                            //   ),
+                            // ),
+                  //  Spacer(),
+                            // Row(
+                            //   children: [
+                            //     ClipSwitch(
+                            //       value: _bool,
+                            //       onChanged: _toggleBool,
+                            //       inactiveWidget: Container(
+                            //         alignment: Alignment.center,
+                            //         height: 34.00,
+                            //         width: 72.00,
+                            //         decoration: BoxDecoration(
+                            //           color: Color(0xff38056e),
+                            //           border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                            //         ),
+                            //         child: Center(
+                            //           child: new Text(
+                            //             "نسخ الكود",
+                            //             textAlign: TextAlign.center,
+                            //             style: TextStyle(
+                            //               fontWeight: FontWeight.w500,
+                            //               fontSize: 11,
+                            //               color:Color(0xffffffff),
+                            //             ),
+                            //           ),
+                            //         ) ,
+                            //       ),
+                            //       activeWidget: Container(
+                            //           alignment: Alignment.center,
+                            //           height: 34.00,
+                            //           width: 72.00,
+                            //           decoration: BoxDecoration(
+                            //             color: Color(0xffffffff),
+                            //             border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
+                            //           ),
+                            //           child: Center(
+                            //             child: new Text(
+                            //               "DFD23322#",
+                            //               textAlign: TextAlign.center,
+                            //               style: TextStyle(
+                            //                 fontWeight: FontWeight.w500,
+                            //                 fontSize: 9,
+                            //                 color:Color(0xff38056e),
+                            //               ),
+                            //             ),
+                            //           )
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
 
 
-                        ],
+                          ],
+                        ),
                       ),
                       SizedBox(height: 16,),
                       Box("وسائل الإتصال",Image.asset('Assets/Calling.png',color:  Color(0xff38056e),),snapshot.data,data),
@@ -527,11 +621,11 @@ Future<void> share() async {
                       SizedBox(height: 4,),
                       Box("الفروع المتاحة",Image.asset('Assets/Location.png',color:  Color(0xff38056e),),snapshot.data,data),
                       SizedBox(height: 4,),
-                      snapshot.data['offer']['schoolType']!=null?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data) :snapshot.data['menu']!=null?Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+                      snapshot.data['offer']['schoolTypeAr']!=null?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data) :snapshot.data['menu']!=null?Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
                       SizedBox(height: 4,),
-                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("خدمةالحجز",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
+                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("احجز طاولة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
                       snapshot.data['branches'][0]['hasBooking']&&snapshot.data['bookingSettings'].length!=0?SizedBox(height: 4,):Container(),
-                      snapshot.data['offer']['schoolType']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+                      snapshot.data['offer']['schoolTypeAr']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
 
                          ],
                   ),
@@ -615,6 +709,7 @@ Future<void> share() async {
               top: 178,
 
               child:Container(
+
                 height: 27.00,
                 width: 89.00,
                 decoration: BoxDecoration(
@@ -656,83 +751,87 @@ Future<void> share() async {
   }
   //  snapshot.data['branches'][0]['hasBooking']
   Widget Box(String text,Widget widget,data,dataRestaurantData){
-    return     InkWell(
-      onTap:(){
-        if(text=="خدمةالحجز"){
-          print("${data['offer']['id']}  id");
-          Navigator.push(context,PageTransition(
-            type: PageTransitionType.bottomToTop,
-            duration: Duration(milliseconds: 550) ,
-            reverseDuration: Duration(milliseconds: 700),
-            child:ReservationService(data['bookingSettings'],data['offer']['id'],dataRestaurantData),
-          ),);
-        } else  if(text=="كوبون الخصم للمدرسة"){
-          print("${data['offer']['id']}  id");
-          Navigator.push(context,PageTransition(
-            type: PageTransitionType.bottomToTop,
-            duration: Duration(milliseconds: 550) ,
-            reverseDuration: Duration(milliseconds: 700),
-            child:CouponDiscount(data['offer']),
-          ),);
-        }else if(text=="الفروع المتاحة"){
-          Navigator.push(context,
-              new MaterialPageRoute(builder: (context) => new branches(data['branches'])));
+    return     Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      width: MediaQuery.of(context).size.width,
+      child: InkWell(
+        onTap:(){
+          if(text=="احجز طاولة"){
+            print("${data['offer']['id']}  id");
+            Navigator.push(context,PageTransition(
+              type: PageTransitionType.bottomToTop,
+              duration: Duration(milliseconds: 550) ,
+              reverseDuration: Duration(milliseconds: 700),
+              child:ReservationService(data['bookingSettings'],data['offer']['id'],dataRestaurantData),
+            ),);
+          } else  if(text=="كوبون الخصم للمدرسة"){
+            print("${data['offer']['id']}  id");
+            Navigator.push(context,PageTransition(
+              type: PageTransitionType.bottomToTop,
+              duration: Duration(milliseconds: 550) ,
+              reverseDuration: Duration(milliseconds: 700),
+              child:CouponDiscount(data['offer']),
+            ),);
+          }else if(text=="الفروع المتاحة"){
+            Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => new branches(data['branches'])));
 
-        }else
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) => SingleChildScrollView(
-            child: Container(
-              decoration: BoxDecoration(
-                color:Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
-                ),
-              ),
-
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: BottomSheetExample(context,text,data,),
-            ),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
-        ),
-        margin:EdgeInsets.all(2) ,
-        child: Material(
-          elevation: 1,
-          borderRadius: BorderRadius.circular(11.00),
-          child: new Container(
-            height: 59.00,
-
-            width: MediaQuery.of(context).size.width*0.82,
-            padding:EdgeInsets.symmetric(vertical: 8,horizontal: 12) ,
-            decoration: BoxDecoration(
-              color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
-            ),
-            child: Row(
-              children: [
-
-                widget,
-                SizedBox(width: 16,),
-                new Text(
-                translator.translate(text),
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color:Color(0xff040303).withOpacity(0.9),
+          }else
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                  color:Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
                   ),
                 ),
-                Spacer(),
-                Icon(Icons.arrow_forward_ios,color: Color(0xffD9D9D9),size: 18,)
 
-              ],
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: BottomSheetExample(context,text,data,),
+              ),
+            ),
+          );
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
+          ),
+          margin:EdgeInsets.all(2) ,
+          child: Material(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(11.00),
+            child: new Container(
+              height: 59.00,
+
+              width: MediaQuery.of(context).size.width*0.82,
+              padding:EdgeInsets.symmetric(vertical: 8,horizontal: 12) ,
+              decoration: BoxDecoration(
+                color: Color(0xffffffff),borderRadius: BorderRadius.circular(11.00),
+              ),
+              child: Row(
+                children: [
+
+                  widget,
+                  SizedBox(width: 16,),
+                  new Text(
+                  translator.translate(text),
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                      color:Color(0xff040303).withOpacity(0.9),
+                    ),
+                  ),
+                  Spacer(),
+                  Icon(Icons.arrow_forward_ios,color: Color(0xffD9D9D9),size: 18,)
+
+                ],
+              ),
             ),
           ),
         ),
@@ -1475,68 +1574,78 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         //     color: const Color(0xff242e42),
         //     fontWeight: FontWeight.w700,
         //   ),
-          Container(
-            margin: EdgeInsets.only(top: 16, bottom: 16),
-            width: MediaQuery.of(context).size.width*0.7,
-            child: Text(
-              'المرحلة',
-              style: TextStyle(
-
-                fontSize: 15,
-                color:  Colors.black54,
-              ),
-              textAlign: TextAlign.right,
-            ),
+        //   Container(
+        //     margin: EdgeInsets.only(top: 16, bottom: 16),
+        //     width: MediaQuery.of(context).size.width*0.7,
+        //     child: Text(
+        //       'المرحلة',
+        //       style: TextStyle(
+        //
+        //         fontSize: 15,
+        //         color:  Colors.black54,
+        //       ),
+        //       textAlign: TextAlign.right,
+        //     ),
+        //   ),
+        Text(
+           '${data['branches'][0]['schoolStages']}',
+          style: TextStyle(
+            // fontFamily: 'DIN Next LT Arabic',
+            fontSize: 15,
+            color: const Color(0xff242e42),
+            fontWeight: FontWeight.w700,
           ),
-          Container(
-            height:150,
-            width: MediaQuery.of(context).size.width*0.8,
-            padding: EdgeInsets.all(0),
-            // margin: EdgeInsets.only(top: 16, bottom: 40),
-            color: Colors.white,
-            child: ListWheelScrollView(
-                itemExtent: 50,
-                diameterRatio: 1.2,
-                offAxisFraction: -0.4,
-                squeeze: 0.8,
-                // clipToSize: true
-                //  itemExtent: 40,
-                useMagnifier: true,
-                // onSelectedItemChanged: (int){
-                //   {setState(()=>{newStudentsid=data[int]['id'],newStudentsNameid=data[int]['nameAr']});}
-                // },
-                // diameterRatio: 1.6,
-                children: <Widget>[
-                  ...dataS.map((name) {
-                    print(name['nameAr']);
-                    print("lll");
-                    return InkWell(
-                     // onTap: ()=>{setState(()=>{newStudentsid=name['id'],newStudentsNameid=name['nameAr']}),},
-                      child: Container(
-                        width: double.infinity,
-
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                                width: 1, color: Colors.black12)),
-                        padding: EdgeInsets.all(5),
-                        margin:EdgeInsets.all(3) ,
-                        child: Center(
-                          child: Text(name['nameAr'],
-                              style: TextStyle(
-                                fontFamily: "Tajawal",fontWeight: FontWeight.w500,
-                                fontSize: 16,
-                                color:Color(0xff3d3b39),
-                              )),
-                        ),
-                      ),
-                    );
-                  })
-                ]),
-          ),
+          textAlign: TextAlign.right,
+        ),
+          // Container(
+          //   height:150,
+          //   width: MediaQuery.of(context).size.width*0.8,
+          //   padding: EdgeInsets.all(0),
+          //   // margin: EdgeInsets.only(top: 16, bottom: 40),
+          //   color: Colors.white,
+          //   child: ListWheelScrollView(
+          //       itemExtent: 50,
+          //       diameterRatio: 1.2,
+          //       offAxisFraction: -0.4,
+          //       squeeze: 0.8,
+          //       // clipToSize: true
+          //       //  itemExtent: 40,
+          //       useMagnifier: true,
+          //       // onSelectedItemChanged: (int){
+          //       //   {setState(()=>{newStudentsid=data[int]['id'],newStudentsNameid=data[int]['nameAr']});}
+          //       // },
+          //       // diameterRatio: 1.6,
+          //       children: <Widget>[
+          //         ...dataS.map((name) {
+          //           print(name['nameAr']);
+          //           print("lll");
+          //           return InkWell(
+          //            // onTap: ()=>{setState(()=>{newStudentsid=name['id'],newStudentsNameid=name['nameAr']}),},
+          //             child: Container(
+          //               width: double.infinity,
+          //
+          //               decoration: BoxDecoration(
+          //                   color: Colors.white,
+          //                   borderRadius: BorderRadius.circular(10),
+          //                   border: Border.all(
+          //                       width: 1, color: Colors.black12)),
+          //               padding: EdgeInsets.all(5),
+          //               margin:EdgeInsets.all(3) ,
+          //               child: Center(
+          //                 child: Text(name['nameAr'],
+          //                     style: TextStyle(
+          //                       fontFamily: "Tajawal",fontWeight: FontWeight.w500,
+          //                       fontSize: 16,
+          //                       color:Color(0xff3d3b39),
+          //                     )),
+          //               ),
+          //             ),
+          //           );
+          //         })
+          //       ]),
+          // ),
         //  textAlign: TextAlign.right,
-
+      //
       ],
     );
 

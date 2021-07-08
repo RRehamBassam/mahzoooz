@@ -35,7 +35,7 @@ class _CreateAccountState extends State<CreateAccount> {
   String errorMessage = '';
   FirebaseAuth _auth = FirebaseAuth.instance;
  int countryId=0;
-  String base64Image;
+  var base64Image;
   String otp, authStatus = "";
 bool ee=false;
 bool eeName=false;
@@ -54,11 +54,11 @@ bool eeName=false;
           authStatus = "Your account is successfully verified";
         });
       },
-      verificationFailed: (AuthException authException) {
-        setState(() {
-          authStatus = "Authentication failed";
-        });
-      },
+      // verificationFailed: (AuthException authException) {
+      //   setState(() {
+      //     authStatus = "Authentication failed";
+      //   });
+      // },
       codeSent: (String verId, [int forceCodeResent]) {
         verificationId = verId;
         setState(() {
@@ -82,7 +82,7 @@ bool eeName=false;
   List dataG =["ذكر","أنثى"];
   Future<String> getSWData() async {
     var res = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+        .get(Uri.parse(Uri.encodeFull(url)), headers: {"Accept": "application/json"});
     var resBody = json.decode(res.body);
     print(resBody);
     setState(() {

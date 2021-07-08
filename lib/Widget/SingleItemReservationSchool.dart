@@ -56,72 +56,79 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                height: 72.0,width: 65.0,
-                // margin: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
+          Container(
+            width: MediaQuery.of(context).size.width*0.87 ,
+            child: Row(
+              children: [
+                Container(
+                  height: 72.0,width: 65.0,
+                  // margin: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    image: DecorationImage(
 
-                    image:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,):NetworkImage("${data['logo']}"),// MemoryImage(bytes,),
+                      image:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,):NetworkImage("${data['logo']}"),// MemoryImage(bytes,),
 
-                    fit: BoxFit.cover,
+                      fit: BoxFit.cover,
+                    ),
+                  ),),
+                // ClipRRect(
+                //   borderRadius: BorderRadius.circular(12.00),
+                //   child:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,): MemoryImage(bytes),
+                // ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment:CrossAxisAlignment.start ,
+                    children: [
+                      Container(
+                          width: MediaQuery.of(context).size.width*0.47 ,
+                          child: Text(data['providerNameAr']== null?"":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],style: TextStyle(color: Colors.black.withOpacity(0.6)))),
+                      SizedBox(height: 4,),
+                      Container(
+                          width: MediaQuery.of(context).size.width*0.47 ,
+                          child: Text(data['titlAr']== null?"":translator.currentLanguage == 'ar' ?data['titlAr']:data['titleEn'],style: TextStyle(color: Colors.black),)),
+                      //  Spacer(),
+
+
+                    ],
                   ),
-                ),),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(12.00),
-              //   child:data['logo']== null? Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,): MemoryImage(bytes),
-              // ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment:CrossAxisAlignment.start ,
-                  children: [
-                    Text(data['providerNameAr']== null?"مشتى دخول سيارة واحدة":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],style: TextStyle(color: Colors.black.withOpacity(0.6))),
-                    SizedBox(height: 4,),
-                    Text(data['titlAr']== null?"خصم":translator.currentLanguage == 'ar' ?data['titlAr']:data['titleEn'],style: TextStyle(color: Colors.black),),
-                    //  Spacer(),
-
-
-                  ],
                 ),
-              ),
-              Spacer(),
-              Container(
-                //  width:MediaQuery.of(context).size.width- 130,
-                child:Column(
-                  children: [
-                    InkWell(
-                      onTap: ()async{
-                       // showDialog(data);
-                       if(!data['isCanceled']){
-                        showAlertDialog( context,data);}
+                Spacer(),
+                Container(
+                  //  width:MediaQuery.of(context).size.width- 130,
+                  child:Column(
+                    children: [
+                      InkWell(
+                        onTap: ()async{
+                         // showDialog(data);
+                         if(!data['isCanceled']){
+                          showAlertDialog( context,data);}
 
-                      },
-                      child: Row(
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            Text(data["isFinished"]?translator.translate("إنتهاء مدة الخصم"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 32,),
+                      // Spacer(),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          Text(data["isFinished"]?translator.translate("إنتهاء مدة الخصم"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
+                          Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),
                         ],
-                      ),
-                    ),
-                    SizedBox(height: 32,),
-                    // Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      )
+                    ],
+                  ),
+                )
 
-                        Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),
-                      ],
-                    )
-                  ],
-                ),
-              )
-
-            ],
+              ],
+            ),
           ),
           Container(height: 1,width: MediaQuery.of(context).size.width*0.84,color: Colors.grey.withOpacity(0.2),),
           Container(
@@ -145,7 +152,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.date_range_outlined,size: 22,),
-                   Text(" لغايه قبل التاريخ ${data['expireDate'].toString().split('T')[0] }",style: TextStyle(fontSize: 9),)
+                   Text(" لغايه التاريخ ${data['expireDate'].toString().split('T')[0] }",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),

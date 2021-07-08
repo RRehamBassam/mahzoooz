@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:mahzoooz/Screen/SearchScreen.dart';
 class Search extends StatefulWidget {
@@ -53,12 +54,12 @@ class _SearchState extends State<Search> {
                     fillColor:Colors.white,// Color(0xFFF8F8F8).withOpacity(0.7),
                     // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                    hintText:"ابحث في العروض",
+                    hintText:translator.translate("Search"),
 
                     // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                     hintStyle:TextStyle(
-                      fontSize: 15,
-                      color:Color(0xffd9d9d9),
+                      fontSize: 13,
+                      color:Color(0xffc0c0c0),
                     ),
                     labelStyle: null
                 ),

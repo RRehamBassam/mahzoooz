@@ -53,9 +53,27 @@ class _HomeState extends State<Home> {
       }
     });
   }
+var addresses;
+  m(lat,lng) async {
+    try
+    {
+      final coordinates=await new Coordinates(lat,lng);
+      addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+      HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");
+      print("kkkkooo ${addresses.first.addressLine}");
+    }catch(e){
+      print("kkkkooo");
+      print(e);
+    }
+  }
   var DataEmapty2;//             "latitude": "24.75007441712588",
 //             "longitude": "46.775951958232405"
   getDataRandom() async {
+    print(latLnglocation.longitude);
+    print(latLnglocation.latitude);
+    await m(latLnglocation.latitude,latLnglocation.longitude);
+    print("rrrrrrr $AddressChangموقعك  ");
     await networkRequest.getLuck(latLnglocation).then((value){
       try {
         DataEmapty2 = null;
@@ -74,6 +92,14 @@ class _HomeState extends State<Home> {
       });
     });
   }
+  var AddressChang;
+
+  getAddressChangeState() async {
+    await HelperFunctions.getUserAddressChangeSharedPreference().then((value){
+      setState(() {
+        AddressChang  = value;
+      });
+    });}
   getLatInState() async {
     await HelperFunctions.getUserLatInSharedPreference().then((value){
       setState(() {
@@ -92,112 +118,7 @@ class _HomeState extends State<Home> {
   getLngInState() async {
 
   }
-  Future<void> checkLocationServicesInDevice() async {
 
-    Location location = new Location();
-
-    _serviceEnabled = await location.serviceEnabled();
-
-    if(_serviceEnabled)
-    {
-
-      _permissionGranted = await location.hasPermission();
-
-      if(_permissionGranted == PermissionStatus.granted)
-      {
-
-        // _location = await location.getLocation();
-
-        // print(_location.latitude.toString() + " " + _location.longitude.toString());
-
-
-        location.onLocationChanged.listen((LocationData currentLocation) async {
-          //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
-          if(lat==null){
-
-            latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
-          }else{
-            latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
-
-          }
-          // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
-          HttpClient client = new HttpClient();
-          client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-          String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
-        print(latLnglocation);
-        print("ppp");
-          Map map ={
-            "pageNumber": 1,
-            "pageSize": 10,
-            "filter": {
-              "searchText": "",
-              "isSpecial": false,
-               "latitude": "${latLnglocation.latitude}",
-              "longitude": "${latLnglocation.longitude}"
-            }
-          };
-          var itemCount ;
-          HttpClientRequest request = await client.postUrl(Uri.parse(url));
-          request.headers.set('content-type', 'application/json');
-          request.add(convert.utf8.encode(convert.json.encode(map)));
-          HttpClientResponse response = await request.close();
-          String reply = await response.transform(convert.utf8.decoder).join();
-         // print(response.statusCode);
-          var jsonResponse = convert.jsonDecode(reply);
-
-          setState(() {
-            dataLocation=jsonResponse['data']['data'];
-
-            loud=true;
-          });
-
-
-          print(dataLocation);
-
-
-        });
-      }else{
-
-        _permissionGranted = await location.requestPermission();
-        if(_permissionGranted == PermissionStatus.granted)
-        {
-          print('user allowed');
-        }else{
-          //   SystemNavigator.pop();
-        }
-
-      }
-
-    }else{
-
-      _serviceEnabled = await location.requestService();
-
-      if(_serviceEnabled)
-      {
-        _permissionGranted = await location.hasPermission();
-
-        if(_permissionGranted == PermissionStatus.granted)
-        {
-
-          print('user allowed before');
-
-        }else{
-          _permissionGranted = await location.requestPermission();
-          if(_permissionGranted == PermissionStatus.granted)
-          {
-            print('user allowed');
-          }else{
-            //   SystemNavigator.pop();
-          }}
-      }else{
-
-        //  SystemNavigator.pop();
-
-      }
-
-    }
-
-  }
 
   int _selectedIndex ;
 
@@ -300,6 +221,7 @@ class _HomeState extends State<Home> {
   //  getImageInState();
     DataEmapty2="1";
     getDataEmptyState();
+    getAddressChangeState();
     getLatInState();
     getLngInState();
     _selectedIndex=0;

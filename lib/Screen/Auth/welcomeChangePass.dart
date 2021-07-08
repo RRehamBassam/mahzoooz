@@ -12,16 +12,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 
 import '../../main.dart';
-class welcome extends StatefulWidget {
+class welcomeChangePass extends StatefulWidget {
   bool isReservation;
 
-  welcome(this.isReservation);
+  welcomeChangePass(this.isReservation);
 
   @override
   _welcomeState createState() => _welcomeState(isReservation);
 }
 
-class _welcomeState extends State<welcome> {
+class _welcomeState extends State<welcomeChangePass> {
   bool isReservation;
 
   _welcomeState(this.isReservation);
@@ -62,7 +62,7 @@ bool isverifyPhoneNumbe=false;
           authStatus = "OTP has been successfully send";
         });
         print("$forceCodeResent forceCodeResent");
-      await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code,false)));
+      await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code,true)));
         setState(() {
           isLouding=false;
         });
@@ -195,7 +195,7 @@ bool isverifyPhoneNumbe=false;
                             // initialSelection:phoneIsoCode,
                             dropdownIcon: Icon(Icons.arrow_drop_down,color: Colors.grey[300],),
                             labelStyle: TextStyle(color: Colors.grey[300],fontFamily: "Tajawal"),
-                            enabledCountries: ['+20','+970','+966'],
+                            enabledCountries: ['+966','+970','+20'],
                             //showCountryFlags: false,
                             showCountryCodes: true),
                       ),
@@ -223,13 +223,14 @@ bool isverifyPhoneNumbe=false;
                             isLouding=true;
                           });
                           try
-                          {await  getUserHasAccount();
+                          {//await  getUserHasAccount();
+                          await getSendOptAccount();
                           }catch(e){
                             setState(() {
                               isLouding=false;
                             });
                           }
-                          if(!userHasAccount){
+                          if(message=="Code created"){
                             print(message);
                             if(phoneNumber.length<9){
                               print("22");
@@ -265,16 +266,16 @@ bool isverifyPhoneNumbe=false;
                           }
                           else
                        {
-                         if(isReservation){
-                           await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
-                           await   Navigator.popAndPushNamed(context, '/login');
-                          // await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation)));
-
-                         }else{
-                           await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
-                           await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation,false)));
-
-                         }
+                         await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
+                         // if(isReservation){
+                         //   await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
+                         //   await  phoneNumber == null ? null : verifyPhoneNumber(context);
+                         //  // await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation)));
+                         //
+                         // }else{
+                         //   await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
+                         //   await  phoneNumber == null ? null : verifyPhoneNumber(context);
+                         // }
                        }
 
 
@@ -368,9 +369,34 @@ bool isverifyPhoneNumbe=false;
       ),
     );
   }
+  getSendOTpAccount() async {
+    // networkRequest.OffersGetPaged();
+    await  networkRequest.UserHasAccount(phoneNumber).then((value){
+      setState(() {
+        userHasAccount  = value['data']['hasAccount'];
+        code=value['data']['code'];
+        print(value['data']['code']);
+        print("code");
+        message=value['message'];
+        print(value['message']);
+      });
+    });
+  }
   getUserHasAccount() async {
    // networkRequest.OffersGetPaged();
     await  networkRequest.UserHasAccount(phoneNumber).then((value){
+      setState(() {
+        userHasAccount  = value['data']['hasAccount'];
+        code=value['data']['code'];
+        message=value['message'];
+        print(value['message']);
+      });
+    });
+  }
+  getSendOptAccount() async {
+
+    // networkRequest.OffersGetPaged();
+    await  networkRequest.SendOtp(phoneNumber).then((value){
       setState(() {
         userHasAccount  = value['data']['hasAccount'];
         code=value['data']['code'];

@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/Auth/ActivateCode.dart';
 import 'package:mahzoooz/Screen/Auth/createAccount.dart';
+import 'package:mahzoooz/Screen/Auth/welcome.dart';
+import 'package:mahzoooz/Screen/Auth/welcomeChangePass.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
@@ -16,18 +18,21 @@ import '../../main.dart';
 class login extends StatefulWidget {
   String phoneNo;
   bool isReservation;
+  bool setPass;
+  var code;
 
-  login(this.phoneNo,this.isReservation);
+  login(this.phoneNo,this.isReservation,this.setPass,{this.code});
 
   @override
-  _loginState createState() => _loginState(phoneNo,isReservation);
+  _loginState createState() => _loginState(phoneNo,isReservation,setPass,code: code);
 }
 
 class _loginState extends State<login> {
   String phoneNumber;
   bool isReservation;
-
-  _loginState(this.phoneNumber,this.isReservation);
+  bool setPass;
+  var code;
+  _loginState(this.phoneNumber,this.isReservation,this.setPass,{this.code});
   bool  _obscureText;
   String smsOTP;
   String verificationId;
@@ -56,11 +61,11 @@ String Password;
           authStatus = "Your account is successfully verified";
         });
       },
-      verificationFailed: (AuthException authException) {
-        setState(() {
-          authStatus = "Authentication failed";
-        });
-      },
+      // verificationFailed: (AuthException authException) {
+      //   setState(() {
+      //     authStatus = "Authentication failed";
+      //   });
+      // },
       codeSent: (String verId, [int forceCodeResent]) {
         verificationId = verId;
         setState(() {
@@ -124,11 +129,11 @@ String Password;
   }
 
   Future<void> signIn(String otp) async {
-    await FirebaseAuth.instance
-        .signInWithCredential(PhoneAuthProvider.getCredential(
-      verificationId: verificationId,
-      smsCode: otp,
-    ));
+    // await FirebaseAuth.instance
+    //     .signInWithCredential(PhoneAuthProvider.getCredential(
+    //   verificationId: verificationId,
+    //   smsCode: otp,
+    // ));
   }
 
   NetworkRequest networkRequest=new NetworkRequest();
@@ -229,8 +234,11 @@ String Password;
                   ),
                     isLouding?SizedBox(height: 22,): SizedBox(height: 16,),
                     isLouding?Loading():  InkWell(
+
                       onTap: ()async {
+                        print("1");
                         if(Password==null){
+                          print("2");
                             Fluttertoast.showToast(
                                 msg: "يجب عليك إدخال كلمة المرور",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -240,42 +248,82 @@ String Password;
                                 textColor: Colors.white,
                                 fontSize: 16.0
                             );
-                        }
-                        setState(() {
-                          isLouding=true;
-                        });
-                      if(isReservation){
-                        await getLoggedInState();}
-                       await getUserHasAccount(phoneNumber,Password);
-                       if(message=="OK"){
-                              if(isReservation){
-                              Navigator.pop(context);
-                              }else{
+                        }else{
+                          print("3");
+                          setState(() {
+                            isLouding=true;
+                          });
+                          if(isReservation){
+                            await getLoggedInState();
+                          }
+                          if(!setPass) {
+
+                                  await getUserHasAccount(
+                                      phoneNumber, Password);
+                                  if (message == "OK") {
+                                    if (isReservation) {
+                                      Navigator.pop(context);
+                                    } else {
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(builder: (_) {
+                                        return Home();
+                                      }), (route) => false);
+                                      //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+
+                                    }
+
+                                    //phoneNumber == null ? null : verifyPhoneNumber(context);
+                                    // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                                  } else {
+                                    print("4");
+                                    setState(() {
+                                      isLouding = false;
+                                    });
+                                    Fluttertoast.showToast(
+                                        msg: message,
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        timeInSecForIosWeb: 1,
+                                        backgroundColor:
+                                            Color(0xff38056e).withOpacity(0.9),
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+                                  }
+                                }else{
+                            await getUserSetPass(
+                                phoneNumber, Password);
+                            if (message == "Password change successfuly") {
+                              if (isReservation) {
+                                Navigator.pop(context);
+                              } else {
                                 Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (_){
-                                      return  Home();
-                                    }),(route)=> false
-                                );
-                          //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                                    MaterialPageRoute(builder: (_) {
+                                      return Home();
+                                    }), (route) => false);
+                                //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
 
                               }
 
-                         //phoneNumber == null ? null : verifyPhoneNumber(context);
-                       // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
-                       }else{
-                         setState(() {
-                         isLouding=false;
-                       });
-                         Fluttertoast.showToast(
-                             msg: message,
-                             toastLength: Toast.LENGTH_SHORT,
-                             gravity: ToastGravity.BOTTOM,
-                             timeInSecForIosWeb: 1,
-                             backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                             textColor: Colors.white,
-                             fontSize: 16.0
-                         );
-                       }
+                              //phoneNumber == null ? null : verifyPhoneNumber(context);
+                              // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                            } else {
+                              print("4");
+                              setState(() {
+                                isLouding = false;
+                              });
+                              Fluttertoast.showToast(
+                                  msg: message,
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor:
+                                  Color(0xff38056e).withOpacity(0.9),
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            }
+
+                          }
+                              }
 
 
                       },
@@ -304,7 +352,7 @@ String Password;
 
 
               InkWell(
-               // onTap: ()=>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  CreateAccount())),
+                onTap: ()=>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  welcomeChangePass(false))),
                 child: new Text(
                   "لقد نسيت رقم السر",
                   textAlign: TextAlign.right,
@@ -358,7 +406,17 @@ String Password;
     );
   }
   getUserHasAccount(String phone,String pass) async {
+
     await   networkRequest.Login(phone,pass).then((value){
+      setState(() {
+        message  = value['message'];
+
+      });
+    });
+  }
+  getUserSetPass(String phone,String pass) async {
+
+    await   networkRequest.resetPass(phone,pass,code).then((value){
       setState(() {
         message  = value['message'];
 

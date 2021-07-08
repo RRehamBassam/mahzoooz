@@ -17,7 +17,7 @@ class NetworkRequest{
 
     try {
       final response = await http.post(
-        ServerAddresses.serverAddress + ServerAddresses.register,
+          Uri.parse( ServerAddresses.serverAddress + ServerAddresses.register),
         body: {
           "id": 0,
           "name": "reham",
@@ -62,7 +62,7 @@ class NetworkRequest{
 
     try {
       final response = await http.post(
-        ServerAddresses.serverAddress + ServerAddresses.Login,
+          Uri.parse( ServerAddresses.serverAddress + ServerAddresses.Login),
         body:{
           "phone": phone,
           "password": password
@@ -98,7 +98,7 @@ class NetworkRequest{
 
     try {
       final response = await http.post(
-          ServerAddresses.serverAddress + ServerAddresses.UserHasAccount,
+          Uri.parse( ServerAddresses.serverAddress + ServerAddresses.UserHasAccount),
           body:{
             "phone": "0594102511",
           }
@@ -156,6 +156,46 @@ class NetworkRequest{
    // HelperFunctions.saveUserEmailSharedPreference(itemCount);
     return jsonResponse;
   }
+  Future<dynamic> SendOtp(String phone ) async {
+    print(phone);
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Accounts/SendOtp';
+    print("sendotp");
+    Map map ={
+      "phone": phone,
+    };
+    String username = 'mahzoooz';
+    String password = 'Mahzoooz@123';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    var itemCount ;
+    try {
+      HttpClientRequest request = await client.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json'); //headers: <String, String>{'authorization': basicAuth}
+      request.headers.set('authorization', basicAuth);
+      request.add(convert.utf8.encode(convert.json.encode(map)));
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(response.statusCode);
+      print(reply);
+      print("sendotp");
+      var jsonResponse = convert.jsonDecode(reply);
+      // if (reply == "Name +966111122222 is already taken.") {
+      //   itemCount="Name +966111122222 is already taken.";
+      // }else{
+      //   itemCount = jsonResponse['result'];}
+
+      // dynamic itemCount2 = jsonResponse;
+      print(jsonResponse['data']['hasAccount']);
+      // HelperFunctions.saveUserEmailSharedPreference(itemCount);
+      return jsonResponse;
+    }catch(e){
+      print("sendotp");
+      print(e);
+    }
+  }
+
   Future<dynamic> Login(String phone,String pass) async {
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -166,26 +206,78 @@ class NetworkRequest{
     "password": pass
     };
     var itemCount ;
-    HttpClientRequest request = await client.postUrl(Uri.parse(url));
-    request.headers.set('content-type', 'application/json');
-    request.add(convert.utf8.encode(convert.json.encode(map)));
-    HttpClientResponse response = await request.close();
-    String reply = await response.transform(convert.utf8.decoder).join();
-    print(response.statusCode);
-    print(reply);
-    var jsonResponse = convert.jsonDecode(reply);
-    HelperFunctions.saveUserEmailSharedPreference(jsonResponse['data']['token']);
-    HelperFunctions.saveUserLoggedInSharedPreference(true);
-    return jsonResponse;
-    if (reply == "Name +966111122222 is already taken.") {
-      itemCount="Name +966111122222 is already taken.";
-    }else{
-      itemCount = jsonResponse['result'];}
+    try {
+      HttpClientRequest request = await client.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+      request.add(convert.utf8.encode(convert.json.encode(map)));
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(response.statusCode);
+      print(reply);
+      var jsonResponse = convert.jsonDecode(reply);
+      HelperFunctions.saveUserEmailSharedPreference(
+          jsonResponse['data']['token']);
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+      return jsonResponse;
+    }
+    catch(e){
+      return {"data":null,"status":"NotFound","message":"Wrong Password","exception":null};
+    }
+    // if (reply == "Name +966111122222 is already taken.") {
+    //   itemCount="Name +966111122222 is already taken.";
+    // }else{
+    //   itemCount = jsonResponse['result'];}
+    //
+    // dynamic itemCount2 = jsonResponse;
+    //
+    // // HelperFunctions.saveUserEmailSharedPreference(itemCount);
+    // return itemCount;
+  }
+  Future<dynamic> resetPass(String phone,String pass,code) async {
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Accounts/ResetPassword';
+    String username = 'mahzoooz';
+    String password = 'Mahzoooz@123';
+    String basicAuth =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    Map map ={
+      "phone": phone,
+      "code": code,
+      "password":pass,
+      "confirmPassword": pass
+    };
+    var itemCount ;
+    try {
+      HttpClientRequest request = await client.postUrl(Uri.parse(url));
+      request.headers.set('content-type', 'application/json');
+     // request.headers.set('content-type', 'application/json'); //headers: <String, String>{'authorization': basicAuth}
+      request.headers.set('authorization', basicAuth);
+      request.add(convert.utf8.encode(convert.json.encode(map)));
 
-    dynamic itemCount2 = jsonResponse;
-
-    // HelperFunctions.saveUserEmailSharedPreference(itemCount);
-    return itemCount;
+      HttpClientResponse response = await request.close();
+      String reply = await response.transform(convert.utf8.decoder).join();
+      print(response.statusCode);
+      print("qqq");
+      print(reply);
+      var jsonResponse = convert.jsonDecode(reply);
+      HelperFunctions.saveUserEmailSharedPreference(
+          jsonResponse['data']['token']);
+      HelperFunctions.saveUserLoggedInSharedPreference(true);
+      return jsonResponse;
+    }
+    catch(e){
+      return {"data":null,"status":"NotFound","message":"WrongPassword Password","exception":null};
+    }
+    // if (reply == "Name +966111122222 is already taken.") {
+    //   itemCount="Name +966111122222 is already taken.";
+    // }else{
+    //   itemCount = jsonResponse['result'];}
+    //
+    // dynamic itemCount2 = jsonResponse;
+    //
+    // // HelperFunctions.saveUserEmailSharedPreference(itemCount);
+    // return itemCount;
   }
   Future<dynamic> Register(String name,String password,String confirmPassword,String email,String phone,
       int gender, birthDate,int generatedCode, base64Image,countryId) async {
@@ -229,8 +321,8 @@ class NetworkRequest{
     HelperFunctions.saveUserLoggedInSharedPreference(true);
     return jsonResponse['message'];
   }
-  Future<dynamic> UpdateUserProfile(String name,String password,String confirmPassword,String email,String phone,
-      int gender, birthDate, base64Image,countryId) async {
+  Future<dynamic> UpdateUserProfile(id,String name,String password,String confirmPassword,String email,String phone,
+       gender, birthDate, base64Image,countryId) async {
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
     });
@@ -248,17 +340,15 @@ class NetworkRequest{
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Users/UpdateUserProfile';
 
-    Map map ={
-
+    Map map =  {
+      "id":id,
       "name": name,
-      "password": password,
-      "confirmPassword": confirmPassword,
       "email": email,
-      "phone": phone,
       "gender": gender,
       "birthDate": birthDate,
       "countryId": countryId,
-      "imageName":"data:image/jpeg;base64,$base64Image" ,
+      "imageBase64":base64Image,
+      "image": null
 
     };
     var itemCount ;
@@ -719,6 +809,9 @@ print(colId);print(colId);
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
     });
+    print("getLuck");
+    print(latLnglocation.longitude);
+    print(latLnglocation.latitude);
     //print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
     print(token);
 
@@ -1059,7 +1152,7 @@ print(colId);print(colId);
     print(token); print(token);
     try {
       final response = await http.post(
-        "http://ahmed453160-001-site1.etempurl.com/BookingSettings/AddBooking",
+          Uri.parse("http://ahmed453160-001-site1.etempurl.com/BookingSettings/AddBooking"),
         headers: {
           'Authorization': 'Bearer $token',
         },

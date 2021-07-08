@@ -47,7 +47,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
             ),
 
 
-            height: 66,
+            height: 69,
             child: Row(
               children: [
 
@@ -65,16 +65,19 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                         color:Color(0xffffffff),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: new Text(
-                        translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          fontFamily: 'Nimbus',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                          color:Color(0xffffffff),
+                    Container(
+                      width:MediaQuery.of(context).size.width*0.51,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: new Text(
+                          translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                            fontFamily: 'Nimbus',
+                            fontWeight: FontWeight.w700,
+                            fontSize:translator.currentLanguage == 'ar' ?data['titeAr'].length>22?14:15:data['titleEn'].length>25?14: 15,
+                            color:Color(0xffffffff),
+                          ),
                         ),
                       ),
                     ),

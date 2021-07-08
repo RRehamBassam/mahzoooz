@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mahzoooz/Screen/Auth/login.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,9 +9,10 @@ class ActivateCode extends StatefulWidget {
    String phoneNumber;
  var code;
   String verificationId;
-  ActivateCode(this.smsOTP, this.verificationId,this.phoneNumber,this.code);
+  bool setPass;
+  ActivateCode(this.smsOTP, this.verificationId,this.phoneNumber,this.code,this.setPass);
   @override
-  _ActivateCodeState createState() => _ActivateCodeState(smsOTP,verificationId,phoneNumber,code);
+  _ActivateCodeState createState() => _ActivateCodeState(smsOTP,verificationId,phoneNumber,code,setPass);
 }
 
 class _ActivateCodeState extends State<ActivateCode> {
@@ -18,15 +20,16 @@ class _ActivateCodeState extends State<ActivateCode> {
   String verificationId;
   String phoneNumber;
    var code;
-  _ActivateCodeState(this.smsOTP, this.verificationId,this.phoneNumber,this.code);
+  bool setPass;
+  _ActivateCodeState(this.smsOTP, this.verificationId,this.phoneNumber,this.code,this.setPass);
 
-  Future<void> signIn(String smsOTP) async {
-    await FirebaseAuth.instance
-        .signInWithCredential(PhoneAuthProvider.getCredential(
-      verificationId: verificationId,
-      smsCode: smsOTP,
-    ));
-  }
+  // Future<void> signIn(String smsOTP) async {
+  //   await FirebaseAuth.instance
+  //       .signInWithCredential(PhoneAuthProvider.getCredential(
+  //     verificationId: verificationId,
+  //     smsCode: smsOTP,
+  //   ));
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,10 +113,18 @@ class _ActivateCodeState extends State<ActivateCode> {
           height:  MediaQuery.of(context).size.height *0.12,),
             InkWell(
               onTap:() {
-                signIn( smsOTP);
+              //  signIn( smsOTP);
                 if(smsOTP!=null)
-                Navigator.push(context, new MaterialPageRoute(
-                    builder: (context) => CreateAccount(phoneNumber, code)));
+                  if(!setPass) {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) =>
+                              CreateAccount(phoneNumber, code)));
+                }else{
+                       Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,code: code,)));
+
+                  }
               },
               child: new Container(
                   height: 48.00,

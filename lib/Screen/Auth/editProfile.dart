@@ -2,6 +2,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Widget/test.dart';
@@ -16,6 +17,9 @@ import 'package:the_validator/the_validator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class editProfile extends StatefulWidget {
+ var id;
+ var genderNum;
+ var cityNum;
  var UserName;
 var UserEmile;
  var userMobile;
@@ -26,15 +30,18 @@ var phoneNumber;
 var add;
 var dataApi;
 
- editProfile(this.UserName, this.UserEmile, this.userMobile,this.gender,this.city,this.date,this.phoneNumber,this.add,this.dataApi);
+ editProfile(this.id,this.genderNum,this.cityNum,this.UserName, this.UserEmile, this.userMobile,this.gender,this.city,this.date,this.phoneNumber,this.add,this.dataApi);
 
  // editProfile();
 
   @override
-  _editProfileState createState() => _editProfileState(UserName,UserEmile,userMobile,gender,city,date,phoneNumber,add,dataApi);
+  _editProfileState createState() => _editProfileState(id,genderNum,cityNum,UserName,UserEmile,userMobile,gender,city,date,phoneNumber,add,dataApi);
 }
 
 class _editProfileState extends State<editProfile> {
+  var id;
+  var genderNum;
+  var cityNum;
   var UserName;
   var UserEmile;
   var genderInt;
@@ -42,7 +49,7 @@ class _editProfileState extends State<editProfile> {
   var dateInt;
   var phoneNumber;
   var add;var dataApi;
-  _editProfileState(this.UserName,this.UserEmile,this.userMobile,this.genderInt,this.cityInt,this.dateInt,this.phoneNumber,this.add,this.dataApi);
+  _editProfileState(this.id,this.genderNum,this.cityNum,this.UserName,this.UserEmile,this.userMobile,this.genderInt,this.cityInt,this.dateInt,this.phoneNumber,this.add,this.dataApi);
 
   var userMobile;
 
@@ -54,7 +61,7 @@ class _editProfileState extends State<editProfile> {
   String errorMessage = '';
   FirebaseAuth _auth = FirebaseAuth.instance;
   int countryId=0;
-  String base64Image;
+  var base64Image;
   String otp, authStatus = "";
   bool ee=false;
   bool eeName=false;
@@ -76,19 +83,19 @@ class _editProfileState extends State<editProfile> {
   List dataG =["ذكر","أنثى"];
   Future<String> getSWData() async {
     var res = await http
-        .get(Uri.encodeFull(url), headers: {"Accept": "application/json"});
+        .get(Uri.parse(Uri.encodeFull(url)), headers: {"Accept": "application/json"});
     var resBody = json.decode(res.body);
     print(resBody);
     setState(() {
       data = resBody['data'];
     });
-    for(int i;i<data.length;i++){
-      if(data[i]['id']==cityInt)
-        setState(() {
-          _controllerCitiy=new TextEditingController(text:data[i]['nameAr']);
-        });
-
-    };
+    // for(int i;i<data.length;i++){
+    //   if(data[i]['id']==cityInt)
+    //     setState(() {
+    //       _controllerCitiy=new TextEditingController(text:data[i]['nameAr']);
+    //     });
+    //
+    // };
     print(data);
 
     return "Sucess";
@@ -120,7 +127,7 @@ class _editProfileState extends State<editProfile> {
    gender=1;
     init=false;
     super.initState();
-    this.getSWData();
+    getSWData();
   }
 
   var _blankFocusNode = new FocusNode();
@@ -171,7 +178,7 @@ class _editProfileState extends State<editProfile> {
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
         title: new Text(
-          "تعديل صفحتى",
+        translator.translate("تعديل بياناتي"),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -214,7 +221,7 @@ class _editProfileState extends State<editProfile> {
                       textFiled("البريد الإلكتروني",(val)=>setState(()=>email=val),_controllerEmail,UserEmile),
                       // textFiled("كلمة المرور",(val)=>setState(()=>password=val),_controllerPass,null),
                       // textFiled("تأكيد كلمة المرور",(val)=>setState(()=>confirmPassword=val),_controllerCpass,null),
-                      textFiled("النوع",(val)=>setState(()=>gender=val),_controllerG,genderInt==1?"ذكر":"أنثى"),
+                      textFiled("النوع",(val)=>setState(()=>gender=val),_controllerG,genderInt=="ذكر"?"ذكر":"أنثى"),
                       textFiled("تاريخ الميلاد",(val)=>setState(()=>birthDate=val),_controllerD,dateInt),
                       textFiled("الدولة",(val)=>setState(()=>city=val),_controllerCitiy,Address),
                     ],
@@ -310,7 +317,7 @@ class _editProfileState extends State<editProfile> {
                               ),
                               child:Center(
                                 child: new Text(
-                                  "تعديل الملف الشخصي",
+                                  translator.translate("تعديل"),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
@@ -322,15 +329,15 @@ class _editProfileState extends State<editProfile> {
                           ),
                         ),
                         SizedBox(height: 16,),
-                        new Text(
-                          "بمجرد الضغط علي انشاء الحساب انت توافق علي الشروط و الاحكام",
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 9,
-                            color:Color(0xff909090),
-                          ),
-                        )
+                        // new Text(
+                        //   "بمجرد الضغط علي انشاء الحساب انت توافق علي الشروط و الاحكام",
+                        //   textAlign: TextAlign.right,
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.w500,
+                        //     fontSize: 9,
+                        //     color:Color(0xff909090),
+                        //   ),
+                        // )
 
                       ],
                     ),
@@ -542,7 +549,7 @@ class _editProfileState extends State<editProfile> {
                     //  itemExtent: 40,
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
-                      {setState(()=>{_controllerCitiy.text=data[int]['nameAr'],city=data[int]['nameAr'],countryId=data[int]['id']});}
+                      {setState(()=>{_controllerCitiy.text=data[int]['nameAr'],city=data[int]['nameAr'],countryId=data[int]['id'],cityNum=data[int]['id']});}
                       HelperFunctions.saveUserAddressSharedPreference(data[int]['nameAr']);
                     },
                     // diameterRatio: 1.6,
@@ -551,7 +558,7 @@ class _editProfileState extends State<editProfile> {
                         print(name['nameAr']);
                         return InkWell(
                           onTap: ()=>{        HelperFunctions.saveUserAddressSharedPreference(name['nameAr']),
-                            setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id']}),},
+                            setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id'],cityNum=name['id']}),},
                           child: Container(
                             width: double.infinity,
 
@@ -693,14 +700,16 @@ class _editProfileState extends State<editProfile> {
                     //  itemExtent: 40,
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
-                      {setState(()=>{_controllerG.text=dataG[int],gender=int+1});}
+                      {setState(()=>{_controllerG.text=dataG[int],genderNum=int+1});}
                     },
                     // diameterRatio: 1.6,
                     children: <Widget>[
                       ...dataG.map<Widget>((name) {
                         //  print(name['nameAr']);
                         return InkWell(
-                          onTap: ()=>{setState(()=>{_controllerG.text=name}),},
+                          onTap: ()=>{setState(()=>{_controllerG.text=name,
+                            name== "ذكر"?genderNum=1:genderNum=2,
+                          }),},
                           child: Container(
                             width: double.infinity,
 
@@ -856,8 +865,8 @@ class _editProfileState extends State<editProfile> {
       );
   }
   getUserHasAccount() async {
-    await  networkRequest.UpdateUserProfile( name, pas, confirmPassword, email, phoneNumber,
-        gender, birthDate,base64Image,countryId).then((value){
+    await  networkRequest.UpdateUserProfile( id,name, pas, confirmPassword, email, phoneNumber,
+        genderNum, birthDate,base64Image,cityNum).then((value){
       setState(() {
         message  = value;
 

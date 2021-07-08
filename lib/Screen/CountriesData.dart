@@ -32,10 +32,13 @@ class _CountriesDataState extends State<CountriesData> {
   Uint8List bytesback;
   bool isEmpty;
   int count=1;
+  bool init;
+  bool loud;
   @override
   void initState() {
     isEmpty=false;
     count=1;
+    loud=false;
    // bytesback= convert.base64.decode(data['imageName'].split(',').last);
     final dataCategory = Category(
       categoryId: 0,
@@ -55,7 +58,7 @@ class _CountriesDataState extends State<CountriesData> {
 
       ];
     }
-
+    init=true;
     // TODO: implement initState
     super.initState();
   }
@@ -102,14 +105,17 @@ class _CountriesDataState extends State<CountriesData> {
             child: Consumer<AppCategoris>(
               builder: (context, appState, _) {
 
-                return       FutureBuilder<dynamic>(
-                    future:networkRequest.subCategoriesGetPaged(id),
+                return      loud?Container(
+                    height:MediaQuery.of(context).size.height*0.5,
+                    child: Loading()): FutureBuilder<dynamic>(
+                    future:appState.show||appState.id==-1?networkRequest.subCategoriesGetPaged(id):appState.id==id?networkRequest.subCategoriesGetPaged(id):networkRequest.subCategoriesGetPaged(appState.id),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         if(appState.show){
                           subcategoriesData=snapshot.data['categories'];
                           appState.updateshowData();
                           subcategoriesDatabody=snapshot.data;
+                          init=false;
                         }
                         //  print( snapshot.data['categories'].length);
                         return Container(
@@ -139,10 +145,10 @@ class _CountriesDataState extends State<CountriesData> {
                                             isSelected=-1;
                                           });
                                           appState.updateCountEmpty(-1);
-                                          appState.updateid(-1);
+                                          appState.updateid(id);
                                           appState.updateCount(-1);
 
-
+                                          getData();
                                         },
                                         child: Container(
 
@@ -177,8 +183,9 @@ class _CountriesDataState extends State<CountriesData> {
                                                   isSelected=index;
                                                   isEmpty=false;
                                                 });
+                                                getData();
                                                 appState.updateCountEmpty(-1);
-                                                appState.updateid(subcategoriesData[index]['id']);
+                                                appState.updateid(id);
                                                 appState.updateCount(index);
 
 
@@ -290,22 +297,22 @@ class _CountriesDataState extends State<CountriesData> {
                                           // height: MediaQuery.of(context).size.height*0.89,
                                           child: ListView.builder(
                                               shrinkWrap: true,
-                                              itemCount:appState.CountEmpty==-1?1:subcategoriesDatabody['data'].length,
+                                              itemCount:subcategoriesDatabody['data'].length,
                                               physics: BouncingScrollPhysics(),
                                               itemBuilder: (context, index) {
 
 
-                                                  for(int i=0;i<snapshot.data.length;i++){
-                                                    print("ppppppp");
-                                                    if(subcategoriesDatabody['data'][i]['categoryId']==appState.id){
-                                                      appState.updateCountEmpty(1);
-                                                      print("jjjjjj");
-                                                   
-
-
-                                                      print(count);
-                                                    }
-                                                  }
+                                                  // for(int i=0;i<snapshot.data.length;i++){
+                                                  //   print("ppppppp");
+                                                  //   if(subcategoriesDatabody['data'][i]['categoryId']==appState.id){
+                                                  //     appState.updateCountEmpty(1);
+                                                  //     print("jjjjjj");
+                                                  //
+                                                  //
+                                                  //
+                                                  //     print(count);
+                                                  //   }
+                                                  // }
 
                                                 // categoriesData.add(new Category(
                                                 //   categoryId: index,
@@ -314,68 +321,7 @@ class _CountriesDataState extends State<CountriesData> {
                                                 // appState.updateCategory(index,snapshot.data[index]['nameAr']);
                                                 print(appState.categoriesData);
                                                 // AppCategoris.updateCategory(index,snapshot.data[index]['nameAr']);
-                                                return appState.CountEmpty==-1? Expanded(
-                                                  child: Container(
-                                                 height: MediaQuery.of(context).size.height*0.6,
-                                                    child: Column(
-                                                      crossAxisAlignment:CrossAxisAlignment.center ,
-                                                      mainAxisAlignment:MainAxisAlignment.center ,
-                                                      children: [
-                                                      // Container(
-                                                      // height: 50.0,),
-                                                        Container(
-                                                          width: 260.0,
-                                                          height: 260.0,
-                                                          padding:EdgeInsets.all(45),
-                                                          decoration: new BoxDecoration(
-                                                            color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
-                                                            shape: BoxShape.circle,
-                                                          ),
-                                                          child: Container(
-                                                            width: 120.0,
-                                                            height: 120.0,
-
-                                                            padding:EdgeInsets.all(50),
-                                                            decoration: new BoxDecoration(
-                                                              color: Color(0xffC5E696),// Color(0xffCEEAE7),
-                                                              shape: BoxShape.circle,
-                                                            ),
-                                                            child: Container(
-                                                              width: 60.0,
-                                                              height: 60.0,
-                                                              decoration: new BoxDecoration(
-                                                                color:Color(0xff91B958),//Color(0xff029789),
-                                                                shape: BoxShape.circle,
-                                                              ),
-                                                              child: Image.asset("Assets/sad.png") ,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 45,),
-                                                        new Text(
-                                                          "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-
-                                                            fontWeight: FontWeight.w800,
-                                                            fontSize: 16,
-                                                            color:Color(0xff91B958),
-                                                          ),
-                                                        ),
-                                                        // new Text(
-                                                        //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                                                        //   textAlign: TextAlign.center,
-                                                        //   style: TextStyle(
-                                                        //
-                                                        //     fontWeight: FontWeight.w700,
-                                                        //     fontSize: 16,
-                                                        //     color:Color(0xff029789),
-                                                        //   ),
-                                                        // ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ): snapshot.data['data'][index]['categoryId']==appState.id?ViewRestaurantDiscounts(snapshot.data['data'][index]):Container(height: 0,)   ;    }),
+                                                return  ViewRestaurantDiscounts(snapshot.data['data'][index])   ;    }),
                                         ),
                                       ),
 
@@ -496,4 +442,15 @@ class _CountriesDataState extends State<CountriesData> {
 //   ),
 // );
 //  }
+  Future<String> getData() async {
+    setState(() {
+      loud=true;
+    });
+
+
+    await Future<void>.delayed(Duration(seconds: 1));
+    setState(() {
+      loud=false;
+    });
+  }
 }

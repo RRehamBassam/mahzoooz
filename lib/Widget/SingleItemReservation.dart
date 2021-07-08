@@ -54,70 +54,80 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                height: 72.0,width: 65.0,
-                // margin: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  image: DecorationImage(
+          Container(
+            width: MediaQuery.of(context).size.width*0.87 ,
+            child: Row(
+              children: [
+               Row(children: [
+                 Container(
+                   height: 72.0,width: 65.0,
+                   // margin: EdgeInsets.all(16.0),
+                   decoration: BoxDecoration(
+                     borderRadius: BorderRadius.circular(10.0),
+                     image: DecorationImage(
 
-                    image:NetworkImage("${data['logo']}"),// MemoryImage(bytes,),
+                       image:NetworkImage("${data['logo']}"),// MemoryImage(bytes,),
 
-                    fit: BoxFit.cover,
-                  ),
-                ),),
-              //  ClipRRect(
-              //  borderRadius: BorderRadius.circular(12.00),
-              //    child:Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,),
-              // ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment:CrossAxisAlignment.start ,
-                  children: [
-                     Text(data['providerNameAr']== null?"مشتى دخول سيارة واحدة":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],style: TextStyle(color: Colors.black.withOpacity(0.6))),
-                    SizedBox(height: 4,), Text(data['titleAr']== null?"خصم":translator.currentLanguage == 'ar' ?data['titleAr']:data['titleEn'],style: TextStyle(color: Colors.black),),
-                  //  Spacer(),
+                       fit: BoxFit.cover,
+                     ),
+                   ),),
+                 //  ClipRRect(
+                 //  borderRadius: BorderRadius.circular(12.00),
+                 //    child:Image.asset("Assets/ModalPanel.png",fit: BoxFit.fitWidth,height: 65.0,width: 65.0,),
+                 // ),
+                 Container(
+                   margin: EdgeInsets.symmetric(horizontal: 8),
+                   child: Column(
+                     crossAxisAlignment:CrossAxisAlignment.start ,
+                     children: [
+                       Container(
+                           width: MediaQuery.of(context).size.width*0.47 ,
+                           child: Text(data['providerNameAr']== null?"":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],style: TextStyle(color: Colors.black.withOpacity(0.6)))),
+                       SizedBox(height: 4,),
+                       Container(
+                           width: MediaQuery.of(context).size.width*0.47 ,
+                           child: Text(data['titleAr']== null?"":translator.currentLanguage == 'ar' ?data['titleAr']:data['titleEn'],style: TextStyle(color: Colors.black),)),
+                       //  Spacer(),
 
 
-                  ],
-                ),
-              ),
-              Spacer(),
-              Container(
-              //  width:MediaQuery.of(context).size.width- 130,
-                child:Column(
-                  children: [
-                    InkWell(
-                      onTap: ()async{
-                        if(!data['isCanceled'] && !data["isFinished"]){
-                          showAlertDialog( context,data);}
+                     ],
+                   ),
+                 ),
+               ],),
+Spacer(),
+                Container(
+                //  width:MediaQuery.of(context).size.width- 130,
+                  child:Column(
+                    children: [
+                      InkWell(
+                        onTap: ()async{
+                          if(!data['isCanceled'] && !data["isFinished"]){
+                            showAlertDialog( context,data);}
 
-                      },
-                      child: Row(
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            Text(data["isFinished"]?translator.translate("منتهى"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
+                          ],
+                        ),
+                      ),
+                     SizedBox(height: 32,),///201098994275
+                     // Spacer(),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          Text(data["isFinished"]?translator.translate("إنتهاء مدة الحجز"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
+                          Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),//201098994275
                         ],
-                      ),
-                    ),
-                   SizedBox(height: 32,),///201098994275
-                   // Spacer(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      )
+                    ],
+                  ),
+                )
 
-                        Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),//201098994275
-                      ],
-                    )
-                  ],
-                ),
-              )
-
-            ],
+              ],
+            ),
           ),
           Container(height: 1,width: MediaQuery.of(context).size.width*0.84,color: Colors.grey.withOpacity(0.2),),
           Container(
@@ -156,8 +166,8 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
                 InkWell(
                   onTap: (){
-                    MapUtils.openMap(data['latitude'],data['longitude']);
-
+                  //  MapUtils.openMap(data['latitude'],data['longitude']);
+                    MapUtils.openMap(double.parse(data['latitude']),double.parse(data['longitude']));
                     // Navigator.push(context,
                      //    new MaterialPageRoute(builder: (context) => new maps(data['latitude'],data['longitude'])));
 

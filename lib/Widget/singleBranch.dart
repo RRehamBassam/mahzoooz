@@ -54,14 +54,17 @@ class _singleBranchState extends State<singleBranch> {
 
                   children: [
 
-                    Text(
-                      translator.currentLanguage == 'ar' ? data['addressAr']: data['addressEn'],
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                        color:Colors.black,
+                    Container(
+                      width:MediaQuery.of(context).size.width*0.2<72?MediaQuery.of(context).size.width*0.59:MediaQuery.of(context).size.width*0.62,
+                      child: Text(
+                        translator.currentLanguage == 'ar' ? data['addressAr']: data['addressEn'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                          color:Colors.black,
+                        ),
+                        textAlign: TextAlign.right,
                       ),
-                      textAlign: TextAlign.right,
                     ),
                   ],
                 ),
@@ -86,7 +89,7 @@ class _singleBranchState extends State<singleBranch> {
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 4),
 height: 34,
-width: 62,
+  width:MediaQuery.of(context).size.width*0.2<72?MediaQuery.of(context).size.width*0.22:MediaQuery.of(context).size.width*0.2,
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 boxShadow: [

@@ -39,10 +39,10 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   }
   Future<void> share() async {
     await FlutterShare.share(
-        title: 'Example share',
-        text: 'Example share text',
+        title:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
+        text:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
         linkUrl: data['webSite'],
-        chooserTitle: 'Example Chooser Title');
+        chooserTitle: 'لتفاصيل');
   }
   void _toggleBool(bool newValue) {
     if(newValue){
@@ -170,7 +170,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                 onTap: ()async{
                                   if(token==null){
                                     Fluttertoast.showToast(
-                                        msg: "يجب عليك تسجيل الدخول",
+                                        msg: "عفوا سجل دخولك اولا",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.BOTTOM,
                                         timeInSecForIosWeb: 1,
@@ -178,33 +178,49 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                         textColor: Colors.white,
                                         fontSize: 16.0
                                     );
-                                  }else{
-                                    await addFavourites();
-                                    if(message=="Data Inserted Successfully"){
+                                  }else {
+                                    if (token == null) {
                                       Fluttertoast.showToast(
-                                          msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                          msg:"عفوا سجل دخولك اولا",
                                           toastLength: Toast.LENGTH_SHORT,
                                           gravity: ToastGravity.BOTTOM,
                                           timeInSecForIosWeb: 1,
-                                          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                          backgroundColor: Color(0xff38056e)
+                                              .withOpacity(0.9),
                                           textColor: Colors.white,
                                           fontSize: 16.0
                                       );
-                                    }else{
-                                      Fluttertoast.showToast(
-                                          msg: message,
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                          textColor: Colors.white,
-                                          fontSize: 16.0
-                                      );
-
+                                    } else {
+                                      await addFavourites();
+                                      if (message ==
+                                          "Data Inserted Successfully") {
+                                        Fluttertoast.showToast(
+                                            msg: translator.currentLanguage ==
+                                                'ar'
+                                                ? "تم إضافة للمفضلة بنجاح"
+                                                : message,
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Color(0xff38056e)
+                                                .withOpacity(0.9),
+                                            textColor: Colors.white,
+                                            fontSize: 16.0
+                                        );
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg: message,
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Color(0xff38056e)
+                                                .withOpacity(0.9),
+                                            textColor: Colors.white,
+                                            fontSize: 16.0
+                                        );
+                                      }
                                     }
                                   }
-
-
                                 },
                                 child: new Container(
                                   height: 25.00,
@@ -268,7 +284,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                children: [
                                  SizedBox(width: 4,),
                                  new Text(
-                                   data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],
+                                   data['providerNameAr'] ==null? "":translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn'],
                                    textAlign: TextAlign.right,
                                    style: TextStyle(
                                      fontWeight: FontWeight.w700,
@@ -397,7 +413,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   Spacer(),
                                   Row(
                                     children: [
-                                      data['schoolType']!=null?InkWell(
+                                      data['schoolTypeAr']!=null?InkWell(
                                         onTap: (){
                                           Navigator.push(context,PageTransition(
                                             type: PageTransitionType.bottomToTop,
@@ -430,7 +446,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                           ),
                                         )
                                   ),
-                                      ):  ClipSwitch(
+                                      ):data['code']==null?Container():  ClipSwitch(
                                         pathBuilder:	PathBuilders.slideRight,
                                         value: _bool,
                                         onChanged: _toggleBool,
@@ -449,7 +465,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                                   textDirection:translator.currentLanguage == 'ar' ? TextDirection.rtl:TextDirection.ltr,
                                                   child: new Text(
 
-                                                    data['code']==null?"dd":data['code'],
+                                                    data['code'],
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontWeight: FontWeight.w500,
@@ -504,7 +520,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                       ),
                                       SizedBox(width: 6,),
 
-                                      data['schoolType']!=null?Container(): InkWell(
+                                      data['schoolTypeAr']!=null?Container(): InkWell(
                                         onTap: () => setState(() {
                                           launch(data['webSite']);
 
@@ -698,7 +714,17 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                       onTap:()async { Navigator.pop(context);
                         if(rate!=null)
                           {
-
+                          if(token==null){
+                          Fluttertoast.showToast(
+                          msg: "عفوا سجل دخولك اولا",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                          textColor: Colors.white,
+                          fontSize: 16.0
+                          );
+                          }else{
                             await  addRate(comment, int.parse(rate.toString().split(".").first),
                               dataoffer['id']);
                             Fluttertoast.showToast(
@@ -711,7 +737,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                 fontSize: 16.0
                             );
 
-                          };
+                          };}
 
                       },
                       child: new Container(

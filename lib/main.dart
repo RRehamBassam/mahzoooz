@@ -15,16 +15,17 @@ import 'package:provider/provider.dart';
 import 'package:mahzoooz/services/providerUser.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
+// import 'package:geolocator/geolocator.dart';
 
 import 'package:flutter/services.dart';
 import 'dart:convert' as convert;
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await translator.init(
-    localeDefault: LocalizationDefaultType.device,
+     localeDefault: LocalizationDefaultType.device,
     languagesList: <String>['ar', 'en'],
     assetsDirectory: 'Assets/langs/',
-    apiKeyGoogle: '<Key>', // NOT YET TESTED
+     apiKeyGoogle: '<Key>', // NOT YET TESTED
   ); // intialize
 
   runApp( MultiProvider(
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Color(0xff38056e),
       ),
       routes: <String, WidgetBuilder> {
-        '/login': (BuildContext context) => login("+9705941025",true),
+        '/login': (BuildContext context) => login("+9705941025",true,false),
       },
       home: MyHomePage(),
       localizationsDelegates: translator.delegates, // Android + iOS Delegates
@@ -131,9 +132,77 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     });
   }
-  Future<void> checkLocationServicesInDevice() async {
-    //print("1");
+
+
+ // Position currentPosition = Position();
+  _getPosition() async {
     await getLatInState();
+    // "latitude": "24.75007441712588",
+    // "longitude": "46.775951958232405"
+    HelperFunctions.saveUserlocationLatSharedPreference(
+    24.75007441712588);
+    HelperFunctions.saveUserlocationlngSharedPreference(
+    46.775951958232405);
+
+    try {
+      // await Geolocator.requestPermission().then((value) async {
+      //   await Geolocator.getCurrentPosition().then((value) async{
+      //     currentPosition = value;
+      //     if(lat==null) {
+      //       HelperFunctions.saveUserlocationLatSharedPreference(
+      //           currentPosition.latitude);
+      //       HelperFunctions.saveUserlocationlngSharedPreference(
+      //           currentPosition.longitude);
+      //     }
+      //
+      //     print(currentPosition.latitude.toString());
+      //   });
+      // });
+      //
+      // await getLatInState();
+      //
+      // await  m(lat,lng);
+      // print("$lat  kdkdkdkdk $lng");
+
+    } catch (error) {
+      print(error.toString());
+    }
+  }
+
+  m(lat,lng) async {
+    print("kakaka");
+    try
+   {
+     final coordinates=await new Coordinates(lat,lng);
+     addresses=await Geocoder.local.findAddressesFromCoordinates(coordinates);
+
+     HelperFunctions.saveUserAddressChangeSharedPreference(" ${addresses.first.addressLine}");
+     print("kkkkooo ${addresses.first.addressLine}");
+   }catch(e){
+      print("kkkkooo");
+      print(e);
+    }
+  }
+  String _locationMessage = "";
+  // void _getCurrentLocation() async {
+  //
+  //   final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  //   print(position);
+  //
+  //   setState(() {
+  //     HelperFunctions.saveUserlocationLatSharedPreference(currentLocation.latitude);
+  //     HelperFunctions.saveUserlocationlngSharedPreference(currentLocation.longitude);
+  //     _locationMessage = "${position.latitude}, ${position.longitude}";
+  //   });
+  //
+  // }
+  getcheckLocationInState() async {
+    await checkLocationServicesInDevice();
+  }
+  Future<void> checkLocationServicesInDevice() async {
+    print("RR");
+    //print("1");
+
     Location location = new Location();
 
     _serviceEnabled = await location.serviceEnabled();
@@ -144,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _permissionGranted = await location.hasPermission();
 
       if(_permissionGranted == PermissionStatus.granted)
-      {
+      {  print("EE");
 
         // _location = await location.getLocation();
 
@@ -155,18 +224,22 @@ class _MyHomePageState extends State<MyHomePage> {
           //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
 
           if(lat==null){
+            print("HH");
+setState(() {
+  HelperFunctions.saveUserlocationLatSharedPreference(currentLocation.latitude);
+  HelperFunctions.saveUserlocationlngSharedPreference(currentLocation.longitude);
+  latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
+});
 
-            HelperFunctions.saveUserlocationLatSharedPreference(currentLocation.latitude);
-            HelperFunctions.saveUserlocationlngSharedPreference(currentLocation.longitude);
-            latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
            // getUserLocation();
 
           }else{
 
-print("1");
+            print("AA");
             latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
 
           }
+
           // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
 //           HttpClient client = new HttpClient();
 //           client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -259,10 +332,15 @@ print("1");
   }
 
   void initState(){
+    // getLatInState();
      getLatInState();
      getLoctoinState();
      userIsLoggedIn=false;
-    checkLocationServicesInDevice();
+    // _getPosition();
+     //_getCurrentLocation();
+     _getPosition();
+ //  checkLocationServicesInDevice();
+    // getcheckLocationInState();
     //getLoggedInState();
     getLoggedInState();
     super.initState();
@@ -281,7 +359,7 @@ print("1");
   bool _enabled = true;
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarColor( Color(0x00ffffff));
+    FlutterStatusbarcolor.setStatusBarColor( Color(0xff38056e));
 
     // TODO: implement build
     return  Scaffold(

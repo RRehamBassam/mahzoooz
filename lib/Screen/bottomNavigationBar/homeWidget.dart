@@ -1,5 +1,6 @@
 
 import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -36,10 +37,10 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
 
   _homeWidgetState(this.latLnglocation);
 
-  Future<void> share(text) async {
+  Future<void> share(text,text2) async {
     await FlutterShare.share(
         title: 'Example share',
-        text:' مـــبرووك كسبت $text' +'  حمل الآن تطبيق محظوووظ من الرابط',
+        text:'$text $text2' +'  حمل الآن تطبيق محظوووظ من الرابط',
       //  linkUrl: 'https://flutter.dev/',
         chooserTitle: 'Example Chooser Title'
     );
@@ -158,7 +159,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
       if(_items.length==0)
     {
       for(int i=0;i<snapshot.data['data'].length;i++){
-        Luck newluck=  new Luck(snapshot.data['data'][i]['titeAr'],i%2==0?Color(0xff38056e):Color(0xff80AB40),snapshot.data['data'][i]['titleEn']);
+        Luck newluck=  new Luck(snapshot.data['data'][i]['titeAr'],i%2==0?Color(0xff38056e):Color(0xff80AB40),snapshot.data['data'][i]['titleEn'],snapshot.data['data'][i],snapshot.data['data'][i]['providerNameAr'],snapshot.data['data'][i]['providerNameEn']);
         _items.add(newluck);
 
       }
@@ -192,15 +193,15 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                   children: [
                   Column(
                   children: [
-                  SizedBox(height: 30,),
+                  SizedBox(height: 16,),
                   Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  Image.asset("Assets/Image-2.png")
+                  Image.asset("Assets/mohzoooz2.png",scale: 4.4,)
                   ],
                   ),
-                    SizedBox(height: 5,),
+                    SizedBox(height: 16,),
                    Column(
 
                      children: [
@@ -219,8 +220,8 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                  2.0,
                                  2.0,
                                ),
-                               blurRadius: 5.0,
-                               spreadRadius: 1.0,
+                               blurRadius: 3.0,
+                               spreadRadius: 0.5,
                              ), //BoxShadow
                              BoxShadow(
                                color: Colors.white,
@@ -375,7 +376,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                    fontSize: 16.0
                                );
                              }else{
-                               await addFavourites(snapshot.data['data'][_calIndex(_value * _angle + _current)]['id']);
+                               await addFavourites(_items[_calIndex(_value * _angle + _current)].dataLuck['id']);
                                if(message=="Data Inserted Successfully"){
                                  Fluttertoast.showToast(
                                      msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
@@ -420,7 +421,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                            ),
                          ),
                          InkWell(
-                          onTap:()=>share( _items[_calIndex(_value * _angle + _current)].asset),
+                          onTap:()=>share( translator.currentLanguage == 'ar' ?_items[_calIndex(_value * _angle + _current)].asset:_items[_calIndex(_value * _angle + _current)].assetEn, translator.currentLanguage == 'ar' ?"من ${_items[_calIndex(_value * _angle + _current)].NameReAr} ":"from ${_items[_calIndex(_value * _angle + _current)].NameReEn} "),
                            child: Container(
                              margin: EdgeInsets.all( 10),
                              height: 32.00,
@@ -458,7 +459,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                type: PageTransitionType.leftToRight,
                                duration: Duration(milliseconds: 550) ,
                                reverseDuration: Duration(milliseconds: 700),
-                               child: RestaurantData(snapshot.data['data'][_calIndex(_value * _angle + _current)]),
+                               child: RestaurantData(_items[_calIndex(_value * _angle + _current)].dataLuck),
                              ),);
                   },
                            child: Container(
@@ -667,16 +668,56 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
    context.read<providerUser>().updateRandomNum(_value);
     String _asset = translator.currentLanguage == 'ar' ? _items[_index].asset:_items[_index].assetEn;// _items[_calIndex(_value * _angle + _current)].asset
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: 8.0),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Center(
-          child: Text(_asset, textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
-              color:Color(0xff38056e),
-            ),),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width*0.78,
+                child: Center(
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text:  _asset,
+                      style:  TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontFamily:'Tajawal',
+                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
+                        color:Color(0xff38056e),
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: translator.currentLanguage == 'ar' ?" من ${_items[_index].NameReAr} ":"from ${_items[_index].NameReEn} ",
+                          style: TextStyle(
+                            fontFamily:'Tajawal',
+                            fontWeight: FontWeight.w700,
+                            fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
+                            color:Color(0xff38056e),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              // Text(_asset, textAlign: TextAlign.center,
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.w900,
+              //
+              //     fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
+              //     color:Color(0xff38056e),
+              //   ),),
+              // Text(translator.currentLanguage == 'ar' ?"${_items[_index].NameReAr}من ":"${_items[_index].NameReEn}from ",maxLines: 2, textAlign: TextAlign.center,
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.w700,
+              //     fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
+              //     color:Color(0xff38056e),
+              //   ),),
+            ],
+          )
         ),
       ),
     );

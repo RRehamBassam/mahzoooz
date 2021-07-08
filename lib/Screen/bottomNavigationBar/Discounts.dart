@@ -154,7 +154,7 @@ class _DiscountsState extends State<Discounts> {
                                                         builder: (context, snapshot) {
                                                         if (snapshot.hasData) {
                                                         return  Container(
-                                                          margin: EdgeInsets.only(right: 5),
+                                                          margin: EdgeInsets.only(right: MediaQuery.of(context).size.height< 740.4285714285714?5:12),
                                                           width:    MediaQuery.of(context).size.width,
                                                           child: ListView.builder(
                                                           shrinkWrap: true,
