@@ -4,10 +4,13 @@ import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mahzoooz/Screen/Auth/createAccount.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 class ActivateCode extends StatefulWidget {
   String smsOTP;
    String phoneNumber;
- var code;
+
+
+  var code;
   String verificationId;
   bool setPass;
   ActivateCode(this.smsOTP, this.verificationId,this.phoneNumber,this.code,this.setPass);
@@ -22,7 +25,15 @@ class _ActivateCodeState extends State<ActivateCode> {
    var code;
   bool setPass;
   _ActivateCodeState(this.smsOTP, this.verificationId,this.phoneNumber,this.code,this.setPass);
+  String _code="";
+  String signature = "{{ app signature }}";
 
+
+  @override
+  void dispose() {
+    SmsAutoFill().unregisterListener();
+    super.dispose();
+  }
   // Future<void> signIn(String smsOTP) async {
   //   await FirebaseAuth.instance
   //       .signInWithCredential(PhoneAuthProvider.getCredential(
@@ -81,6 +92,20 @@ class _ActivateCodeState extends State<ActivateCode> {
               height:  MediaQuery.of(context).size.height *0.30,
               child:Column(
                 children: [
+                  // PinFieldAutoFill(
+                  //
+                  //   decoration: UnderlineDecoration(
+                  //     textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                  //     colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+                  //   ),
+                  //   currentCode: _code,
+                  //   onCodeSubmitted: (code) {},
+                  //   onCodeChanged: (code) {
+                  //
+                  //       FocusScope.of(context).requestFocus(FocusNode());
+                  //
+                  //   },
+                  // ),        
                   PinEntryTextField(
                     fields: 6,
                     showFieldAsBox: true, onSubmit: (String pin){

@@ -343,7 +343,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                   ),
 
                   Container(
-                  height:MediaQuery.of(context).size.height< 743.4285714285714?  MediaQuery.of(context).size.height*0.18: MediaQuery.of(context).size.height*0.23,
+              //    height:MediaQuery.of(context).size.height< 743.4285714285714?  MediaQuery.of(context).size.height*0.18: MediaQuery.of(context).size.height*0.23,
                   child:win?Column(
                   children: [
                   new Text(
@@ -668,7 +668,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
    context.read<providerUser>().updateRandomNum(_value);
     String _asset = translator.currentLanguage == 'ar' ? _items[_index].asset:_items[_index].assetEn;// _items[_calIndex(_value * _angle + _current)].asset
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(vertical: 3.0),
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Center(
@@ -677,6 +677,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
             children: [
               Container(
                 width: MediaQuery.of(context).size.width*0.78,
+                height:42,// MediaQuery.of(context).size.height*0.062,//38,
                 child: Center(
                   child: RichText(
                     textAlign: TextAlign.center,
@@ -685,7 +686,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                       style:  TextStyle(
                         fontWeight: FontWeight.w700,
                         fontFamily:'Tajawal',
-                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
+                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:20: MediaQuery.of(context).size.height< 783.4285714285714?18:28,
                         color:Color(0xff38056e),
                       ),
                       children: <TextSpan>[
@@ -694,7 +695,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                           style: TextStyle(
                             fontFamily:'Tajawal',
                             fontWeight: FontWeight.w700,
-                            fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?18:22: MediaQuery.of(context).size.height< 783.4285714285714?28:33,
+                            fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:20: MediaQuery.of(context).size.height< 783.4285714285714?18:28,
                             color:Color(0xff38056e),
                           ),
                         )

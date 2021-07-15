@@ -376,7 +376,7 @@ setState(() {
                               children: [
                       Center(child: Container(
                           width: MediaQuery.of(context).size.width*0.78,
-                          child: Text(addresses is String?addresses==null?"":"$addresses":addresses==null?"":"${addresses.first.addressLine}"))
+                          child: Center(child: Text(addresses is String?addresses==null?"":"$addresses":addresses==null?"":"${addresses.first.addressLine}")))
 
 
                             )

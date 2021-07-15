@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mahzoooz/Screen/Auth/welcome.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Screen/Map.dart';
 import 'package:mahzoooz/Screen/OpenMap.dart';
@@ -99,10 +100,10 @@ Future<String> getSWData(id) async {
 bool initPage;
 Future<void> share() async {
   await FlutterShare.share(
-      title: 'Example share',
-      text: 'Example share text',
+      title:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
+      text:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
       linkUrl: data['webSite'],
-      chooserTitle: 'Example Chooser Title');
+      chooserTitle: 'لتفاصيل');
 }
   var token;
   void gettoken()async{
@@ -123,7 +124,7 @@ Future<void> share() async {
       future: networkRequest.OfferGetDetails(data['id']),
     builder: (context, snapshot) {
     if (snapshot.hasData) {
-      if(snapshot.data['offer']['schoolTypeAr']!=null){
+      if(snapshot.data['offer']['schoolCurriculum']!=null){
         if(!initPage) {
 
                   getSWData(1);
@@ -365,7 +366,7 @@ Future<void> share() async {
                         ],
                       ),
                       SizedBox(height: 8,),
-                      snapshot.data['offer']['schoolTypeAr']!=null?Row(
+                      snapshot.data['offer']['schoolCurriculum']!=null?Row(
                         children: [
                           Container(
                             padding: EdgeInsets.all(8),
@@ -426,7 +427,7 @@ Future<void> share() async {
                                   ),
                                 ),
                                 Text(
-                                  translator.currentLanguage == 'ar' ? snapshot.data['offer']['schoolTypeAr']:snapshot.data['offer']['schoolTypeEn'],
+                                  translator.currentLanguage == 'ar' ? snapshot.data['offer']['schoolCurriculum']:snapshot.data['offer']['schoolTypeEn'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
@@ -480,7 +481,7 @@ Future<void> share() async {
                         ),
                       ),
                       SizedBox(width: 60,),
-                      snapshot.data['offer']['schoolTypeAr']!=null?Text(
+                      snapshot.data['offer']['schoolCurriculum']!=null?Text(
                         snapshot.data['offer']['schoolStudentType'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -489,7 +490,7 @@ Future<void> share() async {
                         ),
                       ):Container(),
                       Spacer(),
-                      snapshot.data['offer']['schoolTypeAr']!=null?Container():    Row(
+                      snapshot.data['offer']['schoolCurriculum']!=null?Container():    Row(
                         children: [
                             new Text(//{data['lastDate'].toString().split('T')[1]}
                               "استعمل مؤخراً منذ",
@@ -623,9 +624,9 @@ Future<void> share() async {
                       SizedBox(height: 4,),
                       snapshot.data['offer']['schoolTypeAr']!=null?Box("مراحل",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data) :snapshot.data['menu']!=null?Box("القائمة",Image.asset('Assets/Document.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
                       SizedBox(height: 4,),
-                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("احجز طاولة",Image.asset('Assets/Bag 2.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
+                      snapshot.data['branches'][0]['hasBooking'] && snapshot.data['bookingSettings'].length!=0? Box("احجز طاولة",Image.asset('Assets/ReservationIcon.png',scale: 2.8,),snapshot.data,data):Container(),//"كوبون الخصم للمدرسه"
                       snapshot.data['branches'][0]['hasBooking']&&snapshot.data['bookingSettings'].length!=0?SizedBox(height: 4,):Container(),
-                      snapshot.data['offer']['schoolTypeAr']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/SchoolIcon.png',color:  Color(0xff38056e),),snapshot.data,data):Container(),
+                      snapshot.data['offer']['schoolTypeAr']!=null?Box("كوبون الخصم للمدرسة",Image.asset('Assets/SchoolIcon.png',scale: 2.8,),snapshot.data,data):Container(),
 
                          ],
                   ),
@@ -755,23 +756,68 @@ Future<void> share() async {
       margin: EdgeInsets.symmetric(horizontal: 16),
       width: MediaQuery.of(context).size.width,
       child: InkWell(
-        onTap:(){
+        onTap:() async {
+          await gettoken();
+
           if(text=="احجز طاولة"){
+            if(token!=null){
             print("${data['offer']['id']}  id");
             Navigator.push(context,PageTransition(
               type: PageTransitionType.bottomToTop,
               duration: Duration(milliseconds: 550) ,
               reverseDuration: Duration(milliseconds: 700),
               child:ReservationService(data['bookingSettings'],data['offer']['id'],dataRestaurantData),
-            ),);
+            ),);}else
+            {
+              Fluttertoast.showToast(
+                  msg: "لإتمام عملية الحجز يجب عليك تسجيل دخول",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+              await getData();
+              Navigator.push(context,PageTransition(
+                type: PageTransitionType.leftToRight,
+                duration: Duration(milliseconds: 550) ,
+                reverseDuration: Duration(milliseconds: 700),
+                child: welcome(true),
+              ),);
+
+
+            }
           } else  if(text=="كوبون الخصم للمدرسة"){
+            await gettoken();
+            if(token!=null){
             print("${data['offer']['id']}  id");
             Navigator.push(context,PageTransition(
               type: PageTransitionType.bottomToTop,
               duration: Duration(milliseconds: 550) ,
               reverseDuration: Duration(milliseconds: 700),
-              child:CouponDiscount(data['offer']),
-            ),);
+              child:CouponDiscount(data['offer'],data['branches']),
+            ),);}else
+            {
+              Fluttertoast.showToast(
+                  msg: "لإتمام عملية الحصول الكوبون الخصم يجب عليك تسجيل دخول",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                  textColor: Colors.white,
+                  fontSize: 16.0
+              );
+              await getData();
+              Navigator.push(context,PageTransition(
+                type: PageTransitionType.leftToRight,
+                duration: Duration(milliseconds: 550) ,
+                reverseDuration: Duration(milliseconds: 700),
+                child: welcome(true),
+              ),);
+
+
+            }
           }else if(text=="الفروع المتاحة"){
             Navigator.push(context,
                 new MaterialPageRoute(builder: (context) => new branches(data['branches'])));
@@ -1665,6 +1711,9 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
       });
     });
   }
+Future<String> getData() async {
+  await Future<void>.delayed(Duration(seconds: 3));
+ }
   var Ratemessage;
 addRate(comment,rate,id) async {
   await  networkRequest.AddRate(comment,rate,id).then((value){

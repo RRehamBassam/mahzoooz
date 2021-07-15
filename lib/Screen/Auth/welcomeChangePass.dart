@@ -10,6 +10,7 @@ import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
+import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 
 import '../../main.dart';
 class welcomeChangePass extends StatefulWidget {
@@ -47,8 +48,8 @@ bool isverifyPhoneNumbe=false;
         setState(() {
           authStatus = "Your account is successfully verified";
         });
-        Navigator.push(context, new MaterialPageRoute(
-            builder: (context) => CreateAccount(phoneNumber, code)));
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) =>  login(phoneNumber, false,true,code: smsOTP)));
       },
       // verificationFailed: (AuthException authException) {
       //   setState(() {
@@ -62,7 +63,7 @@ bool isverifyPhoneNumbe=false;
           authStatus = "OTP has been successfully send";
         });
         print("$forceCodeResent forceCodeResent");
-      await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code,true)));
+   //   await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code,true)));
         setState(() {
           isLouding=false;
         });
@@ -88,10 +89,153 @@ bool isverifyPhoneNumbe=false;
       phoneIsoCode = isoCode;
     });
   }
+  bool setPass=true;
+  @override
+  void initState() {
+    codeScreen =false;
+    super.initState();
+  }
+
   NetworkRequest networkRequest=new NetworkRequest();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return codeScreen?Scaffold(
+      appBar:  AppBar(
+        centerTitle: true,
+        elevation: 1,
+        backgroundColor: Color(0xFFFEFEFE),
+        title: new Text(
+          'كود التأكيد',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color:Color(0xff747474),
+          ),
+        ),
+      ),
+      body:  SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 25,),
+            Container(
+              height:  MediaQuery.of(context).size.height *0.25,
+              child: Column(
+                children: [
+                  new Text(
+                    setPass?"من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور":"أدخل الكورد الذي ارسلناه لك",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "DIN Next LT Arabic",
+                      fontSize: 14,
+                      color:Color(0xff454545),
+                    ),
+                  ),
+                  SizedBox(height: 8,),
+                  new Text(
+                    "تم ارسال رمز التحقيق الي رقم\n$phoneNumber",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "DIN Next LT Arabic",
+                      fontSize: 17,
+                      color:Color(0xff909090),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+                height:  MediaQuery.of(context).size.height *0.30,
+                child:Column(
+                  children: [
+                    // PinFieldAutoFill(
+                    //
+                    //   decoration: UnderlineDecoration(
+                    //     textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                    //     colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+                    //   ),
+                    //   currentCode: _code,
+                    //   onCodeSubmitted: (code) {},
+                    //   onCodeChanged: (code) {
+                    //
+                    //       FocusScope.of(context).requestFocus(FocusNode());
+                    //
+                    //   },
+                    // ),
+                    Directionality(
+                      textDirection:translator.currentLanguage == 'ar' ? TextDirection.ltr:TextDirection.ltr,
+                      child: PinEntryTextField(
+                        fields: 6,
+                        showFieldAsBox: true, onSubmit: (String pin){
+                        setState(() {
+                          smsOTP=pin;
+                          // ActiationCode=pin;
+                        });
+                        // showDialog(context: context, builder: (context){
+                        //           return AlertDialog(
+                        //             title: Text("Pin"),
+                        //             content: Text('Pin entered is $pin'),
+                        //           );}
+                        //           );
+                      },),
+                    ),
+                    SizedBox(height: 8,),
+                    new Text(
+                      "اعد الارسال ( ٣٠ ثانية )",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: "DIN Next LT Arabic",
+                        fontSize: 14,
+                        color:Color(0xff38056e),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                )),
+
+            Container(
+              height:  MediaQuery.of(context).size.height *0.12,),
+            InkWell(
+              onTap:() {
+                //  signIn( smsOTP);
+
+                // Navigator.pushReplacement(context, MaterialPageRoute(
+                //     builder: (context) =>  login(phoneNumber, false,true,code: code)));
+
+                if(smsOTP!=null)
+                    signIn(smsOTP);
+
+
+                    // Navigator.push(
+                    //     context,
+                    //     new MaterialPageRoute(
+                    //         builder: (context) =>
+                    //             CreateAccount(phoneNumber, code)));
+
+              },
+              child: new Container(
+                  height: 48.00,
+                  width: 311.00,
+                  decoration: BoxDecoration(
+                    color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                  ),
+                  child:Center(
+                    child: new Text(
+                      setPass?"استعادة كلمة المرور" :"دخول",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color:Color(0xffffffff),
+                      ),
+                    ),
+                  )
+              ),
+            ),
+          ],
+        ),
+      ),
+    ): Scaffold(
       body: Container(
         margin: EdgeInsets.all(16),
         child: SingleChildScrollView(
@@ -193,7 +337,7 @@ bool isverifyPhoneNumbe=false;
                         border: Border.all(width: 1.00, color: Colors.grey[300],), borderRadius: BorderRadius.circular(30.00),
                       ),
                       child: Directionality(
-                        textDirection: TextDirection.ltr,
+                        textDirection: translator.currentLanguage == 'ar' ? TextDirection.ltr:TextDirection.ltr,
                         child: InternationalPhoneInput(
 
                             border: OutlineInputBorder(
@@ -268,7 +412,8 @@ bool isverifyPhoneNumbe=false;
                                 setState(() {
                                   isverifyPhoneNumbe=false;
                                 });
-                           await  phoneNumber == null ? null : verifyPhoneNumber(context);
+                           await  phoneNumber == null ? null : verifyPhoneNumber2(context);
+
                                // await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code)));
                                 setState(() {
                                   isLouding=false;
@@ -408,6 +553,99 @@ bool isverifyPhoneNumbe=false;
         print(value['message']);
       });
     });
+  }bool codeScreen;
+  Future<void> verifyPhoneNumber2(BuildContext context) async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 15),
+      verificationCompleted: (AuthCredential authCredential) {
+        FirebaseAuth.instance.signInWithCredential(authCredential).then((AuthResult result){
+
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) =>  login(phoneNumber, false,true,code: code)));
+        }).catchError((e) {
+          Fluttertoast.showToast(
+              msg: "Authentication failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xff38056e).withOpacity(0.9),
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+          return "error";
+        });
+
+//        Navigator.pushReplacement(context, MaterialPageRoute(
+//            builder: (context) => Home_Screen()//ChatRoom()
+//        ));
+        setState(() {
+          authStatus = "Your account is successfully verified";
+        });
+      },
+      verificationFailed: (AuthException authException) {
+        setState(() {
+          authStatus = "Authentication failed";
+        });
+        Fluttertoast.showToast(
+            msg: "Authentication failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+      },
+      codeSent: (String verId, [int forceCodeResent]) {
+        verificationId = verId;
+        setState(() {
+          codeScreen=true;
+          authStatus = "OTP has been successfully send";
+        });
+
+        //  otpDialogBox(context).then((value) {});
+      },
+      codeAutoRetrievalTimeout: (String verId) {
+        verificationId = verId;
+        setState(() {
+          authStatus = "TIMEOUT";
+        });
+        Fluttertoast.showToast(
+            msg: "TIMEOUT send new messege",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+      },
+
+    );
+  }
+  Future<void> signIn(String otp) async {
+    print(otp);
+    print("otp");
+    try
+    {
+      await FirebaseAuth.instance
+          .signInWithCredential(PhoneAuthProvider.getCredential(
+        verificationId: verificationId,
+        smsCode: otp,
+      ));
+    }catch(v){
+      Fluttertoast.showToast(
+          msg: "ادخل كود صحيح",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+
+    }
   }
   getSendOptAccount() async {
 

@@ -416,11 +416,11 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                       data['schoolTypeAr']!=null?InkWell(
                                         onTap: (){
                                           Navigator.push(context,PageTransition(
-                                            type: PageTransitionType.bottomToTop,
-                                            duration: Duration(milliseconds: 550) ,
-                                            reverseDuration: Duration(milliseconds: 700),
-                                            child:CouponDiscount(data),
-                                          ),);
+                                             type: PageTransitionType.bottomToTop,
+                                             duration: Duration(milliseconds: 550) ,
+                                             reverseDuration: Duration(milliseconds: 700),
+                                             child:CouponDiscount(data,data),
+                                         ),);
                                         },
                                         child: Container(
                                         alignment: Alignment.centerLeft,
@@ -522,7 +522,9 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
 
                                       data['schoolTypeAr']!=null?Container(): InkWell(
                                         onTap: () => setState(() {
-                                          launch(data['webSite']);
+                                          launch(data['webSite'],
+
+                                          );
 
                                         }),
                                         child: Transform(

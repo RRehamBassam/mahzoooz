@@ -10,17 +10,18 @@ import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
 class CouponDiscount extends StatefulWidget {
   var datapath;
+  var databranches;
 
-  CouponDiscount(this.datapath);
+  CouponDiscount(this.datapath,this.databranches);
 
   @override
-  _CouponDiscountState createState() => _CouponDiscountState(datapath);
+  _CouponDiscountState createState() => _CouponDiscountState(datapath,databranches);
 }
 
 class _CouponDiscountState extends State<CouponDiscount> {
   var datapath;
-
-  _CouponDiscountState(this.datapath);
+  var databranches;
+  _CouponDiscountState(this.datapath,this.databranches);
 
   NetworkRequest networkRequest=new NetworkRequest();
   var id;
@@ -30,7 +31,7 @@ var newStudentsName;
   @override
   void initState() {
     super.initState();
-    this.getSWData(1);
+    this.getSWData(datapath['schoolType']);
     StudentsData=[];
     StudentsDataApi=[];
   }
@@ -631,9 +632,12 @@ mainAxisAlignment: MainAxisAlignment.spaceBetween,
             style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e)),
             ),
           ),
-          Center(
-            child: Text(translator.translate(nameid),
-              style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
+          Container(
+            width:  MediaQuery.of(context).size.width*0.2,
+            child: Center(
+              child: Text(translator.translate(nameid),
+                style: TextStyle(fontWeight:FontWeight.w600,fontSize:nameid.length>8?14: 18,color:Color(0xff38056e) ),
+              ),
             ),
           ),
         //  Spacer(),

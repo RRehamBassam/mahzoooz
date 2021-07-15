@@ -360,8 +360,8 @@ bool initData;
                   SizedBox(height: 4,),
                   Box("عن التطبيق",Image.asset('Assets/Group 39851.png',color:  Color(0xff38056e),),snapshot.data),
                   SizedBox(height: 4,),
-                  Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
-                  SizedBox(height: 4,),
+                  // Box("اتصل بنا عبر صفحتنا",Icon(Icons.call,color:  Color(0xff38056e),),snapshot.data),
+                  // SizedBox(height: 4,),
                   Box("خروج",Image.asset('Assets/Login.png',color:  Color(0xff38056e),),snapshot.data),
                 //  SizedBox(height: 4,),
                 ],
@@ -446,25 +446,25 @@ bool initData;
 
   }else if(text=="قيم"){
 
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (context) => SingleChildScrollView(
-          child: Container(
-            decoration: BoxDecoration(
-              color:Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
-              ),
-            ),
-
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: BottomSheetExample(context,"text",data,data),
-          ),
-        ),
-      )
+      // showModalBottomSheet(
+      //   context: context,
+      //   isScrollControlled: true,
+      //   builder: (context) => SingleChildScrollView(
+      //     child: Container(
+      //       decoration: BoxDecoration(
+      //         color:Colors.white,
+      //         borderRadius: BorderRadius.only(
+      //           topLeft: Radius.circular(20.0),
+      //           topRight: Radius.circular(20.0),
+      //         ),
+      //       ),
+      //
+      //       padding: EdgeInsets.only(
+      //           bottom: MediaQuery.of(context).viewInsets.bottom),
+      //       child: BottomSheetExample(context,"text",data,data),
+      //     ),
+      //   ),
+      // )
 
           },
 

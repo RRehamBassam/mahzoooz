@@ -60,7 +60,7 @@ class _singleBranchState extends State<singleBranch> {
                         translator.currentLanguage == 'ar' ? data['addressAr']: data['addressEn'],
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 18,
+                          fontSize: data['addressAr'].length>16?16:18,
                           color:Colors.black,
                         ),
                         textAlign: TextAlign.right,

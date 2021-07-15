@@ -229,6 +229,7 @@ var addresses;
   @override
   void initState() {
   //  getImageInState();
+    gettoken();
     getProfileState();
     DataEmapty2="1";
     getDataEmptyState();
@@ -239,7 +240,7 @@ var addresses;
     dataLocation=[];
     DataEmapty=true;
     initSign=false;
-    gettoken();
+
     loud=false;
     //checkLocationServicesInDevice();
     // TODO: implement initState

@@ -10,6 +10,9 @@ import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
+import 'package:pin_entry_text_field/pin_entry_text_field.dart';
+import 'package:sms_autofill/sms_autofill.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
 class welcome extends StatefulWidget {
@@ -25,7 +28,7 @@ class _welcomeState extends State<welcome> {
   bool isReservation;
 
   _welcomeState(this.isReservation);
-
+bool codeScreen;
   String phoneNumber;
   String phoneIsoCode;
   String changePass;
@@ -37,7 +40,7 @@ class _welcomeState extends State<welcome> {
 bool isLouding=false;
 bool isverifyPhoneNumbe=false;
   String otp, authStatus = "";
-
+  bool setPass=false;
   Future<void> verifyPhoneNumber(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
 
@@ -88,11 +91,157 @@ bool isverifyPhoneNumbe=false;
       phoneIsoCode = isoCode;
     });
   }
+  @override
+  void initState() {
+    codeScreen =false;
+    super.initState();
+  }
+
+
   NetworkRequest networkRequest=new NetworkRequest();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return codeScreen==true? Scaffold(
+      appBar:  AppBar(
+        centerTitle: true,
+        elevation: 1,
+        backgroundColor: Color(0xFFFEFEFE),
+        title: new Text(
+          'كود التأكيد',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color:Color(0xff747474),
+          ),
+        ),
+      ),
+      body:  SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 25,),
+            Container(
+              height:  MediaQuery.of(context).size.height *0.25,
+              child: Column(
+                children: [
+                  new Text(
+                    setPass?"من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور":"أدخل الكورد الذي ارسلناه لك",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "DIN Next LT Arabic",
+                      fontSize: 14,
+                      color:Color(0xff454545),
+                    ),
+                  ),
+                  SizedBox(height: 8,),
+                  new Text(
+                    "تم ارسال رمز التحقيق الي رقم\n$phoneNumber",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "DIN Next LT Arabic",
+                      fontSize: 17,
+                      color:Color(0xff909090),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+                height:  MediaQuery.of(context).size.height *0.30,
+                child:Column(
+                  children: [
+                    // Directionality(
+                    //   textDirection:translator.currentLanguage == 'ar' ? TextDirection.ltr:TextDirection.ltr,
+                    //
+                    //   child: PinFieldAutoFill(
+                    //
+                    //     decoration: UnderlineDecoration(
+                    //       textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                    //       colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
+                    //     ),
+                    //     currentCode: smsOTP,
+                    //     onCodeSubmitted: (code) {},
+                    //     onCodeChanged: (code) {
+                    //
+                    //         FocusScope.of(context).requestFocus(FocusNode());
+                    //
+                    //     },
+                    //   ),
+                    // ),
+                    Directionality(
+                      textDirection:translator.currentLanguage == 'ar' ? TextDirection.ltr:TextDirection.ltr,
+                      child: PinEntryTextField(
+                        fields: 6,
+                        showFieldAsBox: true, onSubmit: (String pin){
+                        setState(() {
+                          smsOTP=pin;
+                          // ActiationCode=pin;
+                        });
+                        // showDialog(context: context, builder: (context){
+                        //           return AlertDialog(
+                        //             title: Text("Pin"),
+                        //             content: Text('Pin entered is $pin'),
+                        //           );}
+                        //           );
+                      },),
+                    ),
+                    SizedBox(height: 8,),
+                    new Text(
+                      "اعد الارسال ( ٣٠ ثانية )",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: "DIN Next LT Arabic",
+                        fontSize: 14,
+                        color:Color(0xff38056e),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                )),
+
+            Container(
+              height:  MediaQuery.of(context).size.height *0.12,),
+            InkWell(
+              onTap:() {
+                //  signIn( smsOTP);
+                if(smsOTP!=null)
+                  if(!setPass) {
+                    signIn(smsOTP);print(authStatus);
+
+                    // Navigator.push(
+                    //     context,
+                    //     new MaterialPageRoute(
+                    //         builder: (context) =>
+                    //             CreateAccount(phoneNumber, code)));
+                  }else{
+                    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,code: code,)));
+
+                  }
+              },
+              child: new Container(
+                  height: 48.00,
+                  width: 311.00,
+                  decoration: BoxDecoration(
+                    color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                  ),
+                  child:Center(
+                    child: new Text(
+                      setPass?"استعادة كلمة المرور" :"دخول",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14,
+                        color:Color(0xffffffff),
+                      ),
+                    ),
+                  )
+              ),
+            ),
+          ],
+        ),
+      ),
+    ):Scaffold(
+      body:Container(
         margin: EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
@@ -251,7 +400,7 @@ bool isverifyPhoneNumbe=false;
                                 setState(() {
                                   isverifyPhoneNumbe=false;
                                 });
-                           await  phoneNumber == null ? null : verifyPhoneNumber(context);
+                           await  phoneNumber == null ? null : verifyPhoneNumber2(context);
                                // await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code)));
                                 setState(() {
                                   isLouding=false;
@@ -266,11 +415,15 @@ bool isverifyPhoneNumbe=false;
                           else
                        {
                          if(isReservation){
+                           // url ='sms:+972594102511?body=2222';
+                           // await launch(url);
                            await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
                            await   Navigator.popAndPushNamed(context, '/login');
                           // await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation)));
 
                          }else{
+                           // url ='sms:+972594102511?body=2222';
+                           // await launch(url);
                            await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
                            await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation,false)));
 
@@ -368,6 +521,7 @@ bool isverifyPhoneNumbe=false;
       ),
     );
   }
+  var url;
   getUserHasAccount() async {
    // networkRequest.OffersGetPaged();
     await  networkRequest.UserHasAccount(phoneNumber).then((value){
@@ -379,7 +533,108 @@ bool isverifyPhoneNumbe=false;
       });
     });
   }
-bool userHasAccount;
+
+  Future<void> verifyPhoneNumber2(BuildContext context) async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 15),
+      verificationCompleted: (AuthCredential authCredential) {
+        FirebaseAuth.instance.signInWithCredential(authCredential).then((AuthResult result){
+print(result);
+print("result");
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) =>  CreateAccount(phoneNumber, code)));
+        }).catchError((e) {
+          Fluttertoast.showToast(
+              msg: "Authentication failed ",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Color(0xff38056e).withOpacity(0.9),
+              textColor: Colors.white,
+              fontSize: 16.0
+          );
+          return "error";
+        });
+
+//        Navigator.pushReplacement(context, MaterialPageRoute(
+//            builder: (context) => Home_Screen()//ChatRoom()
+//        ));
+        setState(() {
+          authStatus = "Your account is successfully verified";
+        });
+        print(authStatus);
+      },
+      verificationFailed: (AuthException authException) {
+        setState(() {
+          authStatus = "Authentication failed";
+        });
+        Fluttertoast.showToast(
+            msg: "Authentication failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+      },
+      codeSent: (String verId, [int forceCodeResent]) {
+        verificationId = verId;
+        print(verId);
+        print("verId");
+        setState(() {
+          codeScreen=true;
+          authStatus = "OTP has been successfully send";
+        });
+        print(authStatus);
+      //  otpDialogBox(context).then((value) {});
+      },
+      codeAutoRetrievalTimeout: (String verId) {
+        print(verId);
+        verificationId = verId;
+        setState(() {
+          authStatus = "TIMEOUT";
+        });
+        Fluttertoast.showToast(
+            msg: "TIMEOUT send new messege",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+        print(authStatus);
+      },
+
+
+    );
+  }
+  Future<void> signIn(String otp) async {
+    print(otp);
+    print("otp");
+    try
+    {
+      await FirebaseAuth.instance
+          .signInWithCredential(PhoneAuthProvider.getCredential(
+        verificationId: verificationId,
+        smsCode: otp,
+      ));
+    }catch(v){
+      Fluttertoast.showToast(
+          msg: "ادخل كود صحيح",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Color(0xff38056e).withOpacity(0.9),
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+
+    }
+  }
+  bool userHasAccount;
   var code;
   var message;
 }

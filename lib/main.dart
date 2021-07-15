@@ -139,11 +139,70 @@ class _MyHomePageState extends State<MyHomePage> {
     await getLatInState();
     // "latitude": "24.75007441712588",
     // "longitude": "46.775951958232405"
+    Location location = new Location();
+
+    _serviceEnabled = await location.serviceEnabled();
+    _serviceEnabled = await location.requestService();
+
+    if(_serviceEnabled)
+    {
+      _permissionGranted = await location.hasPermission();
+
+      if(_permissionGranted == PermissionStatus.granted)
+      {
+
+        print('user allowed before');
+
+      }else{
+        _permissionGranted = await location.requestPermission();
+        if(_permissionGranted == PermissionStatus.granted)
+        {
+          print('user allowed');
+        }else{
+//   SystemNavigator.pop();
+        }}
+    }else{
+
+//  SystemNavigator.pop();
+
+    }
+
+    if(_serviceEnabled)
+    {
+
+      _permissionGranted = await location.hasPermission();
+
+      if(_permissionGranted == PermissionStatus.granted)
+      {  print("EE");
+
+      _location = await location.getLocation();
+      if(lat==null) {
+      print(_location.latitude.toString() + " " + _location.longitude.toString());
+      HelperFunctions.saveUserlocationLatSharedPreference(_location.latitude);
+      HelperFunctions.saveUserlocationlngSharedPreference(_location.longitude);
+      }
+      }else{
+
+        _permissionGranted = await location.requestPermission();
+        if(_permissionGranted == PermissionStatus.granted)
+        {
+          print('user allowed');
+        }else{
+          //   SystemNavigator.pop();
+        }
+
+      }
+
+    }else{
+
+
+
+    }
     if(lat==null) {
-      HelperFunctions.saveUserlocationLatSharedPreference(
-          24.75007441712588);
-      HelperFunctions.saveUserlocationlngSharedPreference(
-          46.775951958232405);
+      // HelperFunctions.saveUserlocationLatSharedPreference(
+      //     24.75007441712588);
+      // HelperFunctions.saveUserlocationlngSharedPreference(
+      //     46.775951958232405);
     }
     try {
       // await Geolocator.requestPermission().then((value) async {
@@ -200,127 +259,12 @@ class _MyHomePageState extends State<MyHomePage> {
   getcheckLocationInState() async {
     await checkLocationServicesInDevice();
   }
+  var _location;
   Future<void> checkLocationServicesInDevice() async {
     print("RR");
     //print("1");
 
-    Location location = new Location();
 
-    _serviceEnabled = await location.serviceEnabled();
-
-    if(_serviceEnabled)
-    {
-
-      _permissionGranted = await location.hasPermission();
-
-      if(_permissionGranted == PermissionStatus.granted)
-      {  print("EE");
-
-        // _location = await location.getLocation();
-
-        // print(_location.latitude.toString() + " " + _location.longitude.toString());
-
-
-        location.onLocationChanged.listen((LocationData currentLocation) async {
-          //  print(currentLocation.latitude.toString() + " yess" + currentLocation.longitude.toString());
-
-          if(lat==null){
-            print("HH");
-setState(() {
-  HelperFunctions.saveUserlocationLatSharedPreference(currentLocation.latitude);
-  HelperFunctions.saveUserlocationlngSharedPreference(currentLocation.longitude);
-  latLnglocation=LatLng(currentLocation.latitude,currentLocation.longitude);
-});
-
-           // getUserLocation();
-
-          }else{
-
-            print("AA");
-            latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
-
-          }
-
-          // List<Placemark> placemarks =  placemarkFromCoordinates(52.2165157, 6.9437819);
-//           HttpClient client = new HttpClient();
-//           client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
-//           String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetRandomOffers';
-//           print("3");
-//           Map map ={
-//             "latitude": "24.75007441712588",
-//             "longitude": "46.775951958232405"
-//             //   "latitude": "${latLnglocation.latitude}",
-//             //   "longitude": "${latLnglocation.longitude}"
-//           };
-//           var itemCount ;
-//           HttpClientRequest request = await client.postUrl(Uri.parse(url));
-//           request.headers.set('content-type', 'application/json');
-//           request.add(convert.utf8.encode(convert.json.encode(map)));
-//           HttpClientResponse response = await request.close();
-//           String reply = await response.transform(convert.utf8.decoder).join();
-//           // print(reply);
-//           print("2");
-//           var jsonResponse = convert.jsonDecode(reply);
-//         //  await Future<void>.delayed(Duration(seconds: 2));
-// try{
-//             if (jsonResponse['data']==null){
-//               print("7");
-//               HelperFunctions.saveDataEmptyInSharedPreference(true);
-//             }else{
-//               dataLocation=jsonResponse['data']['data'];
-//               print("8");
-//               //loud=true;
-//               HelperFunctions.saveDataEmptyInSharedPreference(false);
-//             }}catch(val){
-//   HelperFunctions.saveDataEmptyInSharedPreference(true);  print("9");
-//             }
-
-
-
-
-
-
-        });
-      }else{
-
-        _permissionGranted = await location.requestPermission();
-        if(_permissionGranted == PermissionStatus.granted)
-        {
-          print('user allowed');
-        }else{
-          //   SystemNavigator.pop();
-        }
-
-      }
-
-    }else{
-
-      _serviceEnabled = await location.requestService();
-
-      if(_serviceEnabled)
-      {
-        _permissionGranted = await location.hasPermission();
-
-        if(_permissionGranted == PermissionStatus.granted)
-        {
-
-          print('user allowed before');
-
-        }else{
-          _permissionGranted = await location.requestPermission();
-          if(_permissionGranted == PermissionStatus.granted)
-          {
-            print('user allowed');
-          }else{
-            //   SystemNavigator.pop();
-          }}
-      }else{
-
-        //  SystemNavigator.pop();
-
-      }
-
-    }
 
   }
 

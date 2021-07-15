@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/Auth/ActivateCode.dart';
@@ -14,6 +16,7 @@ import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 
+import 'dart:math';
 import '../../main.dart';
 class login extends StatefulWidget {
   String phoneNo;
@@ -51,6 +54,32 @@ String Password;
       phoneNumber= value;
     });
     ;
+  }
+  var _otp;
+  void generateOtp([int min = 1000, int max = 9999]) {
+    //Generates four digit OTP by default
+
+    _otp = 1000 + Random().nextInt(9999 - 1000);
+  }
+  void sendOtp(String phoneNumber,
+      [String messageText,
+        int min = 1000,
+        int max = 9999,
+        String countryCode = '+972']) {
+    //function parameter 'message' is optional.
+    generateOtp(min, max);
+    // SmsSender sender = new SmsSender();
+    String address = (countryCode ?? '+972') +
+        phoneNumber; // +1 for USA. Change it according to use.
+
+    /// Use country code as per your requirement.
+    /// +1 : USA / Canada
+    /// +91: India
+    /// +44: UK
+    /// For other countries, please refer https://countrycode.org/
+
+    // sender.sendSms(new SmsMessage(
+    //     address, messageText ?? 'Your OTP is : ' + _otp.toString()));
   }
   Future<void> verifyPhoneNumber(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -127,6 +156,9 @@ String Password;
           );
         });
   }
+  // SmsSender sender = new SmsSender();
+  //
+  // SmsMessage messageSmS = new SmsMessage("+952594102511", 'Hello flutter!');
 
   Future<void> signIn(String otp) async {
     // await FirebaseAuth.instance
@@ -280,7 +312,9 @@ String Password;
                                     if (isReservation) {
                                       Navigator.pop(context);
                                     } else {
-                                      Navigator.of(context).pushAndRemoveUntil(
+
+                     //   sendOtp('594102511', 'OTP is :  5555 ');
+                        Navigator.of(context).pushAndRemoveUntil(
                                           MaterialPageRoute(builder: (_) {
                                         return Home();
                                       }), (route) => false);
@@ -313,9 +347,25 @@ String Password;
                                 Navigator.pop(context);
                               } else {
                                 Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (_) {
-                                      return Home();
-                                    }), (route) => false);
+                                    MaterialPageRoute(builder: (_){
+                                      return  welcome(false);
+                                    }),(route)=> false
+                                );
+                                // Navigator.pushReplacement(context, MaterialPageRoute(
+                                //     builder: (context) =>  login(phoneNumber, false,false)));
+                                 Fluttertoast.showToast(
+                                    msg: "تم تغيير كلمة المرور بنجاح",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                    textColor: Colors.white,
+                                    fontSize: 16.0
+                                );
+                                // Navigator.of(context).pushAndRemoveUntil(
+                                //     MaterialPageRoute(builder: (_) {
+                                //       return Home();
+                                //     }), (route) => false);
                                 //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
 
                               }
@@ -370,7 +420,7 @@ String Password;
             setPass?Container():  InkWell(
                 onTap: ()=>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  welcomeChangePass(false))),
                 child: new Text(
-                  "لقد نسيت رقم السر",
+                  translator.translate("نسيت كلمة المرور ؟"),
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
