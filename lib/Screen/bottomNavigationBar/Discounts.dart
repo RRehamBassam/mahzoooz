@@ -68,7 +68,7 @@ class _DiscountsState extends State<Discounts> {
                   Positioned(
                     top: 8,
                     child: Container(
-                      width: 400,
+                      width: MediaQuery.of(context).size.width,//400
                       height: 600,
                     child:   AnimatedOpacity(
                         duration: const Duration(milliseconds: 800),

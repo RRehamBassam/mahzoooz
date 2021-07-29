@@ -5,6 +5,7 @@ import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:mahzoooz/Screen/Auth/aa.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/homeWidget.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Profile.dart';
@@ -24,6 +25,7 @@ import 'package:geocoder/geocoder.dart';
 //import 'package:geolocator/geolocator.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'bottomNavigationBar/noDataLocation.dart';
 
@@ -149,7 +151,7 @@ var addresses;
               type: PageTransitionType.leftToRight,
               duration: Duration(milliseconds: 550),
               reverseDuration: Duration(milliseconds: 700),
-              child: welcome(true),
+              child:  welcome(true), //welcome(true),
             ),
           );
           setState(() {
@@ -453,7 +455,9 @@ var addresses;
               ),
               GestureDetector(
                 onTap:()=> {
-                FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
+                 dataProfile==null?launcvWh("+966566515191", " هلا فريق محظوووظ "):   launcvWh("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
+
+                 // dataProfile==null? FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا"):FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
                   print("ooo"),
                   Navigator.pop(context)},
                 child: new Container(
@@ -493,4 +497,44 @@ var addresses;
         ),
       );
   }
+
+void launcvWh(@required num,@required mess) async{
+ // String url="https://wa.me/phone=$num&text=$mess";
+ //    String url="whatsapp://send?phone=$num&text=$mess";
+ //    await canLaunch(url)?launch(url):  Fluttertoast.showToast(
+ //        msg: "can’ open whatsapp",
+ //        toastLength: Toast.LENGTH_SHORT,
+ //        gravity: ToastGravity.BOTTOM,
+ //        timeInSecForIosWeb: 1,
+ //        backgroundColor: Color(0xff38056e).withOpacity(0.9),
+ //        textColor: Colors.white,
+ //        fontSize: 16.0
+ //    );
+
+  var whatsappURl_android = "whatsapp://send?phone="+num+"&text=$mess";
+  var whatappURL_ios ="https://wa.me/$num?text=${Uri.parse("$mess")}";
+  if(Platform.isIOS){
+    // for iOS phone only
+    if( await canLaunch(whatappURL_ios)){
+      await launch(whatappURL_ios, forceSafariVC: false);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: new Text("whatsapp no installed")));
+
+    }
+
+  }else{
+    // android , web
+    if( await canLaunch(whatsappURl_android)){
+      await launch(whatsappURl_android,);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: new Text("whatsapp no installed")));
+
+    }
+
+
+  }
+
+}
 }

@@ -9,6 +9,7 @@ import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mahzoooz/Screen/Auth/login.dart';
+import 'Screen/Auth/aa.dart';
 import 'Screen/Auth/welcome.dart';
 import 'Screen/Home.dart';
 import 'package:provider/provider.dart';
@@ -296,7 +297,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Timer(const Duration(seconds: 3), (){
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_){
-            return userIsLoggedIn != null ?  userIsLoggedIn ? Home() :  welcome(false): welcome(false);;//
+            return userIsLoggedIn != null ?  userIsLoggedIn ? Home() :  welcome(false): welcome(false);;//;//
           })
       );
     }) ;

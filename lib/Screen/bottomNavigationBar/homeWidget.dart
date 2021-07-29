@@ -686,7 +686,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                       style:  TextStyle(
                         fontWeight: FontWeight.w700,
                         fontFamily:'Tajawal',
-                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:20: MediaQuery.of(context).size.height< 783.4285714285714?18:28,
+                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:16: MediaQuery.of(context).size.height< 783.4285714285714?18:18,
                         color:Color(0xff38056e),
                       ),
                       children: <TextSpan>[
@@ -695,7 +695,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                           style: TextStyle(
                             fontFamily:'Tajawal',
                             fontWeight: FontWeight.w700,
-                            fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:20: MediaQuery.of(context).size.height< 783.4285714285714?18:28,
+                            fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:16: MediaQuery.of(context).size.height< 783.4285714285714?18:18,
                             color:Color(0xff38056e),
                           ),
                         )

@@ -34,7 +34,7 @@ class _welcomeState extends State<welcomeChangePass> {
   String verificationId;
   String errorMessage = '';
   FirebaseAuth _auth = FirebaseAuth.instance;
-
+  bool LoginCode;
 bool isLouding=false;
 bool isverifyPhoneNumbe=false;
   String otp, authStatus = "";
@@ -92,6 +92,7 @@ bool isverifyPhoneNumbe=false;
   bool setPass=true;
   @override
   void initState() {
+    LoginCode=false;
     codeScreen =false;
     super.initState();
   }
@@ -203,7 +204,12 @@ bool isverifyPhoneNumbe=false;
                 //     builder: (context) =>  login(phoneNumber, false,true,code: code)));
 
                 if(smsOTP!=null)
-                    signIn(smsOTP);
+                  FirebaseAuth.instance.currentUser().then((user){
+
+                      //  Navigator.of(context).pop();
+                      signIn2(smsOTP);
+
+                  });
 
 
                     // Navigator.push(
@@ -412,7 +418,7 @@ bool isverifyPhoneNumbe=false;
                                 setState(() {
                                   isverifyPhoneNumbe=false;
                                 });
-                           await  phoneNumber == null ? null : verifyPhoneNumber2(context);
+                           await  phoneNumber == null ? null : verfiyPhone();
 
                                // await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code)));
                                 setState(() {
@@ -635,17 +641,77 @@ bool isverifyPhoneNumbe=false;
         smsCode: otp,
       ));
     }catch(v){
-      Fluttertoast.showToast(
-          msg: "ادخل كود صحيح",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Color(0xff38056e).withOpacity(0.9),
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      // Fluttertoast.showToast(
+      //     msg: "ادخل كود صحيح",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Color(0xff38056e).withOpacity(0.9),
+      //     textColor: Colors.white,
+      //     fontSize: 16.0
+      // );
 
     }
+  }
+  Future<void> verfiyPhone() async{
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId){
+      this.verificationId = verId;
+    };
+    final PhoneCodeSent smsCodeSent= (String verId, [int forceCodeResent]) {
+      this.verificationId = verId;
+      setState(() {
+        codeScreen=true;
+        //  authStatus = "OTP has been successfully send";
+      });
+      // smsCodeDialoge(context).then((value){
+      //   print("Code Sent");
+      // });
+    };
+    final PhoneVerificationCompleted verifiedSuccess= (AuthCredential auth){};
+    final PhoneVerificationFailed verifyFailed= (AuthException e){
+      print('${e.message}');
+    };
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 5),
+      verificationCompleted : verifiedSuccess,
+      verificationFailed: verifyFailed,
+      codeSent: smsCodeSent,
+      codeAutoRetrievalTimeout: autoRetrieve,
+
+    );
+
+  }
+  s(){
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => login(phoneNumber, false,true,code: code),),
+    );
+    setState(() {
+      LoginCode=true;
+    });
+  }
+  Future<void> signIn2(String smsCode) async{
+    final AuthCredential credential = PhoneAuthProvider.getCredential(
+      verificationId: verificationId,
+      smsCode: smsCode,);
+
+    await FirebaseAuth.instance.signInWithCredential(
+        credential).then((user) async {
+      await s();
+
+    }).catchError((e){
+      if(!LoginCode) {
+        Fluttertoast.showToast(
+            msg: "ادخل كود صحيح",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+      print(e);
+    });
   }
   getSendOptAccount() async {
 

@@ -8,6 +8,8 @@ import 'package:mahzoooz/services/appCategoris.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchState createState() => _SearchState();
@@ -40,6 +42,7 @@ class _SearchState extends State<SearchScreen> {
         children: [
           SizedBox(height: 25,),
           Container(
+
             decoration: BoxDecoration(
               color:Color(0xfe38056e),
             ),
@@ -56,7 +59,7 @@ class _SearchState extends State<SearchScreen> {
                         child: Icon(Icons.arrow_back_ios,color: Colors.white,)),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 14,bottom: 14,left: 8),
+                    margin: EdgeInsets.only(top:Platform.isIOS?35: 14,bottom: 14,left: 8),
                     width: MediaQuery.of(context).size.width*0.855,
                     height: MediaQuery.of(context).size.height*0.045,
                     child: TextFormField(

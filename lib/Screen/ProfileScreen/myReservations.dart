@@ -26,7 +26,7 @@ class _myReservationsState extends State<myReservations> {
                   print(snapshot.data.length);
                   return snapshot.data.length==0?Container(
                    margin: EdgeInsets.only(top: 16),
-                    height: MediaQuery.of(context).size.height*0.6,
+                    height: MediaQuery.of(context).size.height*0.69,
                     child: Center(
                       child: Column(
                         crossAxisAlignment:CrossAxisAlignment.center ,
@@ -64,7 +64,7 @@ class _myReservationsState extends State<myReservations> {
                           SizedBox(height: 68,),
 
                           new Text(
-                            "لايوجد عروض متوفرة في موقعك الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                            translator.translate("لايوجد بيانات"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                             textAlign: TextAlign.center,
                             style: TextStyle(
 
@@ -73,17 +73,7 @@ class _myReservationsState extends State<myReservations> {
                               color:Color(0xff91B958),
                             ),
                           ),
-                          SizedBox(height: 11,),
-                          new Text(
-                            "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
 
-                              fontWeight: FontWeight.w800,
-                              fontSize: 13,
-                              color:Color(0xff91B958),
-                            ),
-                          ),
                           SizedBox(height: 88,),
                           // InkWell(
                           //   onTap: (){
@@ -149,7 +139,7 @@ class _myReservationsState extends State<myReservations> {
       toolbarHeight: 65,
       elevation: 1,
       backgroundColor: Colors.white,
-      title:Text( translator.translate("حجوزاتى"),style: TextStyle(color:Color(0xff38056e),fontSize: 20),) ,
+      title:Text( translator.translate("حجوزاتي"),style: TextStyle(color:Color(0xff38056e),fontSize: 20),) ,
       centerTitle: true,
     );
   }

@@ -229,14 +229,14 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
           content: Text("هل تريد بتاكيد الغا ء الحجز؟"),
           actions: [
             FlatButton(
-              child: Text("إلغاء"),
+              child: Text("لا"),
               onPressed:  () {
                 Navigator.pop(context);
 
               },
             ),
             FlatButton(
-              child: Text("تأكيد"),
+              child: Text("نعم"),
               onPressed:  () async {
                 if(!data['isCanceled']){
                   await getLoggedInState();

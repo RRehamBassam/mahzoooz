@@ -173,299 +173,304 @@ String Password;
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                  height: MediaQuery.of(context).size.height*.3,
-                  child:Center(child:  Image.asset('Assets/logoSmail.png'),)
-              ),
-              Container(
-                  height: MediaQuery.of(context).size.height*.25,
-                  width:MediaQuery.of(context).size.width ,
-                  margin: EdgeInsets.only(right: 16,left: 16),
-                  child:Column(
-                    //   crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: Container(
+          margin: EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                    height: MediaQuery.of(context).size.height*.3,
+                    child:Center(child:  Image.asset('Assets/logoSmail.png'),)
+                ),
+                Container(
+                    height: MediaQuery.of(context).size.height*.25,
+                    width:MediaQuery.of(context).size.width ,
+                    margin: EdgeInsets.only(right: 16,left: 16),
+                    child:Column(
+                      //   crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                      setPass?Container(
-                        width: 210,
-                        child: Center(
-                          child: new Text(
+                        setPass?Container(
+                          width: 210,
+                          child: Center(
+                            child: new Text(
 
-                            "من فضلك ادخل كلمة المرور الجديدة ",
-                            textAlign: TextAlign.center,
+                              "من فضلك ادخل كلمة المرور الجديدة ",
+                              textAlign: TextAlign.center,
 
-                            style: TextStyle(fontWeight: FontWeight.w700,
-                              fontSize: 20,
+                              style: TextStyle(fontWeight: FontWeight.w700,
+                                fontSize: 20,
 
-                              color:Colors.black54.withOpacity(0.65),
+                                color:Colors.black54.withOpacity(0.65),
+                              ),
                             ),
                           ),
-                        ),
-                      ): new Text(
-                        "اهلاً بيك في محظوووظ",
-                        // textAlign: TextAlign.right,gt3
-                        style: TextStyle(fontWeight: FontWeight.w700,
-                          fontSize: 23,
-                          color:Colors.black54.withOpacity(0.7),
-                        ),
-                      ),
-                      SizedBox(height: 16,),
-                      setPass?Container(): new Text(
-                        "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد",
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 3,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 15,
-                          color:Color(0xff707070),
-                        ),
-                      )
-                    ],
-                  )),
-
-              Container(
-                height: MediaQuery.of(context).size.height*.25,
-                child:Column(
-                  children: [ Container(
-                    width: MediaQuery.of(context).size.width*0.815,
-                    height: MediaQuery.of(context).size.height*0.065,
-                    child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
-                      cursorColor: Color(0xff38056e),
-                      keyboardType:TextInputType.text,
-                      autofocus: false,
-                      obscureText: !_obscureText,
-                      textAlign: TextAlign.right,
-                      //  onChanged: (val)=>setState(()=>Name=val),
-                     // obscureText: true,
-                      onChanged: (val){
-                        setState(() {
-                          Password=val;
-                          HelperFunctions.saveUserPassWordSharedPreference(val);
-                        });
-                      },
-
-                      decoration: InputDecoration(
-                          suffixIcon:  new InkWell(
-                            onTap: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                            child: Container(
-                              margin:EdgeInsets.symmetric(horizontal: 5) ,
-                                child: Icon(_obscureText? Icons.visibility : Icons.visibility_off))),
-                          contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            borderSide: BorderSide(width: 1,color: Colors.grey[300]),
+                        ): new Text(
+                          "اهلاً بيك في محظوووظ",
+                          // textAlign: TextAlign.right,gt3
+                          style: TextStyle(fontWeight: FontWeight.w700,
+                            fontSize: 23,
+                            color:Colors.black54.withOpacity(0.7),
                           ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(30)),
-                              borderSide: BorderSide(width: 1,color:Color(0xff38056e))
+                        ),
+                        SizedBox(height: 16,),
+                        setPass?Container(): new Text(
+                          "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد",
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color:Color(0xff707070),
                           ),
-                          filled: true,
-                          fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
-                          // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+                        )
+                      ],
+                    )),
 
-                          hintText:"كلمة المرور",
-                          // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
-                          hintStyle: TextStyle(color: Colors.black,fontFamily: "Tajawal"),
-                          labelStyle: null
-                      ),
-
-                    ),
-                  ),
-                    isLouding?SizedBox(height: 22,): SizedBox(height: 16,),
-                    isLouding?Loading():  InkWell(
-
-                      onTap: ()async {
-                        print("1");
-                        if(Password==null){
-                          print("2");
-                            Fluttertoast.showToast(
-                                msg: "يجب عليك إدخال كلمة المرور",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                textColor: Colors.white,
-                                fontSize: 16.0
-                            );
-                        }else{
-                          print("3");
+                Container(
+                  height: MediaQuery.of(context).size.height*.25,
+                  child:Column(
+                    children: [ Container(
+                      width: MediaQuery.of(context).size.width*0.815,
+                      height: MediaQuery.of(context).size.height*0.065,
+                      child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
+                        cursorColor: Color(0xff38056e),
+                        keyboardType:TextInputType.text,
+                        autofocus: false,
+                        obscureText: !_obscureText,
+                        textAlign: TextAlign.right,
+                        //  onChanged: (val)=>setState(()=>Name=val),
+                       // obscureText: true,
+                        onChanged: (val){
                           setState(() {
-                            isLouding=true;
+                            Password=val;
+                            HelperFunctions.saveUserPassWordSharedPreference(val);
                           });
-                          if(isReservation){
-                            await getLoggedInState();
-                          }
-                          if(!setPass) {
+                        },
 
-                                  await getUserHasAccount(
-                                      phoneNumber, Password);
-                                  if (message == "OK") {
-                                    if (isReservation) {
-                                      Navigator.pop(context);
-                                    } else {
+                        decoration: InputDecoration(
+                            suffixIcon:  new InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              },
+                              child: Container(
+                                margin:EdgeInsets.symmetric(horizontal: 5) ,
+                                  child: Icon(_obscureText? Icons.visibility : Icons.visibility_off))),
+                            contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                              borderSide: BorderSide(width: 1,color: Colors.grey[300]),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(30)),
+                                borderSide: BorderSide(width: 1,color:Color(0xff38056e))
+                            ),
+                            filled: true,
+                            fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
+                            // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                     //   sendOtp('594102511', 'OTP is :  5555 ');
-                        Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(builder: (_) {
-                                        return Home();
-                                      }), (route) => false);
-                                      //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                            hintText:"كلمة المرور",
+                            // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
+                            hintStyle: TextStyle(color: Colors.black,fontFamily: "Tajawal"),
+                            labelStyle: null
+                        ),
 
-                                    }
+                      ),
+                    ),
+                      isLouding?SizedBox(height: 22,): SizedBox(height: 16,),
+                      isLouding?Loading():  InkWell(
 
-                                    //phoneNumber == null ? null : verifyPhoneNumber(context);
-                                    // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
-                                  } else {
-                                    print("4");
-                                    setState(() {
-                                      isLouding = false;
-                                    });
-                                    Fluttertoast.showToast(
-                                        msg: message,
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        backgroundColor:
-                                            Color(0xff38056e).withOpacity(0.9),
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
-                                  }
-                                }else{
-                            await getUserSetPass(
-                                phoneNumber, Password);
-                            if (message == "Password change successfuly") {
-                              if (isReservation) {
-                                Navigator.pop(context);
-                              } else {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (_){
-                                      return  welcome(false);
-                                    }),(route)=> false
-                                );
-                                // Navigator.pushReplacement(context, MaterialPageRoute(
-                                //     builder: (context) =>  login(phoneNumber, false,false)));
-                                 Fluttertoast.showToast(
-                                    msg: "تم تغيير كلمة المرور بنجاح",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
-                                // Navigator.of(context).pushAndRemoveUntil(
-                                //     MaterialPageRoute(builder: (_) {
-                                //       return Home();
-                                //     }), (route) => false);
-                                //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
-
-                              }
-
-                              //phoneNumber == null ? null : verifyPhoneNumber(context);
-                              // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
-                            } else {
-                              print("4");
-                              setState(() {
-                                isLouding = false;
-                              });
+                        onTap: ()async {
+                          print("1");
+                          if(Password==null){
+                            print("2");
                               Fluttertoast.showToast(
-                                  msg: message,
+                                  msg: "يجب عليك إدخال كلمة المرور",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
-                                  backgroundColor:
-                                  Color(0xff38056e).withOpacity(0.9),
+                                  backgroundColor: Color(0xff38056e).withOpacity(0.9),
                                   textColor: Colors.white,
-                                  fontSize: 16.0);
+                                  fontSize: 16.0
+                              );
+                          }else{
+                            print("3");
+                            setState(() {
+                              isLouding=true;
+                            });
+                            if(isReservation){
+                              await getLoggedInState();
                             }
+                            if(!setPass) {
 
-                          }
+                                    await getUserHasAccount(
+                                        phoneNumber, Password);
+                                    if (message == "OK") {
+                                      if (isReservation) {
+                                        Navigator.pop(context);
+                                      } else {
+
+                       //   sendOtp('594102511', 'OTP is :  5555 ');
+                          Navigator.of(context).pushAndRemoveUntil(
+                                            MaterialPageRoute(builder: (_) {
+                                          return Home();
+                                        }), (route) => false);
+                                        //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+
+                                      }
+
+                                      //phoneNumber == null ? null : verifyPhoneNumber(context);
+                                      // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                                    } else {
+                                      print("4");
+                                      setState(() {
+                                        isLouding = false;
+                                      });
+                                      Fluttertoast.showToast(
+                                          msg: message,
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          timeInSecForIosWeb: 1,
+                                          backgroundColor:
+                                              Color(0xff38056e).withOpacity(0.9),
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
+                                    }
+                                  }else{
+                              await getUserSetPass(
+                                  phoneNumber, Password);
+                              if (message == "Password change successfuly") {
+                                if (isReservation) {
+                                  Navigator.pop(context);
+                                } else {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(builder: (_){
+                                        return  welcome(false);
+                                      }),(route)=> false
+                                  );
+                                  // Navigator.pushReplacement(context, MaterialPageRoute(
+                                  //     builder: (context) =>  login(phoneNumber, false,false)));
+                                   Fluttertoast.showToast(
+                                      msg: "تم تغيير كلمة المرور بنجاح",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      timeInSecForIosWeb: 1,
+                                      backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                      textColor: Colors.white,
+                                      fontSize: 16.0
+                                  );
+                                  // Navigator.of(context).pushAndRemoveUntil(
+                                  //     MaterialPageRoute(builder: (_) {
+                                  //       return Home();
+                                  //     }), (route) => false);
+                                  //    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+
+                                }
+
+                                //phoneNumber == null ? null : verifyPhoneNumber(context);
+                                // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
+                              } else {
+                                print("4");
+                                setState(() {
+                                  isLouding = false;
+                                });
+                                Fluttertoast.showToast(
+                                    msg: message,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor:
+                                    Color(0xff38056e).withOpacity(0.9),
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
                               }
 
+                            }
+                                }
 
-                      },
-                      child: new Container(
-                        width: MediaQuery.of(context).size.width*0.815,
-                        height: MediaQuery.of(context).size.height*0.065,
-                        decoration: BoxDecoration(
-                          color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                        ),
-                        child: Center(
-                          child: new Text(
-                           setPass?"حفظ": "دخول",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14,
-                              color:Color(0xffffffff),
+
+                        },
+                        child: new Container(
+                          width: MediaQuery.of(context).size.width*0.815,
+                          height: MediaQuery.of(context).size.height*0.065,
+                          decoration: BoxDecoration(
+                            color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                          ),
+                          child: Center(
+                            child: new Text(
+                             setPass?"حفظ": "دخول",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color:Color(0xffffffff),
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    ],
+                  ),),
+
+
+
+              setPass?Container():  InkWell(
+                  onTap: ()=>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  welcomeChangePass(false))),
+                  child: new Text(
+                    translator.translate("نسيت كلمة المرور ؟"),
+                    textAlign: TextAlign.right,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                      color:Color(0xff38056e),
                     ),
-                  ],
-                ),),
-
-
-
-            setPass?Container():  InkWell(
-                onTap: ()=>Navigator.push(context, new MaterialPageRoute(builder: (context)=>  welcomeChangePass(false))),
-                child: new Text(
-                  translator.translate("نسيت كلمة المرور ؟"),
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 14,
-                    color:Color(0xff38056e),
                   ),
                 ),
-              ),
-              setPass?Container():   InkWell(
-                onTap:(){
-                  translator.setNewLanguage(
-                    context,
-                    newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
-                    remember: true,
+                setPass?Container():   InkWell(
+                  onTap:(){
+                    translator.setNewLanguage(
+                      context,
+                      newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
+                      remember: true,
 
-                  );
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (_){
-                        return MyApp();
-                      }),(route)=> false
-                  );
-                },
-                child: Container(
-                  height:MediaQuery.of(context).size.height*.2 ,
-                  alignment: Alignment.bottomCenter,
-                  child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset('Assets/Group 39810.png'),
-                          new Text(
-                            translator.translate('Change to English'),
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontFamily: "DIN Next LT Arabic",fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                              color:Color(0xff38056e),
+                    );
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_){
+                          return MyApp();
+                        }),(route)=> false
+                    );
+                  },
+                  child: Container(
+                    height:MediaQuery.of(context).size.height*.2 ,
+                    alignment: Alignment.bottomCenter,
+                    child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset('Assets/Group 39810.png'),
+                            new Text(
+                              translator.translate('Change to English'),
+                              textAlign: TextAlign.right,
+                              style: TextStyle(
+                                fontFamily: "DIN Next LT Arabic",fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                                color:Color(0xff38056e),
+                              ),
                             ),
-                          ),
-                        ],
-                      )
+                          ],
+                        )
+                    ),
                   ),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),

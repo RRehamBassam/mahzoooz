@@ -399,13 +399,13 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                               Row(
                                 children: [
                                  Container (
-                                   width:MediaQuery.of(context).size.width*0.48,
+                                   width:MediaQuery.of(context).size.height< 683.4285714285714?MediaQuery.of(context).size.width*0.41:MediaQuery.of(context).size.width*0.48,
                                     child: new Text(
                                       data['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
                                       textAlign: TextAlign.right,
                                       style: TextStyle(
                                         fontFamily: "Tajawal",fontWeight: FontWeight.bold,
-                                        fontSize: 15,
+                                        fontSize:MediaQuery.of(context).size.height< 683.4285714285714?12 :15,
                                         color:Colors.black,
                                       ),
                                     ),
@@ -425,7 +425,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                         child: Container(
                                         alignment: Alignment.centerLeft,
                                         height: 34.00,
-                                        width: 82.00,
+                                        width:MediaQuery.of(context).size.height< 683.4285714285714?78: 82.00,
                                         padding: EdgeInsets.all(5) ,
                                         decoration: BoxDecoration(
                                           color:Color(0xff38056e),
@@ -455,7 +455,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                             Container(
                                                 alignment: Alignment.centerLeft,
                                                 height: 34.00,
-                                                width: 82.00,
+                                                width:MediaQuery.of(context).size.height< 683.4285714285714?78: 82.00,
                                                 padding: EdgeInsets.all(5) ,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xffffffff),
@@ -478,7 +478,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                             Container(
                                               alignment: Alignment.center,
                                               height: 34.00,
-                                              width: 65.00,
+                                              width: MediaQuery.of(context).size.height< 683.4285714285714?62.00:65.00,
                                               decoration: BoxDecoration(
                                                 color: Color(0xff38056e),
                                                 border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),
@@ -500,7 +500,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                         activeWidget: Container(
                                           alignment: Alignment.center,
                                             height: 34.00,
-                                            width: 82.00,
+                                            width:MediaQuery.of(context).size.height< 683.4285714285714?78: 82.00,
                                             decoration: BoxDecoration(
                                               color: Color(0xffffffff),
                                               border: Border.all(width: 1.00, color: Color(0xff38056e),), borderRadius: BorderRadius.circular(22.00),

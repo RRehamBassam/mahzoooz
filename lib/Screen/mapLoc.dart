@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:io' show Platform;
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,16 +41,26 @@ class _mapsState extends State<maps> {
   var lat;
   getLatInState() async {
     await HelperFunctions.getUserLatInSharedPreference().then((value){
-      setState(() {
-        lat  = value;
-      });
+      if(value!=null) {
+        setState(() {
+          lat = value;
+        });
+      }else{
+        setState(() {
+          lat=24.75007441712588;
+        });
+
+      }
     });
     await HelperFunctions.getUserLngSharedPreference().then((value){
-      setState(() {
-        lng  = value;
-        latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
-      });
-
+     if(value!=null) {
+        setState(() {
+          lng = value;
+          latLnglocation = LatLng(lat == null ? 1 : lat, lng == null ? 1 : lng);
+        });
+      }else{
+       lng=46.775951958232405;
+     }
     });
     print("${latLnglocation.latitude} ljlj");
     final coordinates= new Coordinates(latLnglocation.latitude,latLnglocation.longitude);
@@ -356,6 +366,7 @@ setState(() {
 
                       ),
                       height: 55,
+                      margin: EdgeInsets.only(top: Platform.isIOS?22:0),
                       padding: EdgeInsets.all(12),
                       width: MediaQuery.of(context).size.width,
                       child:Row(
@@ -366,7 +377,7 @@ setState(() {
                     },
                             child: Container(
                               width: MediaQuery.of(context).size.width*0.1,
-                            child:Icon(Icons.arrow_forward_ios,size: 18,),
+                            child:Platform.isIOS?Icon(Icons.arrow_back_ios,size: 18,):Icon(Icons.arrow_forward_ios,size: 18,),
                       ),
                           ),
                           Container(
@@ -466,7 +477,7 @@ setState(() {
       } ,
       child: new Container(
         height: MediaQuery.of(context).size.width*0.13,
-        width: MediaQuery.of(context).size.width*0.6,
+        width: MediaQuery.of(context).size.width*0.55,
         margin: EdgeInsets.symmetric(horizontal: 25,vertical: 10),
         decoration: BoxDecoration(
           boxShadow: [BoxShadow(

@@ -27,7 +27,7 @@ class _myCouponDiscountState extends State<myCouponDiscount> {
                     if (snapshot.hasData) {
                       print(snapshot.data.length);
                       return snapshot.data.length==0?Container(
-                        height: MediaQuery.of(context).size.height*0.6,
+                        height: MediaQuery.of(context).size.height*0.69,
                         margin: EdgeInsets.only(top: 16),
                         child: Center(
                           child: Column(
@@ -66,7 +66,7 @@ SizedBox(height: 22,),
                               SizedBox(height: 68,),
 
                               new Text(
-                                "لايوجد عروض متوفرة في موقعك الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                translator.translate("لايوجد بيانات"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
 
@@ -75,17 +75,7 @@ SizedBox(height: 22,),
                                   color:Color(0xff91B958),
                                 ),
                               ),
-                              SizedBox(height: 11,),
-                              new Text(
-                                "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
 
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 13,
-                                  color:Color(0xff91B958),
-                                ),
-                              ),
                               SizedBox(height: 88,),
                               // InkWell(
                               //   onTap: (){
