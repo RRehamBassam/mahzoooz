@@ -246,12 +246,12 @@ class _SettingsState extends State<Settings> {
                                   height: 1.5,
                                 ),
                                 textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                                textAlign: TextAlign.right,
+                                textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                               ),
                             ),
                             SizedBox(height: 8,),// Adobe XD layer: 'text' (text)
                             SizedBox(
-                              width: 66.0,
+                              width:translator.currentLanguage == 'ar' ?66 :110.0,
                               child: Text(
                                 appState.selectedCategory==1 || translator.currentLanguage == 'ar' ?translator.translate("غيير موقعك"):translator.translate("غيير موقعك"),
                                 style: TextStyle(
@@ -262,7 +262,7 @@ class _SettingsState extends State<Settings> {
                                   height: 1.4166666666666667,
                                 ),
                                 textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false),
-                                textAlign: TextAlign.right,
+                                textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                               ),
                             ),
                           ],

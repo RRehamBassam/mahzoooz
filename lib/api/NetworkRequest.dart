@@ -570,9 +570,10 @@ print(colId);print(colId);
     return jsonResponse;
 
   }
-  Future<dynamic> OffersGetPagedS(bool isSpecial,String searchText) async {
+  Future<dynamic> OffersGetPagedS(bool isSpecial,String searchText,latLnglocation) async {
 
-
+    // print(latLnglocation.longitude);
+    // print(latLnglocation.latitude);
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
@@ -583,8 +584,8 @@ print(colId);print(colId);
       "filter": {
         "searchText": searchText,
 
-        "latitude": "24.75007441712588",
-        "longitude": "46.775951958232405"
+        "latitude": latLnglocation.latitude,
+        "longitude": latLnglocation.longitude
       }
     };
     var itemCount ;

@@ -57,7 +57,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                   children: <Widget>[
                     new Text(
                       data['providerNameAr']==null? "مطعم البيك":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                      textAlign: TextAlign.right,
+                      textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                       //  fontFamily: 'Nimbus',
@@ -71,7 +71,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                         padding: const EdgeInsets.all(4.0),
                         child: new Text(
                           translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
-                          textAlign: TextAlign.right,
+                          textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                           style: TextStyle(
                             fontFamily: 'Nimbus',
                             fontWeight: FontWeight.w700,

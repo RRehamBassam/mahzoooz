@@ -152,7 +152,7 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
                         scrollDirection: Axis.horizontal,
                         child: Container(
                           height: 42.0,
-                          width: MediaQuery.of(context).size.width,
+                        //  width: MediaQuery.of(context).size.width,
                           margin: EdgeInsets.only(left: MediaQuery.of(context).size.height< 740.4285714285714?5:12),
                          // width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
@@ -193,8 +193,8 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
           //translator.translate( translator.currentLanguage == 'ar' ?subcategoriesData[index]['nameAr']:subcategoriesData[index]['nameEn']),
 
           style: appState.count==index
-          ? TextStyle(color: Colors.white,fontSize: 12,fontWeight: FontWeight.bold)
-              : TextStyle(color: Colors.black45,fontSize: 12,fontWeight: FontWeight.bold),
+          ? TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.bold)
+              : TextStyle(color: Colors.black45,fontSize: 14,fontWeight: FontWeight.bold),
           ),
           ),
           ),

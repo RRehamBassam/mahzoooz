@@ -60,7 +60,7 @@ class _DiscountsState extends State<Discounts> {
           //shrinkWrap: true,
           children: [
            // AppBarTop(),
-            Search(),
+            Search(latLnglocation),
             Expanded(
               child: Stack(
                 alignment: Alignment.center,
@@ -155,7 +155,7 @@ class _DiscountsState extends State<Discounts> {
                                                         if (snapshot.hasData) {
                                                         return  Container(
                                                           margin: EdgeInsets.only(right: MediaQuery.of(context).size.height< 740.4285714285714?5:12),
-                                                          width:    MediaQuery.of(context).size.width,
+                                                        //  width:    MediaQuery.of(context).size.width,
                                                           child: ListView.builder(
                                                           shrinkWrap: true,
                                                               scrollDirection: Axis.horizontal,

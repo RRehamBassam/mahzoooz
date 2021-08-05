@@ -87,17 +87,17 @@ class _CategoriesState extends State<Categories> {
           ),
           translator.currentLanguage == 'ar' ? Positioned(
             bottom: 25,
-            right: 8,
+            right: 10,
             child:  Container(
-              width:60,
+              width:80,
               child: Text(translator.currentLanguage == 'ar' ?data['nameAr']:data['nameEr'],
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                // "محلات\n وخدمات",
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.right,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 14,
                   color:Color(0xffffffff),
                 ),
               ),
@@ -105,17 +105,17 @@ class _CategoriesState extends State<Categories> {
           ):
           Positioned(
             bottom: 25,
-            left: 8,
+            left: 10,
             child:  Container(
-              width:60,
+              width:80,
               child: Text(translator.currentLanguage == 'ar' ?data['nameAr']:data['nameEn'],
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 // "محلات\n وخدمات",
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 14,
                   color:Color(0xffffffff),
                 ),
               ),

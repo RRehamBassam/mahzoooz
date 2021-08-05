@@ -240,12 +240,12 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   color: Color(0xffffffff),borderRadius: BorderRadius.circular(10.00),
                                 ),
                                 child: Center(
-                                  child: new Text(" %${data['discount'].toString().split('.')[0]} خصم ",
+                                  child: new Text(" %${data['discount'].toString().split('.')[0]} ${translator.translate("خصم")} ",
                                     //"٢٥٪ خصم",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontFamily: "Tajawal",fontWeight: FontWeight.w500,
-                                      fontSize: 14,
+                                      fontSize: translator.currentLanguage == 'ar' ?14:12,
                                       color:Color(0xff38056e),
                                     ),
                                   ),
@@ -351,9 +351,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   Image.asset('Assets/Ticket.png'),
                                 SizedBox(width: 4,),
                                 Text(
-                                  'استخدم ${data['numberUsed']} مرة',
+                                  translator.currentLanguage == 'ar' ?  'استخدم ${data['numberUsed']} مرة':' use ${data['numberUsed']} times',
                                   style: TextStyle(
-                                    fontFamily: 'DIN Next LT Arabic',
                                     fontSize: 10,
                                     color: const Color(0xff80ab40),
                                     fontWeight: FontWeight.w500,
@@ -364,7 +363,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   Row(
                                     children: [
                                       new Text(//{data['lastDate'].toString().split('T')[1]}
-                                        "استعمل مؤخراً منذ",
+                                        translator.translate( "استعمل مؤخراً منذ"),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
@@ -399,10 +398,10 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                               Row(
                                 children: [
                                  Container (
-                                   width:MediaQuery.of(context).size.height< 683.4285714285714?MediaQuery.of(context).size.width*0.41:MediaQuery.of(context).size.width*0.48,
+                                   width:MediaQuery.of(context).size.height< 683.4285714285714?MediaQuery.of(context).size.width*0.41:MediaQuery.of(context).size.width*0.52,
                                     child: new Text(
-                                      data['titeAr']==null? "خصم ١٠٠ ريال سعودي":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
-                                      textAlign: TextAlign.right,
+                                      data['titeAr']==null? "":translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn'],
+                                      textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                                       style: TextStyle(
                                         fontFamily: "Tajawal",fontWeight: FontWeight.bold,
                                         fontSize:MediaQuery.of(context).size.height< 683.4285714285714?12 :15,
@@ -439,7 +438,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 12,
+                                                fontSize: translator.currentLanguage == 'ar' ? 12:11,
                                                 color: Color(0xffffffff),
                                               ),
                                             ),
@@ -613,7 +612,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
               Center(
                 child: // Adobe XD layer: 'How is your trip?' (text)
                 Text(
-                  'كيف كانت تجربتك ؟',
+                  translator.translate('كيف كانت تجربتك ؟'),
                   style: TextStyle(
                     fontSize: 24,
                     color: const Color(0xff242e42),
@@ -633,9 +632,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                   children: [
                   // Adobe XD layer: 'Your feedback will h' (text)
                   Text(
-                  'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا',
+                translator.translate('ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا'),
                   style: TextStyle(
-                    fontFamily: 'DIN Next LT Arabic',
                     fontSize: 17,
                     color: const Color(0xff8a8a8f),
                     letterSpacing: 0.41000000190734864,
@@ -670,11 +668,12 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                     Container(
                       height: MediaQuery.of(context).size.height*0.15,
                       width:MediaQuery.of(context).size.width*0.9,
+                     // alignment:translator.currentLanguage == 'ar' ? Alignment.centerRight:Alignment.centerLeft,
                       child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
                         cursorColor: Color(0xff38056e),
                         keyboardType:TextInputType.text,
                         autofocus: false,
-                        textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                        textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,//(val)=>setState(()=>Name=val)
                         onChanged:(val){
                           setState(() {
                             comment=val;
@@ -699,10 +698,11 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                             fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
                             // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                            hintText:"إضافة تعليق",
+                            hintText:translator.translate("إضافة تعليق"),
 
                             // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                             hintStyle: TextStyle(
+
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
                               color:Color(0xff5e5e5e).withOpacity(0.48),
@@ -751,7 +751,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         ),
                         child: Center(
                           child: new Text(
-                            "إرسال",
+                            translator.translate( "إرسال"),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,

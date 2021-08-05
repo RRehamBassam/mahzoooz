@@ -690,8 +690,9 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                         color:Color(0xff38056e),
                       ),
                       children: <TextSpan>[
+                       // TextSpan(text:" "),
                         TextSpan(
-                          text: translator.currentLanguage == 'ar' ?" من ${_items[_index].NameReAr} ":"from ${_items[_index].NameReEn} ",
+                          text: translator.currentLanguage == 'ar' ?" من ${_items[_index].NameReAr} ":" from ${_items[_index].NameReEn} ",
                           style: TextStyle(
                             fontFamily:'Tajawal',
                             fontWeight: FontWeight.w700,

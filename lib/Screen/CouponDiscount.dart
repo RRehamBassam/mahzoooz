@@ -84,7 +84,7 @@ var token;
         elevation: 1,
         backgroundColor: Colors.white,
         title:new Text(
-          "كوبون الخصم", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+          translator.currentLanguage == 'ar' ?"كوبون الخصم":"Discount Coupon", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -124,7 +124,7 @@ color: Colors.white,
        children: [
            SizedBox(
              width: MediaQuery.of(context).size.width,
-             child: Text(translator.translate("المدرسة"),textDirection: TextDirection.rtl,
+             child: Text(translator.currentLanguage == 'ar' ?"المدرسة":"school",//textDirection: TextDirection.rtl,
                style: TextStyle(fontWeight:FontWeight.w700,fontSize: 19,color:Colors.black ,),
              ),
            ),
@@ -172,7 +172,7 @@ color: Colors.white,
            // ),
            SizedBox(
              width: MediaQuery.of(context).size.width,
-             child: Text(translator.translate(datapath['providerNameAr']),
+             child: Text(translator.currentLanguage == 'ar' ?datapath['providerNameAr']:datapath['providerNameEn'],
                style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
              ),
            ),
@@ -203,7 +203,7 @@ color: Colors.white,
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(translator.translate("بيانات الأبناء"),
+      Text(translator.currentLanguage == 'ar' ?"بيانات الأبناء":"Children's data",
           style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
       ),
       Container(
@@ -247,7 +247,7 @@ color: Colors.white,
                 ),
                 child:Center(
                   child: new Text(
-                    "اضف بيانات ابن جديد",
+                    translator.currentLanguage == 'ar' ? "اضف بيانات ابن جديد":"Add a new son's data",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -293,11 +293,11 @@ color: Colors.white,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height:16,),
-                Text(translator.translate("تفاصيل الخصم"),
+                Text(translator.currentLanguage == 'ar' ?"تفاصيل الخصم":"Discount Details",
                   style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
                 ),
                 SizedBox(height: 8,),
-                Text(translator.translate("الخصم ساري لمرحلة الكي جي ققط"),
+                Text(translator.currentLanguage == 'ar' ?datapath['titeAr']:datapath['titleEn'],
                   style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
                 ),
               ],
@@ -310,7 +310,7 @@ color: Colors.white,
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  child: Text(translator.translate("صالح لغاية"),
+                  child: Text(translator.currentLanguage == 'ar' ?"صالح لغاية":"valid up to",
                     style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
                   ),
                 ),
@@ -435,13 +435,13 @@ color: Colors.white,
                           margin: EdgeInsets.only(top: 0, bottom: 16),
                           width: MediaQuery.of(context).size.width*0.7,
                           child: Text(
-                            'الإسم',
+                            translator.currentLanguage == 'ar' ? 'الإسم':'name',
                             style: TextStyle(
 
                               fontSize: 15,
                               color:  Colors.black54,
                             ),
-                            textAlign: TextAlign.right,
+                          //  textAlign: TextAlign.right,
                           ),
                         ),
                 Container(
@@ -451,7 +451,8 @@ color: Colors.white,
                       cursorColor: Color(0xff38056e),
                       keyboardType:TextInputType.text,
                       autofocus: false,
-                      textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                    //  textAlign: TextAlign.right,
+                      //(val)=>setState(()=>Name=val)
                       // onChanged:onChanged ,
                       // controller:controller ,
                       obscureText: false,
@@ -469,7 +470,7 @@ color: Colors.white,
                           filled: true,
                           fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
                           // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
-                          hintText:'أدخل اسم طالب جديد',
+                          hintText:translator.currentLanguage == 'ar' ?'أدخل اسم طالب جديد':'Enter a new student\'s name',
 
                           // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                           hintStyle: TextStyle(
@@ -489,13 +490,13 @@ color: Colors.white,
                       margin: EdgeInsets.only(top: 16, bottom: 16),
                       width: MediaQuery.of(context).size.width*0.7,
                       child: Text(
-                        'المرحلة',
+                        translator.currentLanguage == 'ar' ? 'المرحلة':'stage',
                         style: TextStyle(
 
                           fontSize: 15,
                           color:  Colors.black54,
                         ),
-                        textAlign: TextAlign.right,
+                       // textAlign: TextAlign.right,
                       ),
                     ),
                     Container(
@@ -552,7 +553,7 @@ color: Colors.white,
 
                         if(newStudentsName==null ||newStudentsid==null){
                           Fluttertoast.showToast(
-                              msg: "لم تتم اضافة ابن",
+                              msg:  translator.currentLanguage == 'ar' ?"لم تتم اضافة ابن":"No son has been added",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 3,
@@ -589,7 +590,7 @@ color: Colors.white,
                             ),
                             child:Center(
                               child: new Text(
-                                "اضف ابن جديد",
+                                translator.currentLanguage == 'ar' ? "اضف ابن جديد":'Add a new son',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,

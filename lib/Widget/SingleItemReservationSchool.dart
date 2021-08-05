@@ -110,7 +110,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
 
-                            Text(data["isFinished"]?translator.translate("إنتهاء مدة الخصم"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
+                            Text(data["isFinished"]?translator.translate("منتهى"):data['isCanceled']?translator.translate("تم إلغاء"):translator.translate("إلغاء"),style: TextStyle(fontSize: 12,color: Colors.red[900],fontWeight: FontWeight.w700),textAlign: TextAlign.left,),
                           ],
                         ),
                       ),
@@ -120,7 +120,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          Text("حجز #${data['id']}",style: TextStyle(fontSize: 11),),
+                          Text("${translator.translate("حجز")} #${data['id']}",style: TextStyle(fontSize: 11),),
                         ],
                       )
                     ],
@@ -143,7 +143,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.person_outline,size: 22,),
-                     Text(" طالب ${data['numberOfStudents']} ",style: TextStyle(fontSize: 9),)
+                     Text(" ${translator.translate("طالب")} ${data['numberOfStudents']} ",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
@@ -152,7 +152,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                   children: [
                     SizedBox(height: 2,),
                     Icon(Icons.date_range_outlined,size: 22,),
-                   Text(" لغايه التاريخ ${data['expireDate'].toString().split('T')[0] }",style: TextStyle(fontSize: 9),)
+                   Text(" ${translator.translate("لغايه التاريخ")} ${data['expireDate'].toString().split('T')[0] }",style: TextStyle(fontSize: 9),)
                   ],
                 ),
                 Container(height: MediaQuery.of(context).size.height*0.05,width: 1,color: Colors.grey.withOpacity(0.2),),
@@ -176,7 +176,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                     children: [
                       SizedBox(height: 2,),
                       Icon(Icons.location_on_outlined,size: 22,),
-                        Text(" الاتجاهات ",style: TextStyle(fontSize: 9),)
+                        Text(translator.translate(" الاتجاهات "),style: TextStyle(fontSize: 9),)
                     ],
                   ),
                 ),
@@ -191,7 +191,7 @@ class _SingleItemReservationSchoolState extends State<SingleItemReservationSchoo
                     children: [
                       SizedBox(height: 2,),
                       Icon(Icons.call,size: 22,),
-                       Text(" اتصل الان ",style: TextStyle(fontSize: 9),)
+                       Text(translator.translate(" اتصل الان "),style: TextStyle(fontSize: 9),)
                     ],
                   ),
                 )

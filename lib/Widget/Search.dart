@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:mahzoooz/Screen/SearchScreen.dart';
 class Search extends StatefulWidget {
+  LatLng latLnglocation;
+
+  Search(this.latLnglocation);
+
   @override
-  _SearchState createState() => _SearchState();
+  _SearchState createState() => _SearchState(latLnglocation);
 }
 
 class _SearchState extends State<Search> {
+  LatLng latLnglocation;
+
+  _SearchState(this.latLnglocation);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +44,7 @@ class _SearchState extends State<Search> {
                     type: PageTransitionType.leftToRight,
                     duration: Duration(milliseconds: 550) ,
                     reverseDuration: Duration(milliseconds: 700),
-                    child: SearchScreen(),
+                    child: SearchScreen(latLnglocation),
                   ),);
                 },
                 decoration: InputDecoration(

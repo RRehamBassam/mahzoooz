@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:math' as math;
 import 'package:animated_clipper/animated_clipper.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
@@ -208,7 +208,7 @@ Future<void> share() async {
                            ),
                          ],
                        ),
-                       Positioned(
+                      translator.currentLanguage == 'ar' ? Positioned(
                          left: 40,
                          top: 47,
                          child: InkWell(
@@ -287,8 +287,87 @@ Future<void> share() async {
                              ],
                            ),
                          ),
+                       ):Positioned(
+                         right: 40,
+                         top: 47,
+                         child: InkWell(
+                           onTap: (){
+                             share();
+                           },
+                           child: Row(
+                             children: [
+                               Material(
+                                 borderRadius:  BorderRadius.circular(15.00),
+                                 elevation: 5,
+                                 child: new Container(
+                                   height: 25.00,
+                                   width: 25.00,
+                                   decoration: BoxDecoration(
+                                     color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                   ),
+                                   child:      Center(child:Icon(Icons.reply_outlined,color:Color(0xff38056e),size: 18,) ),// Center(child: Image.asset("Assets/Upload.png",scale: 0.85,)),
+                                 ),
+                               ),
+                               SizedBox(width: 10,),
+                               InkWell(
+                                 onTap: ()async{
+                                   if(token==null){
+                                     Fluttertoast.showToast(
+                                         msg: "عفوا سجل دخولك اولا",
+                                         toastLength: Toast.LENGTH_SHORT,
+                                         gravity: ToastGravity.BOTTOM,
+                                         timeInSecForIosWeb: 1,
+                                         backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                         textColor: Colors.white,
+                                         fontSize: 16.0
+                                     );
+                                   }else{
+                                     await addFavourites();
+                                     if(message=="Data Inserted Successfully"){
+                                       Fluttertoast.showToast(
+                                           msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                           toastLength: Toast.LENGTH_SHORT,
+                                           gravity: ToastGravity.BOTTOM,
+                                           timeInSecForIosWeb: 1,
+                                           backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                           textColor: Colors.white,
+                                           fontSize: 16.0
+                                       );
+                                     }else{
+                                       Fluttertoast.showToast(
+                                           msg: message,
+                                           toastLength: Toast.LENGTH_SHORT,
+                                           gravity: ToastGravity.BOTTOM,
+                                           timeInSecForIosWeb: 1,
+                                           backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                           textColor: Colors.white,
+                                           fontSize: 16.0
+                                       );
+
+                                     }
+                                   }
+
+
+                                 },
+                                 child: Material(
+                                   borderRadius:  BorderRadius.circular(15.00),
+                                   elevation: 5,
+                                   child: new Container(
+                                     height: 25.00,
+                                     width: 25.00,
+                                     decoration: BoxDecoration(
+                                       color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                     ),
+                                     child:     Center(child:Icon(Icons.favorite_border,color:Color(0xff38056e),size: 20,)),
+                                   ),
+                                 ),
+                               ),
+
+                             ],
+                           ),
+                         ),
                        ),
-                       Positioned(
+                       translator.currentLanguage == 'ar' ? Positioned(
                          right: 40,
                          top: 50,
                          child: Container(
@@ -302,6 +381,28 @@ Future<void> share() async {
                                child: Row(
                                  children: [
                                    Center(child: Image.asset("Assets/IconLeft.png",scale: 0.7,color:Colors.white ,)),
+                                   SizedBox(width: 0,),
+                                 ],
+                               ),
+                             ),
+                           ),
+                         ),
+                       ):Positioned(
+                         left: 40,
+                         top: 50,
+                         child: Container(
+                           child: InkWell(
+                             onTap: () {
+                               Navigator.pop(context);
+                               FlutterStatusbarcolor.setStatusBarColor( Color(0xff38056e));
+                             },
+                             child: Container(
+
+                               child: Row(
+                                 children: [
+                                   Center(child: Transform(
+                                       alignment: Alignment.center,
+                                       transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),child: Image.asset("Assets/IconLeft.png",scale: 0.7,color:Colors.white ,))),
                                    SizedBox(width: 0,),
                                  ],
                                ),
@@ -693,7 +794,7 @@ Future<void> share() async {
                     ),
                     child: Center(
                       child: new Text(
-                        " %${snapshot.data['offer']['discount'].toString().split('.')[0]} خصم ",
+                        translator.currentLanguage == 'ar' ?" %${snapshot.data['offer']['discount'].toString().split('.')[0]} خصم ": " %${snapshot.data['offer']['discount'].toString().split('.')[0]} discount ",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -914,7 +1015,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
             Center(
               child: // Adobe XD layer: 'How is your trip?' (text)
               Text(
-                'كيف كانت تجربتك ؟',
+                translator.translate( 'كيف كانت تجربتك ؟'),
                 style: TextStyle(
                   fontSize: 24,
                   color: const Color(0xff242e42),
@@ -934,9 +1035,8 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                 children: [
                   // Adobe XD layer: 'Your feedback will h' (text)
                   Text(
-                    'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا',
+              translator.translate( 'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا'),
                     style: TextStyle(
-                      fontFamily: 'DIN Next LT Arabic',
                       fontSize: 17,
                       color: const Color(0xff8a8a8f),
                       letterSpacing: 0.41000000190734864,
@@ -975,7 +1075,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                       cursorColor: Color(0xff38056e),
                       keyboardType:TextInputType.text,
                       autofocus: false,
-                      textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                      textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,//(val)=>setState(()=>Name=val)
                       onChanged:(val){
                         setState(() {
                           comment=val;
@@ -1000,7 +1100,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                           fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
                           // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                          hintText:"إضافة تعليق",
+                          hintText:translator.translate("إضافة تعليق"),
 
                           // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                           hintStyle: TextStyle(
@@ -1043,7 +1143,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                       ),
                       child: Center(
                         child: new Text(
-                          "إرسال",
+                          translator.translate( "إرسال"),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -1091,7 +1191,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  text,
+                  translator.translate(text),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -1108,25 +1208,25 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                 color: Colors.white,
                child:text=="ساعات العمل"? workHours(data):text=="وسائل الإتصال"?contacts(data):text=="مراحل"?SchoolStages(data):text=="القائمة"?menu(data):text=="شروط الاستخدام وتفاصيل الخصم"?condition(data):Column( //text=="الفروع المتاحة"?Branches(data):
                  children: [
-                   text=="ساعات العمل"?Text(
-               'يعمل الفرع في الاولاوقات التالية',
-                 style: TextStyle(
-                   fontFamily: 'DIN Next LT Arabic',
-                   fontSize: 13,
-                   color: const Color(0xffc8c7cc),
-                 ),
-                 textAlign: TextAlign.right,
-               ): Text(
-                '',
-                style: TextStyle(
-                  fontFamily: 'DIN Next LT Arabic',
-                  fontSize: 13,
-                  color: const Color(0xffc8c7cc),
-                ),
-                textAlign: TextAlign.right,
-              ),
+              //      text=="ساعات العمل"?Text(
+              //  'يعمل الفرع في الاولاوقات التالية',
+              //    style: TextStyle(
+              //      fontFamily: 'DIN Next LT Arabic',
+              //      fontSize: 13,
+              //      color: const Color(0xffc8c7cc),
+              //    ),
+              //    textAlign: TextAlign.right,
+              //  ): Text(
+              //   '',
+              //   style: TextStyle(
+              //     fontFamily: 'DIN Next LT Arabic',
+              //     fontSize: 13,
+              //     color: const Color(0xffc8c7cc),
+              //   ),
+              //   textAlign: TextAlign.right,
+              // ),
           text=="ساعات العمل"? Text(
-            data.length==0?'' :  'يوميا من${data['to']} مساءا حتي ${data['from']} صباحا',
+            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['to']} مساءا حتي ${data['from']} صباحا':' from Daily${data['to']} P.m Until ${data['from']} A.m',
             style: TextStyle(
               fontFamily: 'DIN Next LT Arabic',
               fontSize: 15,
@@ -1156,16 +1256,16 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
   Widget workHours(data){
     return Column(
       children: [
-        Text(
-          'يعمل الفرع في الاولاوقات التالية',
-          style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
-            fontSize: 13,
-            color: const Color(0xffc8c7cc),
-          ),
-          textAlign: TextAlign.right,
-        ),
-        SizedBox(height: 6,),
+        // Text(
+        //   'يعمل الفرع في الاولاوقات التالية',
+        //   style: TextStyle(
+        //     fontFamily: 'DIN Next LT Arabic',
+        //     fontSize: 13,
+        //     color: const Color(0xffc8c7cc),
+        //   ),
+        //   textAlign: TextAlign.right,
+        // ),
+        // SizedBox(height: 6,),
         Text(
     data['workHours'].length==0?'' :'يوميا من${data['workHours'][0]['from'].toString()} مساءا حتي  صباحا${data['workHours'][0]['to'].toString()}'.toString(),
           style: TextStyle(
@@ -1362,7 +1462,6 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             ' يوتيوب',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1423,11 +1522,12 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "يمكنك الاتصال بالرقم التالي",
+    translator.translate("يمكنك الاتصال بالرقم التالي"),
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
-            fontSize: 15,
-            color: const Color(0xffa9a7aa),
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+
+            color: const Color(0xff888788),
           ),
           textAlign: TextAlign.right,
         ),
@@ -1436,7 +1536,6 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             data['contacts'].length==0?'' :'${data['contacts'][0]['mobile'].toString()}  '.toString(),
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
               fontSize: 15,
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
@@ -1453,7 +1552,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                 Icon(Icons.call,size: 18,color:Color(0xff38056e)),
                 SizedBox(width: 4,),
                 Text(
-                  'اتصل الآن ',
+                  translator.translate('اتصل الآن '),
                   style: TextStyle(
 
                     fontSize: 13,
@@ -1504,12 +1603,12 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         ],),
 
         Text(
-          'او عبر إيميل التالى',
+    translator.translate('او عبر إيميل التالى'),
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
-            fontSize: 15,
-            color: const Color(0xff242e42),
-            fontWeight: FontWeight.w700,
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+
+            color: const Color(0xff888788),
           ),
           textAlign: TextAlign.right,
         ),
@@ -1518,7 +1617,6 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             data['contacts'].length==0?'' : '${data['contacts'][0]['email'].toString()}'.toString(),
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
               fontSize: 15,
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
@@ -1535,7 +1633,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                 Icon(Icons.email,size: 18,color: Color(0xff38056e),),
                 SizedBox(width: 4,),
                 Text(
-                  'ارسل الآن ',
+                  translator.translate("ارسل الآن "),
                   style: TextStyle(
 
                     fontSize: 13,
