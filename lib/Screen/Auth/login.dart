@@ -199,7 +199,7 @@ String Password;
                           child: Center(
                             child: new Text(
 
-                              "من فضلك ادخل كلمة المرور الجديدة ",
+                              translator.translate( "من فضلك ادخل كلمة المرور الجديدة "),
                               textAlign: TextAlign.center,
 
                               style: TextStyle(fontWeight: FontWeight.w700,
@@ -210,7 +210,7 @@ String Password;
                             ),
                           ),
                         ): new Text(
-                          "اهلاً بيك في محظوووظ",
+                translator.translate(  "اهلاً بيك في محظوووظ"),
                           // textAlign: TextAlign.right,gt3
                           style: TextStyle(fontWeight: FontWeight.w700,
                             fontSize: 23,
@@ -219,7 +219,7 @@ String Password;
                         ),
                         SizedBox(height: 16,),
                         setPass?Container(): new Text(
-                          "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد",
+                          translator.translate( "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
@@ -276,7 +276,7 @@ String Password;
                             fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
                             // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                            hintText:"كلمة المرور",
+                            hintText:translator.translate("كلمة المرور"),
                             // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                             hintStyle: TextStyle(color: Colors.black,fontFamily: "Tajawal"),
                             labelStyle: null
@@ -292,7 +292,7 @@ String Password;
                           if(Password==null){
                             print("2");
                               Fluttertoast.showToast(
-                                  msg: "يجب عليك إدخال كلمة المرور",
+                                  msg: translator.translate("يجب عليك إدخال كلمة المرور"),
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
@@ -358,7 +358,7 @@ String Password;
                                   // Navigator.pushReplacement(context, MaterialPageRoute(
                                   //     builder: (context) =>  login(phoneNumber, false,false)));
                                    Fluttertoast.showToast(
-                                      msg: "تم تغيير كلمة المرور بنجاح",
+                                      msg: translator.translate("تم تغيير كلمة المرور بنجاح"),
                                       toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
                                       timeInSecForIosWeb: 1,
@@ -405,7 +405,7 @@ String Password;
                           ),
                           child: Center(
                             child: new Text(
-                             setPass?"حفظ": "دخول",
+                              translator.translate(  setPass?"حفظ": "دخول"),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -459,7 +459,7 @@ String Password;
                               translator.translate('Change to English'),
                               textAlign: TextAlign.right,
                               style: TextStyle(
-                                fontFamily: "DIN Next LT Arabic",fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w500,
                                 fontSize: 10,
                                 color:Color(0xff38056e),
                               ),

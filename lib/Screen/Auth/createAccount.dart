@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:mahzoooz/Widget/test.dart';
@@ -28,6 +29,12 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController _controllerPass = new TextEditingController();
   TextEditingController _controllerCpass = new TextEditingController();
   TextEditingController _controllerG = new TextEditingController();
+  String emailRegExp =
+      "[a-z0-9!#\$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#\$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9][a-zA-Z0-9-]{0,253}\.)*[a-zA-Z0-9][a-zA-Z0-9-]{0,253}\.[a-zA-Z0-9]{2,}\$";
+  String passwordRegExp = "[a-z0-9_@-A-Z]{6,16}\$";
+  String nameRegExp = "^[a-zA-Z]{2,16}[\\s\\\][a-zA-Z]{2,16}\$";
+  String phoneRegExp = "^(009665|9665|05|5)(5|0|3|6|4|9|1|8|7)([0-9]{7})\$";
+
   String phoneNumber;
   var generatedCode;
   String smsOTP;
@@ -37,6 +44,8 @@ class _CreateAccountState extends State<CreateAccount> {
  int countryId=0;
   var base64Image;
   String otp, authStatus = "";
+  bool  _obscureText;
+  bool  _obscureText2;
 bool ee=false;
 bool eeName=false;
   bool eeD=false;
@@ -98,6 +107,8 @@ bool eeName=false;
   NetworkRequest networkRequest=new NetworkRequest();
   @override
   void initState() {
+    _obscureText = true;
+    _obscureText2 = true;
     super.initState();
     this.getSWData();
   }
@@ -115,7 +126,7 @@ bool eeName=false;
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
         title: new Text(
-          "انشاء حساب",
+        translator.translate( "انشاء حساب"),
           textAlign: TextAlign.center,
           style: TextStyle(
            fontWeight: FontWeight.w700,
@@ -180,6 +191,8 @@ bool eeName=false;
                         if(message=="Rigisterd Successfully"){
                          // Navigator.push(context, new MaterialPageRoute(builder: (context)=>  Home()));
                           // phoneNumber == null ? null : verifyPhoneNumber(context);
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text( translator.translate('Processing Data'))));
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(builder: (_){
                                 return  Home();
@@ -187,8 +200,7 @@ bool eeName=false;
                           );
                         }
                         // If the form is valid, display a Snackbar.
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text('Processing Data')));
+
                       }else{
                    await  getUserHasAccount();
                       if(message=="Rigisterd Successfully"){
@@ -206,27 +218,27 @@ bool eeName=false;
                         ),
                         child:Center(
                           child: new Text(
-                            "إنشاء حساب",
+                            translator.translate("إنشاء حساب"),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 14,
                               color:Color(0xffffffff),
-                            ),
+                            ), // new Text(
+                            //   "بمجرد الضغط علي انشاء الحساب انت توافق علي الشروط و الاحكام",
+                            //   textAlign: TextAlign.right,
+                            //   style: TextStyle(
+                            //     fontWeight: FontWeight.w500,
+                            //     fontSize: 9,
+                            //     color:Color(0xff909090),
+                            //   ),
+                            // )
                           ),
                         )
                     ),
                   ),
                   SizedBox(height: 16,),
-                  new Text(
-                    "بمجرد الضغط علي انشاء الحساب انت توافق علي الشروط و الاحكام",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 9,
-                      color:Color(0xff909090),
-                    ),
-                  )
+
 
                 ],
               ),
@@ -246,16 +258,16 @@ bool eeName=false;
 print(error);
     return Container(
       width:error?MediaQuery.of(context).size.width*0.965: MediaQuery.of(context).size.width*0.815,
-      height:ee? MediaQuery.of(context).size.height*0.108: MediaQuery.of(context).size.height*0.062,
+      height:eeCpass? MediaQuery.of(context).size.height*0.108:ee? MediaQuery.of(context).size.height*0.108: MediaQuery.of(context).size.height*0.062,
       child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
         cursorColor: Color(0xff38056e),
         keyboardType:TextInputType.text,
         autofocus: false,
-        textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+        textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,//(val)=>setState(()=>Name=val)
          onChanged:onChanged ,
         controller:controller ,
-        obscureText: false,
-
+       // obscureText: false,
+        obscureText:text=="كلمة المرور"? _obscureText:text=="تأكيد كلمة المرور"?_obscureText2:false,
         onTap:(){
          if (text=="الدولة"|| text=="النوع"||text=="تاريخ الميلاد")
     {
@@ -285,6 +297,7 @@ print(error);
             ),
           );}
         },
+
         validator:text=="كلمة المرور"|| text=="تأكيد كلمة المرور"? FieldValidator.password(
           minLength: 6,
           // shouldContainNumber: true,
@@ -314,12 +327,6 @@ print(error);
               if(text=="الدولة"){
                 eeCitiy=true;
               }
-
-
-
-
-
-
               ee=true;
               init=true;
               error=true;
@@ -354,8 +361,26 @@ print(error);
 
           return null;}
         },
+
         decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down,color:text=="الدولة"|| text=="النوع"||text=="تاريخ الميلاد"?Colors.grey[300]: Color(0x0ffff),),
+
+              suffixIcon:text=="كلمة المرور"? new InkWell(
+                  onTap: () {
+                    setState(() {
+                      _obscureText = !_obscureText;
+                    });
+                  },
+                  child: Container(
+                      margin:EdgeInsets.symmetric(horizontal: 5) ,
+                      child: Icon(_obscureText? Icons.visibility_off: Icons.visibility ))):text=="تأكيد كلمة المرور"? new InkWell(
+                  onTap: () {
+                    setState(() {
+                      _obscureText2 = !_obscureText2;
+                    });
+                  },
+                  child: Container(
+                      margin:EdgeInsets.symmetric(horizontal: 5) ,
+                      child: Icon(!_obscureText2? Icons.visibility : Icons.visibility_off))): Icon(Icons.arrow_drop_down,color:text=="الدولة"|| text=="النوع"||text=="تاريخ الميلاد"?Colors.grey[300]: Color(0x0ffff),),
             contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -369,7 +394,8 @@ print(error);
             fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
             // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-            hintText:text,
+            hintText:translator.translate(text),
+
 
             // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
             hintStyle: TextStyle(
@@ -410,7 +436,7 @@ print(error);
             SizedBox(height: 16,),
             Center(
               child:  Text(
-                "اختر الدولة",
+                translator.translate("اختر الدولة"),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -434,7 +460,18 @@ print(error);
                   //  itemExtent: 40,
                   useMagnifier: true,
                 onSelectedItemChanged: (int){
-                  {setState(()=>{_controllerCitiy.text=data[int]['nameAr'],city=data[int]['nameAr'],countryId=data[int]['id']});}
+                  {setState(()=>{
+                  if(translator.currentLanguage == 'ar')
+                    {
+                                _controllerCitiy.text = data[int]['nameAr'],
+                                city = data[int]['nameAr'],
+                                countryId = data[int]['id']
+                              }else{
+                    _controllerCitiy.text = data[int]['nameEn'],
+                    city = data[int]['nameEn'],
+                    countryId = data[int]['id']
+                  }
+                          });}
                   HelperFunctions.saveUserAddressSharedPreference(data[int]['nameAr']);
                    },
                   // diameterRatio: 1.6,
@@ -442,7 +479,18 @@ print(error);
                     ...data.map((name) {
                       print(name['nameAr']);
                       return InkWell(
-                        onTap: ()=>{setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id']}),},
+                        onTap: ()=>{setState(()=>{
+                          if(translator.currentLanguage == 'ar')
+                            {
+                                    _controllerCitiy.text = name['nameAr'],
+                                    city = name['nameAr'],
+                                    countryId = name['id']
+                                  }else{
+                            _controllerCitiy.text = name['nameEn'],
+                            city = name['nameEn'],
+                            countryId = name['id']
+                          }
+                              }),},
                         child: Container(
                           width: double.infinity,
 
@@ -454,7 +502,7 @@ print(error);
                           padding: EdgeInsets.all(5),
                           margin:EdgeInsets.all(3) ,
                           child: Center(
-                            child: Text(name['nameAr'],
+                            child: Text(translator.currentLanguage == 'ar' ? name['nameAr']:name['nameEn'],
                                 style: TextStyle(
                                   fontFamily: "Tajawal",fontWeight: FontWeight.w500,
                                   fontSize: 16,
@@ -477,7 +525,7 @@ print(error);
                 ),
                 child: Center(
                   child: new Text(
-                    "حفظ",
+                    translator.translate( "حفظ"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -560,7 +608,7 @@ print(error);
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  "اختر النوع",
+                  translator.translate( "اختر النوع"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -603,7 +651,7 @@ print(error);
                             padding: EdgeInsets.all(5),
                             margin:EdgeInsets.all(3) ,
                             child: Center(
-                              child: Text(name,
+                              child: Text(  translator.translate(name),
                                   style: TextStyle(
                                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
                                     fontSize: 16,
@@ -628,7 +676,7 @@ print(error);
                   ),
                   child: Center(
                     child: new Text(
-                      "حفظ",
+                      translator.translate( "حفظ"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -696,6 +744,9 @@ print(error);
                 padding: EdgeInsets.all(8),
                 margin: EdgeInsets.only(top: 16, bottom: 16),
                 child: CupertinoDatePicker(
+                  
+                  maximumDate:DateTime(2021, 1, 1) ,
+                  minimumDate:DateTime(1950, 1, 1) ,
                   mode: CupertinoDatePickerMode.date,
                   initialDateTime: DateTime(2021, 1, 1),
                   onDateTimeChanged: (DateTime newDateTime) {
@@ -721,7 +772,7 @@ print(error);
                   ),
                   child: Center(
                     child: new Text(
-                      "حفظ",
+                      translator.translate( "حفظ"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,

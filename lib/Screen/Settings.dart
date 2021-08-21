@@ -130,7 +130,7 @@ class _SettingsState extends State<Settings> {
                     Spacer(),
                   // Adobe XD layer: 'text' (text)
                   SizedBox(
-                  width: 38.0,
+                  width: 40.0,
                   child: Text(
                     translator.translate('change'),
                     style: TextStyle(
@@ -198,7 +198,7 @@ class _SettingsState extends State<Settings> {
                       Spacer(),
                       // Adobe XD layer: 'text' (text)
                       SizedBox(
-                        width: 38.0,
+                        width: 40.0,
                         child: Text(
                             translator.translate('change'),
                           style: TextStyle(
@@ -270,7 +270,7 @@ class _SettingsState extends State<Settings> {
                         Spacer(),
                         // Adobe XD layer: 'text' (text)
                         SizedBox(
-                          width: 38.0,
+                          width: 40.0,
                           child: Text(
                             translator.translate('change'),
                             style: TextStyle(
@@ -492,7 +492,7 @@ class _SettingsState extends State<Settings> {
                         ),
                         child: Center(
                           child: new Text(
-                            "حفظ",
+                            translator.translate( "حفظ"),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,

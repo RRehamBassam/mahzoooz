@@ -106,7 +106,7 @@ bool isverifyPhoneNumbe=false;
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
         title: new Text(
-          'كود التأكيد',
+          translator.translate('كود التأكيد'),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -124,17 +124,16 @@ bool isverifyPhoneNumbe=false;
               child: Column(
                 children: [
                   new Text(
-                    setPass?"من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور":"أدخل الكورد الذي ارسلناه لك",
+                    setPass?translator.translate("من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور"):translator.translate("أدخل الكورد الذي ارسلناه لك"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "DIN Next LT Arabic",
                       fontSize: 14,
                       color:Color(0xff454545),
                     ),
                   ),
                   SizedBox(height: 8,),
                   new Text(
-                    "تم ارسال رمز التحقيق الي رقم\n$phoneNumber",
+                    "${translator.translate("تم ارسال رمز التحقيق الي رقم")}\n$phoneNumber",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: "DIN Next LT Arabic",
@@ -181,16 +180,16 @@ bool isverifyPhoneNumbe=false;
                       },),
                     ),
                     SizedBox(height: 8,),
-                    new Text(
-                      "اعد الارسال ( ٣٠ ثانية )",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "DIN Next LT Arabic",
-                        fontSize: 14,
-                        color:Color(0xff38056e),
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                    // new Text(
+                    //   "اعد الارسال ( ٣٠ ثانية )",
+                    //   textAlign: TextAlign.center,
+                    //   style: TextStyle(
+                    //     fontFamily: "DIN Next LT Arabic",
+                    //     fontSize: 14,
+                    //     color:Color(0xff38056e),
+                    //     decoration: TextDecoration.underline,
+                    //   ),
+                    // ),
                   ],
                 )),
 
@@ -227,7 +226,7 @@ bool isverifyPhoneNumbe=false;
                   ),
                   child:Center(
                     child: new Text(
-                      setPass?"استعادة كلمة المرور" :"دخول",
+                      setPass?translator.translate("استعادة كلمة المرور" ):translator.translate("دخول"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -263,7 +262,7 @@ bool isverifyPhoneNumbe=false;
                        child: Center(
                          child: new Text(
 
-                            "من فضلك ادخل رقم جوالك لاستعادة كلمة المرور",
+                           translator.translate( "من فضلك ادخل رقم جوالك لاستعادة كلمة المرور"),
                              textAlign: TextAlign.center,
 
                             style: TextStyle(fontWeight: FontWeight.w700,
@@ -361,8 +360,7 @@ bool isverifyPhoneNumbe=false;
                             // initialSelection:phoneIsoCode,
                             dropdownIcon: Icon(Icons.arrow_drop_down,color: Colors.grey[300],),
                             labelStyle: TextStyle(color: Colors.grey[300],fontFamily: "Tajawal"),
-                            enabledCountries: ['+966','+970','+20'],
-                            //showCountryFlags: false,
+                            enabledCountries: ['+20','+970','+966','+1'],                            //showCountryFlags: false,
                             showCountryCodes: true),
                       ),
                     ),
@@ -373,7 +371,7 @@ bool isverifyPhoneNumbe=false;
                       //  networkRequest.OffersGetPaged();
                         if(phoneNumber==null||phoneNumber.length<9){
                           Fluttertoast.showToast(
-                              msg: "يجب عليك إدخال رقم الجوال",
+                              msg: translator.translate("يجب عليك إدخال رقم الجوال"),
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
@@ -401,7 +399,7 @@ bool isverifyPhoneNumbe=false;
                             if(phoneNumber.length<9){
                               print("22");
                               Fluttertoast.showToast(
-                                  msg: " يجب عليك إدخال رقم الجوال صحيح",
+                                  msg:translator.translate( " يجب عليك إدخال رقم الجوال صحيح"),
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   timeInSecForIosWeb: 1,
@@ -421,9 +419,9 @@ bool isverifyPhoneNumbe=false;
                            await  phoneNumber == null ? null : verfiyPhone();
 
                                // await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code)));
-                                setState(() {
-                                  isLouding=false;
-                                });
+                               //  setState(() {
+                               //    isLouding=false;
+                               //  });
                               }else{
 
                               }
@@ -447,9 +445,9 @@ bool isverifyPhoneNumbe=false;
 
 
 
-                          setState(() {
-                            isLouding=false;
-                          });
+                          // setState(() {
+                          //   isLouding=false;
+                          // });
                         }
 
                       },
@@ -461,7 +459,7 @@ bool isverifyPhoneNumbe=false;
                           color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                         ),
                         child: Center(
-                          child: new Text("استعادة كلمة المرور",
+                          child: new Text(translator.translate("استعادة كلمة المرور"),
                             //translator.translate('Login'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -605,7 +603,9 @@ bool isverifyPhoneNumbe=false;
       },
       codeSent: (String verId, [int forceCodeResent]) {
         verificationId = verId;
+
         setState(() {
+          isLouding=false;
           codeScreen=true;
           authStatus = "OTP has been successfully send";
         });
@@ -661,6 +661,7 @@ bool isverifyPhoneNumbe=false;
       this.verificationId = verId;
       setState(() {
         codeScreen=true;
+        isLouding=false;
         //  authStatus = "OTP has been successfully send";
       });
       // smsCodeDialoge(context).then((value){
@@ -702,7 +703,7 @@ bool isverifyPhoneNumbe=false;
     }).catchError((e){
       if(!LoginCode) {
         Fluttertoast.showToast(
-            msg: "ادخل كود صحيح",
+            msg:translator.translate( "ادخل كود صحيح"),
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,

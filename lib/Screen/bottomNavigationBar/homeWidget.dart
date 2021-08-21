@@ -40,7 +40,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
   Future<void> share(text,text2) async {
     await FlutterShare.share(
         title: 'Example share',
-        text:'$text $text2' +'  حمل الآن تطبيق محظوووظ من الرابط',
+        text:translator.currentLanguage == 'ar' ?'$text $text2' +'حمل الآن تطبيق محظوووظ من الرابط'+'. http://onelink.to/mahzoooz':'$text $text2' +'Download now the Mahzoooz app from the link http://onelink.to/mahzoooz',
       //  linkUrl: 'https://flutter.dev/',
         chooserTitle: 'Example Chooser Title'
     );
@@ -560,7 +560,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                   ),]),
 
                       Positioned(
-                        top:MediaQuery.of(context).size.height< 743.4285714285714?265:330,//250
+                        top:MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height< 603.4285714285714?215:265:330,//250
                          // right:MediaQuery.of(context).size.height<800?0:2,
                           child: Container(
                   alignment:Alignment.center,
@@ -571,7 +571,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                 BoardView(items: _items, current: _current, angle: _angle),
                             Positioned(
                               top:MediaQuery.of(context).size.width * 0.294,
-                                left:MediaQuery.of(context).size.width * 0.294,
+                                left:MediaQuery.of(context).size.height< 603.4285714285714?MediaQuery.of(context).size.width * 0.2915:MediaQuery.of(context).size.width * 0.294,
                                 child: _buildGo())
                               ],
                             ),
@@ -629,8 +629,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
             width: 68,
             child: Center(
               child: Text(
-                "إبدأ \nاللعب",
-
+                 translator.translate("إبدأاللعب"),//"إبدأ \nاللعب"
                // textDirection: TextDirection,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold,color: Color(0xff38056E),),
@@ -643,7 +642,6 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
     );
   }
   _animation() async{
-    print("ll");
     if (!_ctrl.isAnimating) {
       var _random = Random().nextDouble();
       _angle = 20 + Random().nextInt(5) + _random;

@@ -39,8 +39,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   }
   Future<void> share() async {
     await FlutterShare.share(
-        title:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
-        text:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
+        title:  translator.currentLanguage == 'ar' ?" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط http://onelink.to/mahzoooz ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahoooz app from the link http://onelink.to/mahzoooz ",
+        text:  translator.currentLanguage == 'ar' ?" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط http://onelink.to/mahzoooz ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahoooz app from the link http://onelink.to/mahzoooz ",
         linkUrl: data['webSite'],
         chooserTitle: 'لتفاصيل');
   }
@@ -48,7 +48,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
     if(newValue){
       getLoggedInState();
       Fluttertoast.showToast(
-          msg: "تم نسخ الكود",
+          msg: translator.translate("تم نسخ الكود"),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -148,6 +148,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                             fit: BoxFit.cover,
                           ),
                         ),),
+                     translator.currentLanguage == 'ar' ?
                       Positioned(
                           left: 10, top: 10,
                           child:Row(
@@ -254,7 +255,115 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
 
                             ],
 
-                          )),
+                          )):
+                     Positioned(
+                         right: 10,
+                         top: 10,
+                         child:Row(
+                           children: [
+                             data['discount']==0.0?Container(): new Container(
+                               height: 27.00,
+                               width: 76.00,
+                               decoration: BoxDecoration(
+                                 color: Color(0xffffffff),borderRadius: BorderRadius.circular(10.00),
+                               ),
+                               child: Center(
+                                 child: new Text(" %${data['discount'].toString().split('.')[0]} ${translator.translate("خصم")} ",
+                                   //"٢٥٪ خصم",
+                                   textAlign: TextAlign.center,
+                                   style: TextStyle(
+                                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
+                                     fontSize: translator.currentLanguage == 'ar' ?14:12,
+                                     color:Color(0xff38056e),
+                                   ),
+                                 ),
+                               ),
+                             ),
+                             SizedBox(width: 10,),
+                             InkWell(
+                               onTap: ()async{
+                                 if(token==null){
+                                   Fluttertoast.showToast(
+                                       msg: "عفوا سجل دخولك اولا",
+                                       toastLength: Toast.LENGTH_SHORT,
+                                       gravity: ToastGravity.BOTTOM,
+                                       timeInSecForIosWeb: 1,
+                                       backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                       textColor: Colors.white,
+                                       fontSize: 16.0
+                                   );
+                                 }else {
+                                   if (token == null) {
+                                     Fluttertoast.showToast(
+                                         msg:"عفوا سجل دخولك اولا",
+                                         toastLength: Toast.LENGTH_SHORT,
+                                         gravity: ToastGravity.BOTTOM,
+                                         timeInSecForIosWeb: 1,
+                                         backgroundColor: Color(0xff38056e)
+                                             .withOpacity(0.9),
+                                         textColor: Colors.white,
+                                         fontSize: 16.0
+                                     );
+                                   } else {
+                                     await addFavourites();
+                                     if (message ==
+                                         "Data Inserted Successfully") {
+                                       Fluttertoast.showToast(
+                                           msg: translator.currentLanguage ==
+                                               'ar'
+                                               ? "تم إضافة للمفضلة بنجاح"
+                                               : message,
+                                           toastLength: Toast.LENGTH_SHORT,
+                                           gravity: ToastGravity.BOTTOM,
+                                           timeInSecForIosWeb: 1,
+                                           backgroundColor: Color(0xff38056e)
+                                               .withOpacity(0.9),
+                                           textColor: Colors.white,
+                                           fontSize: 16.0
+                                       );
+                                     } else {
+                                       Fluttertoast.showToast(
+                                           msg: message,
+                                           toastLength: Toast.LENGTH_SHORT,
+                                           gravity: ToastGravity.BOTTOM,
+                                           timeInSecForIosWeb: 1,
+                                           backgroundColor: Color(0xff38056e)
+                                               .withOpacity(0.9),
+                                           textColor: Colors.white,
+                                           fontSize: 16.0
+                                       );
+                                     }
+                                   }
+                                 }
+                               },
+                               child: new Container(
+                                 height: 25.00,
+                                 width: 25.00,
+                                 decoration: BoxDecoration(
+                                   color: Color(0xffffffff)
+                                   ,borderRadius: BorderRadius.circular(15.00),
+                                 ),
+                                 child:     Center(child: Icon(Icons.favorite_border,color:Color(0xff38056e),size: 18,)),
+                               ),
+                             ),
+                             SizedBox(width: 10,),
+
+                             InkWell(
+                               onTap:(){
+                                 share();
+                               },
+                               child: new Container(
+                                 height: 25.00,
+                                 width: 25.00,
+                                 decoration: BoxDecoration(
+                                   color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                 ),
+                                 child:     Center(child:Icon(Icons.reply_outlined,color:Color(0xff38056e),size: 18,) ),//Image.asset("Assets/Upload.png",scale: 0.85,)
+                               ),
+                             ),
+                           ],
+
+                         )),
 
                       Positioned(
                         bottom:0,

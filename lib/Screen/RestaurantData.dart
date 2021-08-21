@@ -100,8 +100,8 @@ Future<String> getSWData(id) async {
 bool initPage;
 Future<void> share() async {
   await FlutterShare.share(
-      title:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
-      text:  " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ",
+      title: translator.currentLanguage == 'ar' ? " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} ${"للتفاصيل  حمل تطبيق محظوووظ من الرابط"} http://onelink.to/mahzoooz":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahzoooz app from the link http://onelink.to/mahzoooz",
+      text: translator.currentLanguage == 'ar' ? " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} ${"للتفاصيل  حمل تطبيق محظوووظ من الرابط"} http://onelink.to/mahzoooz":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahzoooz app from the link http://onelink.to/mahzoooz",
       linkUrl: data['webSite'],
       chooserTitle: 'لتفاصيل');
 }
@@ -234,7 +234,7 @@ Future<void> share() async {
                                  onTap: ()async{
                                    if(token==null){
                                      Fluttertoast.showToast(
-                                         msg: "عفوا سجل دخولك اولا",
+                                         msg: translator.translate("عفوا سجل دخولك اولا"),
                                          toastLength: Toast.LENGTH_SHORT,
                                          gravity: ToastGravity.BOTTOM,
                                          timeInSecForIosWeb: 1,
@@ -378,12 +378,19 @@ Future<void> share() async {
                              },
                              child: Container(
 
-                               child: Row(
-                                 children: [
-                                   Center(child: Image.asset("Assets/IconLeft.png",scale: 0.7,color:Colors.white ,)),
-                                   SizedBox(width: 0,),
-                                 ],
-                               ),
+                               child:Material(
+                                 borderRadius:  BorderRadius.circular(15.00),
+                                 elevation: 5,
+                                 child: new Container(
+                                   height: 28.00,
+                                   width: 28.00,
+                                   decoration: BoxDecoration(
+                                     color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                   ),
+                                   child:
+                                   Center(child: Image.asset("Assets/IconLeft.png",scale: 1.0,color:Color(0xff38056e) ,)),
+
+                                 )),
                              ),
                            ),
                          ),
@@ -400,9 +407,23 @@ Future<void> share() async {
 
                                child: Row(
                                  children: [
+
                                    Center(child: Transform(
                                        alignment: Alignment.center,
-                                       transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),child: Image.asset("Assets/IconLeft.png",scale: 0.7,color:Colors.white ,))),
+                                       transform:  translator.currentLanguage == 'en' ? Matrix4.rotationY(math.pi):Matrix4.rotationY(0),child: Material(
+                                       borderRadius:  BorderRadius.circular(15.00),
+                                       elevation: 5,
+                                       child: new Container(
+
+                                           height: 28.00,
+                                           width: 28.00,
+                                           decoration: BoxDecoration(
+                                             color: Color(0xffffffff),borderRadius: BorderRadius.circular(15.00),
+                                           ),
+                                           child:
+                                               Center(child: Image.asset("Assets/IconLeft.png",scale: 1.0,color:Color(0xff38056e) ,)),
+
+                                             )))),
                                    SizedBox(width: 0,),
                                  ],
                                ),
@@ -512,7 +533,7 @@ Future<void> share() async {
                                   ),
                                 ),
                                 Text(
-                                  translator.currentLanguage == 'ar' ?snapshot.data['offer']['addressAr']:snapshot.data['offer']['schoolTypeEn'],
+                                  translator.currentLanguage == 'ar' ?snapshot.data['offer']['addressAr']:snapshot.data['offer']['addressEn'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
@@ -528,7 +549,7 @@ Future<void> share() async {
                                   ),
                                 ),
                                 Text(
-                                  translator.currentLanguage == 'ar' ? snapshot.data['offer']['schoolCurriculum']:snapshot.data['offer']['schoolTypeEn'],
+                                  translator.currentLanguage == 'ar' ? snapshot.data['offer']['schoolCurriculum']:snapshot.data['offer']['schoolCurriculum'],
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
@@ -594,7 +615,7 @@ Future<void> share() async {
                       snapshot.data['offer']['schoolCurriculum']!=null?Container():    Row(
                         children: [
                             new Text(//{data['lastDate'].toString().split('T')[1]}
-                              "استعمل مؤخراً منذ",
+                             translator.translate( "استعمل مؤخراً منذ"),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
@@ -632,7 +653,7 @@ Future<void> share() async {
                         width: MediaQuery.of(context).size.width,
                         child: new Text(
                           translator.currentLanguage == 'ar' ? snapshot.data['offer']['descriptionAr']: snapshot.data['offer']['descriptionEn'],
-                          textAlign: TextAlign.right,
+                          textAlign:translator.currentLanguage == 'ar' ? TextAlign.right: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -1226,14 +1247,14 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               //   textAlign: TextAlign.right,
               // ),
           text=="ساعات العمل"? Text(
-            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['to']} مساءا حتي ${data['from']} صباحا':' from Daily${data['to']} P.m Until ${data['from']} A.m',
+            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['to']} مساءا حتي ${data['from']} صباحا':' from ${data['to']} P.m to ${data['from']} A.m',
             style: TextStyle(
               fontFamily: 'DIN Next LT Arabic',
               fontSize: 15,
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ):Text(
             '',
             style: TextStyle(
@@ -1267,14 +1288,13 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         // ),
         // SizedBox(height: 6,),
         Text(
-    data['workHours'].length==0?'' :'يوميا من${data['workHours'][0]['from'].toString()} مساءا حتي  صباحا${data['workHours'][0]['to'].toString()}'.toString(),
+    data['workHours'].length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['workHours'][0]['to']} مساءا حتي ${data['workHours'][0]['from']} صباحا':' From ${data['workHours'][0]['to']} P.m to ${data['workHours'][0]['from']} A.m',//' from ${data['to']} P.m to ${data['from']} A.m'
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
             fontSize: 15,
             color: const Color(0xff242e42),
             fontWeight: FontWeight.w700,
           ),
-          textAlign: TextAlign.right,
+            textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         )
       ],
     );
@@ -1292,7 +1312,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           InkWell(
             onTap: (){
@@ -1311,7 +1331,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                     fontSize: 15,
                     color:Colors.black,
                   ),
-                  textAlign: TextAlign.right,
+                    textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
                 ),
               ],
             ),
@@ -1324,7 +1344,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           InkWell(
             onTap: () => setState(() {
@@ -1340,7 +1360,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.right,
+                  textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
               ),
 
             ],),
@@ -1354,7 +1374,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           InkWell(
             onTap: () => setState(() {
@@ -1370,7 +1390,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.right,
+                  textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
               ),
 
             ],),
@@ -1382,7 +1402,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           InkWell(
             onTap: () => setState(() {
@@ -1398,8 +1418,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.right,
-              ),
+                  textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left              ),
 
             ],),
           ),
@@ -1410,7 +1429,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           InkWell(
             onTap: () => setState(() {
@@ -1426,7 +1445,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.right,
+                textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
               ),
 
             ],),
@@ -1438,7 +1457,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+            textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
           ),
           InkWell(
             onTap: () => setState(() {
@@ -1454,7 +1473,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.right,
+                  textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
               ),
 
             ],),
@@ -1465,7 +1484,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           InkWell(
             onTap: () => setState(() {
@@ -1481,7 +1500,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
                 ),
-                textAlign: TextAlign.right,
+                  textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
               ),
 
             ],),
@@ -1507,7 +1526,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                     color: Color(0xff38056e),
                     fontWeight: FontWeight.w700,
                   ),
-                  textAlign: TextAlign.right,
+                    textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
                 ),
               ],
             ),
@@ -1529,7 +1548,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
 
             color: const Color(0xff888788),
           ),
-          textAlign: TextAlign.right,
+            textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         ),
         SizedBox(height: 6,),
         Row(children: [
@@ -1540,7 +1559,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           Spacer(),
           InkWell(
@@ -1559,7 +1578,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                     color: const Color(0xff38056e),
                     fontWeight: FontWeight.w700,
                   ),
-                  textAlign: TextAlign.right,
+                    textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
                 ),
               ],
             ),
@@ -1576,7 +1595,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
 // Spacer(),
 //           InkWell(
@@ -1610,7 +1629,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
 
             color: const Color(0xff888788),
           ),
-          textAlign: TextAlign.right,
+            textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         ),
       Row(
         children: [
@@ -1621,7 +1640,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
             ),
-            textAlign: TextAlign.right,
+              textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
           ),
           Spacer(),
           InkWell(
@@ -1640,7 +1659,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                     color: const Color(0xff38056e),
                     fontWeight: FontWeight.w700,
                   ),
-                  textAlign: TextAlign.right,
+                    textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
                 ),
               ],
             ),
@@ -1689,7 +1708,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
                 color: const Color(0xff242e42),
                 fontWeight: FontWeight.w700,
               ),
-              textAlign: TextAlign.right,
+                textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
             ),
           ],
         ),

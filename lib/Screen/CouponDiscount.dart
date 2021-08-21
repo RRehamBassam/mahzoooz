@@ -124,7 +124,7 @@ color: Colors.white,
        children: [
            SizedBox(
              width: MediaQuery.of(context).size.width,
-             child: Text(translator.currentLanguage == 'ar' ?"المدرسة":"school",//textDirection: TextDirection.rtl,
+             child: Text(translator.currentLanguage == 'ar' ?"المدرسة":"School name",//textDirection: TextDirection.rtl,
                style: TextStyle(fontWeight:FontWeight.w700,fontSize: 19,color:Colors.black ,),
              ),
            ),
@@ -173,7 +173,7 @@ color: Colors.white,
            SizedBox(
              width: MediaQuery.of(context).size.width,
              child: Text(translator.currentLanguage == 'ar' ?datapath['providerNameAr']:datapath['providerNameEn'],
-               style: TextStyle(fontWeight:FontWeight.w600,fontSize: 18,color:Color(0xff38056e) ),
+               style: TextStyle(fontWeight:FontWeight.w600,fontSize: MediaQuery.of(context).size.height< 703.4285714285714?14:18,color:Color(0xff38056e) ),
              ),
            ),
        ],
@@ -247,7 +247,7 @@ color: Colors.white,
                 ),
                 child:Center(
                   child: new Text(
-                    translator.currentLanguage == 'ar' ? "اضف بيانات ابن جديد":"Add a new son's data",
+                    translator.currentLanguage == 'ar' ? "اضف بيانات ابن جديد":"Add new son",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
@@ -310,7 +310,7 @@ color: Colors.white,
               children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  child: Text(translator.currentLanguage == 'ar' ?"صالح لغاية":"valid up to",
+                  child: Text(translator.currentLanguage == 'ar' ?"صالح لغاية":"Valid till",
                     style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Colors.black ),
                   ),
                 ),
@@ -335,7 +335,7 @@ color: Colors.white,
                     await getLoggedInState(datapath['offerExpireDate'],datapath['id']);
                     if(result=='Created'){
                       Fluttertoast.showToast(
-                          msg: "تم الحصول على كوبون الخصم للمدرسة",
+                          msg: translator.translate("تم الحصول على كوبون الخصم للمدرسة"),
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -346,7 +346,7 @@ color: Colors.white,
                       Navigator.pop(context);
                     }else{
                       Fluttertoast.showToast(
-                          msg: "لم يتم حصول على كوبون حاول مرة اخرى",
+                          msg: translator.translate("لم يتم حصول على كوبون حاول مرة اخرى"),
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
@@ -365,7 +365,7 @@ color: Colors.white,
                       ),
                       child:Center(
                         child: new Text(
-                          "الحصول على كوبون الخصم",
+                          translator.translate( "الحصول على كوبون الخصم"),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -411,7 +411,7 @@ color: Colors.white,
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  "بيانات ابن جديد",
+                  translator.translate( "بيانات ابن جديد"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -435,12 +435,12 @@ color: Colors.white,
                           margin: EdgeInsets.only(top: 0, bottom: 16),
                           width: MediaQuery.of(context).size.width*0.7,
                           child: Text(
-                            translator.currentLanguage == 'ar' ? 'الإسم':'name',
+                            translator.currentLanguage == 'ar' ? 'الإسم':'Name',
                             style: TextStyle(
 
                               fontSize: 15,
                               color:  Colors.black54,
-                            ),
+                            )
                           //  textAlign: TextAlign.right,
                           ),
                         ),
@@ -490,7 +490,7 @@ color: Colors.white,
                       margin: EdgeInsets.only(top: 16, bottom: 16),
                       width: MediaQuery.of(context).size.width*0.7,
                       child: Text(
-                        translator.currentLanguage == 'ar' ? 'المرحلة':'stage',
+                        translator.currentLanguage == 'ar' ? 'المرحلة':'Select Stage',
                         style: TextStyle(
 
                           fontSize: 15,

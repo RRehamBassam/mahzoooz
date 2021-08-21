@@ -117,8 +117,16 @@ class _editProfileState extends State<editProfile> {
       Address  = value ;
     });
   }
+  getImageInState() async {
+    await HelperFunctions.getUserImageSharedPreference().then((value){
+      setState(() {
+        base64Image='data:image/jpeg;base64,$value';
+      });
+    });
+  }
   @override
   void initState() {
+    getImageInState();
     getPassInState();
     getAddress();
     name=UserName;
@@ -362,7 +370,7 @@ class _editProfileState extends State<editProfile> {
         cursorColor: Color(0xff38056e),
         keyboardType:TextInputType.text,
         autofocus: false,
-        textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+        textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,//(val)=>setState(()=>Name=val)
         onChanged:onChanged ,
        controller:controller ,
         obscureText: false,
@@ -484,7 +492,7 @@ class _editProfileState extends State<editProfile> {
             fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
             // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-            hintText:text,
+            hintText: translator.translate(text),
 
             // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
             hintStyle: TextStyle(
@@ -525,7 +533,7 @@ class _editProfileState extends State<editProfile> {
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  "اختر الدولة",
+                  translator.translate(  "اختر الدولة"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -549,16 +557,41 @@ class _editProfileState extends State<editProfile> {
                     //  itemExtent: 40,
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
-                      {setState(()=>{_controllerCitiy.text=data[int]['nameAr'],city=data[int]['nameAr'],countryId=data[int]['id'],cityNum=data[int]['id']});}
+                      {setState(()=>{
+                        if(translator.currentLanguage == 'ar')
+                          {
+                                _controllerCitiy.text = data[int]['nameAr'],
+                                city = data[int]['nameAr'],
+                                countryId = data[int]['id'],
+                                cityNum = data[int]['id']
+                              }else{
+                          _controllerCitiy.text = data[int]['nameEn'],
+                          city = data[int]['nameEn'],
+                          countryId = data[int]['id'],
+                          cityNum = data[int]['id']
+                        }
+                          });}
                       HelperFunctions.saveUserAddressSharedPreference(data[int]['nameAr']);
                     },
                     // diameterRatio: 1.6,
                     children: <Widget>[
                       ...data.map((name) {
-                        print(name['nameAr']);
                         return InkWell(
                           onTap: ()=>{        HelperFunctions.saveUserAddressSharedPreference(name['nameAr']),
-                            setState(()=>{_controllerCitiy.text=name['nameAr'],city=name['nameAr'],countryId=name['id'],cityNum=name['id']}),},
+                            setState(()=>{
+                              if(translator.currentLanguage == 'ar')
+                                  {
+                                    _controllerCitiy.text = name['nameAr'],
+                                    city = name['nameAr'],
+                                    countryId = name['id'],
+                                    cityNum = name['id']
+                                  }else{
+                                _controllerCitiy.text = name['nameEn'],
+                                city = name['nameEn'],
+                                countryId = name['id'],
+                                cityNum = name['id']
+                              }
+                              }),},
                           child: Container(
                             width: double.infinity,
 
@@ -570,7 +603,7 @@ class _editProfileState extends State<editProfile> {
                             padding: EdgeInsets.all(5),
                             margin:EdgeInsets.all(3) ,
                             child: Center(
-                              child: Text(name['nameAr'],
+                              child: Text(translator.currentLanguage == 'ar' ? name['nameAr']:name['nameEn'],
                                   style: TextStyle(
                                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
                                     fontSize: 16,
@@ -593,7 +626,7 @@ class _editProfileState extends State<editProfile> {
                   ),
                   child: Center(
                     child: new Text(
-                      "حفظ",
+                      translator.translate( "حفظ"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -676,7 +709,7 @@ class _editProfileState extends State<editProfile> {
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  "اختر النوع",
+                  translator.translate( "اختر النوع"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -721,7 +754,7 @@ class _editProfileState extends State<editProfile> {
                             padding: EdgeInsets.all(5),
                             margin:EdgeInsets.all(3) ,
                             child: Center(
-                              child: Text(name,
+                              child: Text(translator.translate(name),
                                   style: TextStyle(
                                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
                                     fontSize: 16,
@@ -746,7 +779,7 @@ class _editProfileState extends State<editProfile> {
                   ),
                   child: Center(
                     child: new Text(
-                      "حفظ",
+                      translator.translate(  "حفظ"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -798,7 +831,7 @@ class _editProfileState extends State<editProfile> {
               SizedBox(height: 16,),
               Center(
                 child:  Text(
-                  "تاريخ الميلاد",
+                  translator.translate("تاريخ الميلاد"),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "Tajawal",fontWeight: FontWeight.w500,
@@ -839,7 +872,7 @@ class _editProfileState extends State<editProfile> {
                   ),
                   child: Center(
                     child: new Text(
-                      "حفظ",
+                      translator.translate("حفظ"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,

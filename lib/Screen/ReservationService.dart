@@ -65,7 +65,7 @@ class _ReservationServiceState extends State<ReservationService> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("لايوجد مواعيد للحجز")
+              Text(translator.translate("لايوجد مواعيد للحجز"))
             ],
           ),
         ):Container(
@@ -375,7 +375,7 @@ class _ReservationServiceState extends State<ReservationService> {
                     cursorColor: Color(0xff38056e),
                     keyboardType:TextInputType.text,
                     autofocus: false,
-                    textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                    textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,//(val)=>setState(()=>Name=val)
                      onChanged:(val){
                       setState(() {
                         SpecialRequest=val;
@@ -400,7 +400,7 @@ class _ReservationServiceState extends State<ReservationService> {
                         fillColor: Color(0xFFF8F8F8).withOpacity(0.7),
                         // prefixIcon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
 
-                        hintText:"إضافة طلب خاص(اختيارى)",
+                        hintText:translator.translate("إضافة طلب خاص(اختيارى)"),
 
                         // icon:tajerAccount?Image.asset("Assets/icon-store.png",color:Color(0xfff99b1d),):Image.asset("Assets/icon-account.png") ,
                         hintStyle: TextStyle(
@@ -416,12 +416,23 @@ class _ReservationServiceState extends State<ReservationService> {
                 Center(
                   child: InkWell(
                     onTap: () async {
+                      if(selectoccasion==-1){
+                        Fluttertoast.showToast(
+                            msg:translator.translate( "يجب عليك اختيار مناسبة"),
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                      }
 
                       await gettoken();
                      if(token!=null){
                        if(data[selectDay]['details'][select]['isBooking']){
                          Fluttertoast.showToast(
-                             msg: "هذا الوقت محجوز ",
+                             msg:translator.translate( "هذا الوقت محجوز "),
                              toastLength: Toast.LENGTH_SHORT,
                              gravity: ToastGravity.BOTTOM,
                              timeInSecForIosWeb: 1,
@@ -436,7 +447,7 @@ class _ReservationServiceState extends State<ReservationService> {
                              "${data[selectDay]['dayDate']}",Count,occasionList[selectoccasion],SpecialRequest,id);
                         if(AddBooking=="notOk"){
                           Fluttertoast.showToast(
-                              msg:"لم تتم عملية الحجز حاول مرة الاخرى",
+                              msg:translator.translate("لم تتم عملية الحجز حاول مرة الاخرى"),
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
@@ -446,7 +457,7 @@ class _ReservationServiceState extends State<ReservationService> {
                           );
                         }else if(AddBooking=="ok"){
                           Fluttertoast.showToast(
-                              msg: "تم الحجز",
+                              msg: translator.translate("تم الحجز"),
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
@@ -465,7 +476,7 @@ class _ReservationServiceState extends State<ReservationService> {
                        //   Navigator.pop(context);
                         }else if(AddBooking is int){
                           Fluttertoast.showToast(
-                              msg: "العدد المسموح به $AddBooking",
+                              msg:translator.currentLanguage == 'ar' ?  "العدد المسموح به $AddBooking": "Allowed number $AddBooking",
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 3,
@@ -476,7 +487,7 @@ class _ReservationServiceState extends State<ReservationService> {
                         }
                         else if(AddBooking =="no"){
                           Fluttertoast.showToast(
-                              msg:"لم تتم عملية الحجز حاول مرة الاخرى",
+                              msg:translator.translate("لم تتم عملية الحجز حاول مرة الاخرى"),
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
@@ -486,7 +497,7 @@ class _ReservationServiceState extends State<ReservationService> {
                           );
                         }else{
                           Fluttertoast.showToast(
-                              msg:"لم تتم عملية الحجز حاول مرة الاخرى",
+                              msg:translator.translate("لم تتم عملية الحجز حاول مرة الاخرى"),
                               toastLength: Toast.LENGTH_SHORT,
                               gravity: ToastGravity.BOTTOM,
                               timeInSecForIosWeb: 1,
@@ -505,7 +516,7 @@ class _ReservationServiceState extends State<ReservationService> {
                      }else
                      {
                        Fluttertoast.showToast(
-                           msg: "لإتمام عملية الحجز يجب عليك تسجيل دخول",
+                           msg: translator.translate("لإتمام عملية الحجز يجب عليك تسجيل دخول"),
                            toastLength: Toast.LENGTH_SHORT,
                            gravity: ToastGravity.BOTTOM,
                            timeInSecForIosWeb: 1,
@@ -556,7 +567,7 @@ class _ReservationServiceState extends State<ReservationService> {
                         ),
                         child:Center(
                           child: new Text(
-                            "حجز",
+                            translator.translate( "حجز"),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
@@ -708,7 +719,7 @@ class _ReservationServiceState extends State<ReservationService> {
                             children: [
                               Image.asset("Assets/Profile.png",color:Color(0xff38056e)),
                               SizedBox(width: 16,),
-                              Text("أشخاص",
+                              Text(translator.translate("أشخاص"),
                                 style: TextStyle(fontWeight:FontWeight.w700,fontSize: 18,color:Color(0xff38056e) ),
                               ),
                               SizedBox(width: 40,),
@@ -887,8 +898,8 @@ class _ReservationServiceState extends State<ReservationService> {
           color:selectoccasion==index?Color(0xff38056e).withOpacity(0.9): const Color(0xfffFfffF),
         ),
         child: Center(
-            child: Text(occasionList[index],
-              style: TextStyle(fontWeight:FontWeight.w500,fontSize: 18,color:selectoccasion==index?Colors.white:Color(0xff38056e) ),
+            child: Text(translator.translate(occasionList[index]),
+              style: TextStyle(fontWeight:FontWeight.w500,fontSize: 16,color:selectoccasion==index?Colors.white:Color(0xff38056e) ),
             )),
 
       ),

@@ -44,9 +44,9 @@ class _aboutAppState extends State<aboutApp> {
           children: [
           Container(
               width:MediaQuery.of(context).size.width
-              ,child: Text('عن محظووظ',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),)),
+              ,child: Text(translator.translate('عن محظووظ'),style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),)),
             SizedBox(height: 16,),
-            Text('''محظوووظ هو تطبيقك الفريد والوحيد اللي تقدر من خلاله تلعب وتكسب وتشوف كل العروض والخصومات بأكبر المتاجر والمطاعم وأماكن الترفيه ومراكز التجميل وايضا المدارس العالمية ولأن وقتك غالي تقدرتحجز طاولتك بأرقي المطاعم وتقضي وقت ممتع مع كل حبابيك واصحابك .''',style: TextStyle(fontSize: 18),)
+            Text(translator.translate('''محظوووظ هو تطبيقك الفريد والوحيد اللي تقدر من خلاله تلعب وتكسب وتشوف كل العروض والخصومات بأكبر المتاجر والمطاعم وأماكن الترفيه ومراكز التجميل وايضا المدارس العالمية ولأن وقتك غالي تقدرتحجز طاولتك بأرقي المطاعم وتقضي وقت ممتع مع كل حبابيك واصحابك .'''),style: TextStyle(fontSize: 18),)
 
           ],
         ),

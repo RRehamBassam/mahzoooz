@@ -594,8 +594,8 @@ print(colId);print(colId);
     request.add(convert.utf8.encode(convert.json.encode(map)));
     HttpClientResponse response = await request.close();
     String reply = await response.transform(convert.utf8.decoder).join();
-    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
-    print(jsonResponse['data']['data']);
+  var jsonResponse = convert.jsonDecode(reply);
+
 
     return jsonResponse['data']['data'];
 
@@ -625,8 +625,8 @@ print(colId);print(colId);
     request.add(convert.utf8.encode(convert.json.encode(map)));
     HttpClientResponse response = await request.close();
     String reply = await response.transform(convert.utf8.decoder).join();
-    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
-    print(jsonResponse['data']['data']);
+    var jsonResponse = convert.jsonDecode(reply);
+
 
     return jsonResponse['data']['data'];
 
@@ -637,7 +637,7 @@ print(colId);print(colId);
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Categories/GetPaged';
-    print("jj");
+
     Map map ={
       "pageNumber": 1,
       "pageSize": 10,
@@ -655,18 +655,18 @@ print(colId);print(colId);
     request.add(convert.utf8.encode(convert.json.encode(map)));
     HttpClientResponse response = await request.close();
     String reply = await response.transform(convert.utf8.decoder).join();
-    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
-    print(reply);
+   var jsonResponse = convert.jsonDecode(reply);
+
 
     return jsonResponse['data']['data'];
 
   }
   Future<dynamic> subCategoriesGetPaged(id) async {
-      print(id);
+
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
-    print("jj");
+
     Map map ={
       "pageNumber": 1,
       "pageSize": 10,
@@ -682,8 +682,8 @@ print(colId);print(colId);
     request.add(convert.utf8.encode(convert.json.encode(map)));
     HttpClientResponse response = await request.close();
     String reply = await response.transform(convert.utf8.decoder).join();
-    print(response.statusCode);  var jsonResponse = convert.jsonDecode(reply);
-    print(reply);
+    var jsonResponse = convert.jsonDecode(reply);
+
 
     return jsonResponse['data'];
 
@@ -692,12 +692,11 @@ print(colId);print(colId);
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
     });
-    print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
-    print(token);
+
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/BookingSettings/AddBooking';
-    print(id);
+
     Map map ={
       "bookingTime": bookingTime,
       "dayDate": dayDate,
@@ -715,13 +714,13 @@ print(colId);print(colId);
      request.add(convert.utf8.encode(convert.json.encode(map)));
      HttpClientResponse response = await request.close();
      String reply = await response.transform(convert.utf8.decoder).join();
-     print(reply);
+
      var jsonResponse = convert.jsonDecode(reply);
      if(jsonResponse['status']=="Conflict"){
-       print(jsonResponse['status']);
+
        return jsonResponse['data']['numberOfPerson'];
      }else if(jsonResponse['status']=="Created"){
-       print(jsonResponse['status']);
+
        return 'ok';
      }
      return "no";
@@ -757,7 +756,7 @@ print(colId);print(colId);
       token  = value ;
     });
     //print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
-    print(token);
+
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -769,7 +768,7 @@ print(colId);print(colId);
       //request.add(convert.utf8.encode(convert.json.encode(map)));
       HttpClientResponse response = await request.close();
       String reply = await response.transform(convert.utf8.decoder).join();
-       print(reply);
+
       var jsonResponse = convert.jsonDecode(reply);
       if(jsonResponse['status']=="OK"){
        // print(jsonResponse['status']);
@@ -810,11 +809,8 @@ print(colId);print(colId);
     await HelperFunctions.getUserEmailSharedPreference().then((value){
       token  = value ;
     });
-    print("getLuck");
-    print(latLnglocation.longitude);
-    print(latLnglocation.latitude);
+
     //print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
-    print(token);
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);

@@ -35,7 +35,7 @@ class _SearchState extends State<Search> {
                 cursorColor: Color(0xff38056e),
                 keyboardType:TextInputType.text,
                 autofocus: false,
-                textAlign: TextAlign.right,//(val)=>setState(()=>Name=val)
+                textAlign: translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,//(val)=>setState(()=>Name=val)
                 showCursor: true,
                 readOnly: true,
                 obscureText: false,

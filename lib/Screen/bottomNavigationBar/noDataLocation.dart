@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/mapLoc.dart';
 
 class noDataLocation extends StatefulWidget {
@@ -52,7 +53,7 @@ class _noDataLocationState extends State<noDataLocation> {
             SizedBox(height: 68,),
 
             new Text(
-              "لايوجد عروض متوفرة في موقعك الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+              translator.translate( "لايوجد عروض متوفرة في موقعك الحالى"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
               textAlign: TextAlign.center,
               style: TextStyle(
 
@@ -63,7 +64,7 @@ class _noDataLocationState extends State<noDataLocation> {
             ),
             SizedBox(height: 11,),
             new Text(
-              "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+              translator.translate( "شويات وراجعين بخصومتنا"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
               textAlign: TextAlign.center,
               style: TextStyle(
 
@@ -78,7 +79,7 @@ class _noDataLocationState extends State<noDataLocation> {
                 Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
               },
               child:    new Text(
-                "تغيير الموقع الحالى", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                translator.translate(  "تغيير الموقع الحالى"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                 textAlign: TextAlign.center,
                 style: TextStyle(
 

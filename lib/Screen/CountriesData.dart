@@ -251,7 +251,7 @@ class _CountriesDataState extends State<CountriesData> {
                                             ),
                                             SizedBox(height: 45,),
                                             new Text(
-                                              "شويات وراجعين بخصومتنا", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                                              translator.translate("شويات وراجعين بخصومتنا"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
 

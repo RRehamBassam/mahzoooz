@@ -4,6 +4,7 @@ import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 //import 'package:geolocator/geolocator.dart';
@@ -493,7 +494,7 @@ setState(() {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                "تأكيد العنوان",
+          translator.translate( "تأكيد العنوان"),
                 style: TextStyle(
                   fontFamily: "Tajawal",fontWeight: FontWeight.w700,
                   fontSize: 16,

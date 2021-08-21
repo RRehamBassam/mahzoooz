@@ -107,7 +107,7 @@ bool isverifyPhoneNumbe=false;
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
         title: new Text(
-          'كود التأكيد',
+          translator.translate('كود التأكيد'),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -125,20 +125,18 @@ bool isverifyPhoneNumbe=false;
               child: Column(
                 children: [
                   new Text(
-                    setPass?"من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور":"أدخل الكورد الذي ارسلناه لك",
+                    setPass?translator.translate("من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور"):translator.translate("أدخل الكورد الذي ارسلناه لك"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "DIN Next LT Arabic",
                       fontSize: 14,
                       color:Color(0xff454545),
                     ),
                   ),
                   SizedBox(height: 8,),
                   new Text(
-                    "تم ارسال رمز التحقيق الي رقم\n$phoneNumber",
+                    "${translator.translate("تم ارسال رمز التحقيق الي رقم")}\n$phoneNumber",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "DIN Next LT Arabic",
                       fontSize: 17,
                       color:Color(0xff909090),
                     ),
@@ -186,16 +184,16 @@ bool isverifyPhoneNumbe=false;
                       },),
                     ),
                     SizedBox(height: 8,),
-                    new Text(
-                      "اعد الارسال ( ٣٠ ثانية )",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "DIN Next LT Arabic",
-                        fontSize: 14,
-                        color:Color(0xff38056e),
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
+                    // new Text(
+                    //   "اعد الارسال ( ٣٠ ثانية )",
+                    //   textAlign: TextAlign.center,
+                    //   style: TextStyle(
+                    //     fontFamily: "DIN Next LT Arabic",
+                    //     fontSize: 14,
+                    //     color:Color(0xff38056e),
+                    //     decoration: TextDecoration.underline,
+                    //   ),
+                    // ),
                   ],
                 )),
 
@@ -203,7 +201,12 @@ bool isverifyPhoneNumbe=false;
               height:  MediaQuery.of(context).size.height *0.12,),
             InkWell(
               onTap:() {
-                //  signIn( smsOTP);
+                Navigator.push(
+                    context,
+                    new MaterialPageRoute(
+                        builder: (context) =>
+                            CreateAccount(phoneNumber, code)));
+                 signIn( smsOTP);
                 if(smsOTP!=null)
                   if(!setPass) {
                     FirebaseAuth.instance.currentUser().then((user){
@@ -214,11 +217,7 @@ bool isverifyPhoneNumbe=false;
                     });
                     //signIn(smsOTP);print(authStatus);
 
-                    // Navigator.push(
-                    //     context,
-                    //     new MaterialPageRoute(
-                    //         builder: (context) =>
-                    //             CreateAccount(phoneNumber, code)));
+
                   }else{
                     Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,code: code,)));
 
@@ -232,7 +231,7 @@ bool isverifyPhoneNumbe=false;
                   ),
                   child:Center(
                     child: new Text(
-                      setPass?"استعادة كلمة المرور" :"دخول",
+                      setPass?translator.translate("استعادة كلمة المرور") :translator.translate("دخول"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -354,7 +353,7 @@ bool isverifyPhoneNumbe=false;
                               // initialSelection:phoneIsoCode,
                               dropdownIcon: Icon(Icons.arrow_drop_down,color: Colors.grey[300],),
                               labelStyle: TextStyle(color: Colors.grey[300],fontFamily: "Tajawal"),
-                              enabledCountries: ['+20','+970','+966'],
+                              enabledCountries: ['+20','+970','+966','+1'],
                               //showCountryFlags: false,
                               showCountryCodes: true),
                         ),
@@ -366,7 +365,7 @@ bool isverifyPhoneNumbe=false;
                         //  networkRequest.OffersGetPaged();
                           if(phoneNumber==null||phoneNumber.length<9){
                             Fluttertoast.showToast(
-                                msg: "يجب عليك إدخال رقم الجوال",
+                                msg:translator.translate( "يجب عليك إدخال رقم الجوال"),
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.BOTTOM,
                                 timeInSecForIosWeb: 1,
@@ -393,7 +392,7 @@ bool isverifyPhoneNumbe=false;
                               if(phoneNumber.length<9){
                                 print("22");
                                 Fluttertoast.showToast(
-                                    msg: " يجب عليك إدخال رقم الجوال صحيح",
+                                    msg:translator.translate( " يجب عليك إدخال رقم الجوال صحيح"),
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM,
                                     timeInSecForIosWeb: 1,
@@ -412,9 +411,9 @@ bool isverifyPhoneNumbe=false;
                                   });
                              await  phoneNumber == null ? null : verfiyPhone();
                                  // await  Navigator.push(context, new MaterialPageRoute(builder: (context)=>  ActivateCode(otp,verificationId,phoneNumber,code)));
-                                  setState(() {
-                                    isLouding=false;
-                                  });
+                                 //  setState(() {
+                                 //    isLouding=false;   9/8/2021
+                                 //  });
                                 }else{
 
                                 }
@@ -442,9 +441,9 @@ bool isverifyPhoneNumbe=false;
 
 
 
-                            setState(() {
-                              isLouding=false;
-                            });
+                            // setState(() {
+                            //   isLouding=false; 10/8/2021
+                            // });
                           }
 
                         },
@@ -551,7 +550,11 @@ bool isverifyPhoneNumbe=false;
     };
     final PhoneCodeSent smsCodeSent= (String verId, [int forceCodeResent]) {
       this.verificationId = verId;
+
+
+
       setState(() {
+        isLouding=false;
         codeScreen=true;
       //  authStatus = "OTP has been successfully send";
       });
@@ -625,6 +628,7 @@ print("result");
         print("verId");
         setState(() {
           codeScreen=true;
+          isLouding=false;
           authStatus = "OTP has been successfully send";
         });
         print(authStatus);
@@ -663,7 +667,7 @@ print("result");
       ));
     }catch(v){
       Fluttertoast.showToast(
-          msg: "ادخل كود صحيح",
+          msg: translator.translate("ادخل كود صحيح"),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
@@ -686,7 +690,7 @@ print("result");
       );
     }).catchError((e){
       Fluttertoast.showToast(
-          msg: "ادخل كود صحيح",
+          msg: translator.translate("ادخل كود صحيح"),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,

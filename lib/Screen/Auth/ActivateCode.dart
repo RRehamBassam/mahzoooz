@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/Auth/login.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:mahzoooz/Screen/Home.dart';
@@ -49,7 +50,7 @@ class _ActivateCodeState extends State<ActivateCode> {
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
         title: new Text(
-          'كود التأكيد',
+        translator.translate( 'كود التأكيد'),
           textAlign: TextAlign.center,
           style: TextStyle(
             fontWeight: FontWeight.w700,
@@ -67,20 +68,18 @@ class _ActivateCodeState extends State<ActivateCode> {
               child: Column(
                 children: [
                   new Text(
-                    setPass?"من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور":"أدخل الكورد الذي ارسلناه لك",
+                    setPass?translator.translate("من فضلك ادخل الكود المرسل على جوالكم لاستعادة كلمة المرور"):translator.translate("أدخل الكورد الذي ارسلناه لك"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "DIN Next LT Arabic",
                       fontSize: 14,
                       color:Color(0xff454545),
                     ),
                   ),
                   SizedBox(height: 8,),
                   new Text(
-                    "تم ارسال رمز التحقيق الي رقم\n$phoneNumber",
+                    "${translator.translate("تم ارسال رمز التحقيق الي رقم")}\n$phoneNumber",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontFamily: "DIN Next LT Arabic",
                       fontSize: 17,
                       color:Color(0xff909090),
                     ),
@@ -121,16 +120,15 @@ class _ActivateCodeState extends State<ActivateCode> {
                     //           );
                   },),
                   SizedBox(height: 8,),
-                  new Text(
-                    "اعد الارسال ( ٣٠ ثانية )",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: "DIN Next LT Arabic",
-                      fontSize: 14,
-                      color:Color(0xff38056e),
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
+                  // new Text(
+                  //   "اعد الارسال ( ٣٠ ثانية )",
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //     fontSize: 14,
+                  //     color:Color(0xff38056e),
+                  //     decoration: TextDecoration.underline,
+                  //   ),
+                  // ),
                 ],
               )),
 
@@ -159,7 +157,7 @@ class _ActivateCodeState extends State<ActivateCode> {
                   ),
                   child:Center(
                     child: new Text(
-                     setPass?"استعادة كلمة المرور" :"دخول",
+                     setPass?translator.translate("استعادة كلمة المرور") :translator.translate("دخول"),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,

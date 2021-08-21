@@ -56,7 +56,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     new Text(
-                      data['providerNameAr']==null? "مطعم البيك":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                      data['providerNameAr']==null? "":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                       textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
@@ -73,7 +73,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                           translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
                           textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                           style: TextStyle(
-                            fontFamily: 'Nimbus',
+
                             fontWeight: FontWeight.w700,
                             fontSize:translator.currentLanguage == 'ar' ?data['titeAr'].length>22?14:15:data['titleEn'].length>25?14: 15,
                             color:Color(0xffffffff),

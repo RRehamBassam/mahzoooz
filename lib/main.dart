@@ -25,6 +25,9 @@ void main() async{
   await translator.init(
      localeDefault: LocalizationDefaultType.device,
     languagesList: <String>['ar', 'en'],
+
+   // defaultLanguageCode: 'ar',
+
     assetsDirectory: 'Assets/langs/',
      apiKeyGoogle: '<Key>', // NOT YET TESTED
   ); // intialize
@@ -128,6 +131,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   getLoggedInState() async {
     await HelperFunctions.getUserLoggedInSharedPreference().then((value){
+      if(userIsLoggedIn==null) {
+        translator.setNewLanguage(
+          context,
+          newLanguage:  'ar' ,
+          remember: true,
+        );
+        HelperFunctions.saveUserLoggedInSharedPreference(false);
+      }
       setState(() {
         userIsLoggedIn  = value;
       });

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
@@ -152,7 +153,7 @@ bool initData;
             ),
           //   SizedBox(height: 8,),
             Container(
-              height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height*0.74: MediaQuery.of(context).size.height*0.742,
+              height: MediaQuery.of(context).size.height< 743.4285714285714? MediaQuery.of(context).size.height-155: MediaQuery.of(context).size.height-153,
 
               child: ListView(
                 physics: const AlwaysScrollableScrollPhysics(), // new
@@ -445,8 +446,12 @@ bool initData;
         Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()))
 
   }else if(text=="قيم"){
-
-      // showModalBottomSheet(
+          if(Platform.isIOS)
+            {
+                launch(
+                    "https://apps.apple.com/sa/app/%D9%85%D8%AD%D8%B8%D9%88%D9%88%D9%88%D8%B8/id1570241437")
+              }
+            // showModalBottomSheet(
       //   context: context,
       //   isScrollControlled: true,
       //   builder: (context) => SingleChildScrollView(
