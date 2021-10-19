@@ -4,6 +4,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mahzoooz/Screen/ProfileScreen/aboutApp.dart';
+import 'package:mahzoooz/Screen/bottomNavigationBar/noConnect.dart';
 import 'package:mahzoooz/Screen/mapLoc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,23 @@ class _ProfileState extends State<Profile> {
   Future<String> getData() async {
     await Future<void>.delayed(Duration(seconds: 3));
      }
+  var DataSaprot;
+  var valuekey;
 
+ // NetworkRequest networkRequest=new NetworkRequest();
+  getDataSaprotState() async {
+
+    // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+        //    bytes = convert.base64.decode(value);
+      });
+
+
+    });
+    print("${valuekey}  keykeykey");
+  }
   getDatatoken()async{
     await gettoken();
     if(token==null){
@@ -99,6 +116,8 @@ bool initData;
     getImageInState();
     initData=true;
     getDatatoken();
+    getDataSaprotState();
+
     // TODO: implement initState
     super.initState();
   }
@@ -111,10 +130,10 @@ bool initData;
     builder: (context, snapshot) {
     if (snapshot.hasData) {
       if(initData){
-      context.read<providerUser>().updateName(snapshot.data['name']);
-      context.read<providerUser>().updatMobile(snapshot.data['phone'].toString());
-      context.read<providerUser>().updateGender(snapshot.data['gender'].toString());
-      context.read<providerUser>().updateEmail(snapshot.data['email']);
+      // context.read<providerUser>().updateName(snapshot.data['name']);
+      // context.read<providerUser>().updatMobile(snapshot.data['phone'].toString());
+      // context.read<providerUser>().updateGender(snapshot.data['gender'].toString());
+      // context.read<providerUser>().updateEmail(snapshot.data['email']);
       initData=false;
 
       getSWData(snapshot.data['countryId']);
@@ -210,7 +229,7 @@ bool initData;
 
                                       borderRadius: BorderRadius.circular(14.0),
                                       image: DecorationImage(
-                                        image: NetworkImage(snapshot.data['imageName']),//MemoryImage(bytes),
+                                        image:snapshot.data['imageName']==null||snapshot.data['imageName']=="http://ahmed453160-001-site1.etempurl.com/Files/UsersImage/User-96e66ce1-9dd6-423f-8ba2-29e91d180b56.jpg"?AssetImage("Assets/profileImage.png",) :NetworkImage(snapshot.data['imageName']),//MemoryImage(bytes),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -374,6 +393,12 @@ bool initData;
         ),
       );}
       else if (snapshot.hasError) {
+      Navigator.pushReplacement(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => NoConnect(
+
+              )));
       return Center(child: Text("تأكد من إتصال بالإنرنت"));
       }
       // By default, show a loading spinner.
@@ -416,7 +441,7 @@ bool initData;
         else if(text=="خروج"){
           print('mm'),
     HelperFunctions.saveUserEmailSharedPreference(null),
-          HelperFunctions.saveUserLoggedInSharedPreference(null),
+          HelperFunctions.saveUserLoggedInSharedPreference(false),
     Navigator.of(context).pushAndRemoveUntil(
     MaterialPageRoute(builder: (_){
     return MyApp();
@@ -450,7 +475,10 @@ bool initData;
             {
                 launch(
                     "https://apps.apple.com/sa/app/%D9%85%D8%AD%D8%B8%D9%88%D9%88%D9%88%D8%B8/id1570241437")
-              }
+              }else{
+            launch(
+                "${DataSaprot["google_link"]}")
+          }
             // showModalBottomSheet(
       //   context: context,
       //   isScrollControlled: true,

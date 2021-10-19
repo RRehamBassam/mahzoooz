@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:international_phone_input/international_phone_input.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/Auth/ActivateCode.dart';
@@ -41,6 +42,15 @@ bool isLouding=false;
 bool isverifyPhoneNumbe=false;
   String otp, authStatus = "";
   bool setPass=false;
+  var SettingsGetAll;
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        SettingsGetAll  = value ;
+      });
+
+    });
+  }
   Future<void> verifyPhoneNumber(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
 
@@ -81,31 +91,75 @@ bool isverifyPhoneNumbe=false;
     );
   }
   TextEditingController _passController = new TextEditingController();
+  var valuekey;
+  var DataSaprot;
+
+  getDataSaprotState() async {
+    // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+
+      });
+
+    });
+
+  }
 
   void onPhoneNumberChange(String number, String internationalizedPhoneNumber, String isoCode) {
     print(internationalizedPhoneNumber);
     print(number);
     print(isoCode);
     setState(() {
+      isLouding=false;
       phoneNumber = internationalizedPhoneNumber;
       phoneIsoCode = isoCode;
     });
   }
   @override
   void initState() {
+    SettingsGet();
+    getTokenFCMState();
     codeScreen =false;
+
+    getDataSaprotState();
     super.initState();
   }
-
-
+var tokenFCM;
+  getTokenFCMState() async {
+    await HelperFunctions.getUserTokenFvmSharedPreference().then((value){
+      setState(() {
+        tokenFCM  = value;
+      });
+    });
+  }
   NetworkRequest networkRequest=new NetworkRequest();
   @override
   Widget build(BuildContext context) {
-    return codeScreen==true? Scaffold(
+    return  OfflineBuilder(
+        child: Container(),
+        connectivityBuilder: (
+            BuildContext context,
+            ConnectivityResult connectivity,
+            Widget child,
+            ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected?  codeScreen==true? Scaffold(
       appBar:  AppBar(
         centerTitle: true,
-        elevation: 1,
-        backgroundColor: Color(0xFFFEFEFE),
+        elevation:0,
+        backgroundColor: Color(0xFFFEFEFE).withOpacity(0.0),
+        leading:   InkWell(
+                onTap:(){
+                  setState(() {
+                    codeScreen=false;
+                  });
+          // Navigator.pop(context);
+          },
+            child: Container(
+              // margin: EdgeInsets.all(8),
+                child: Icon(Icons.arrow_back_ios,color:  Color(0xff38056e),)),
+          ),
         title: new Text(
           translator.translate('كود التأكيد'),
           textAlign: TextAlign.center,
@@ -201,20 +255,21 @@ bool isverifyPhoneNumbe=false;
               height:  MediaQuery.of(context).size.height *0.12,),
             InkWell(
               onTap:() {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) =>
-                            CreateAccount(phoneNumber, code)));
-                 signIn( smsOTP);
+                // Navigator.push(
+                //     context,
+                //     new MaterialPageRoute(
+                //         builder: (context) =>
+                //             CreateAccount(phoneNumber, code)));
+                 //signIn( smsOTP);
                 if(smsOTP!=null)
                   if(!setPass) {
-                    FirebaseAuth.instance.currentUser().then((user){
-
-                      //  Navigator.of(context).pop();
-                        signIn2(smsOTP);
-
-                    });
+                    signIn2(smsOTP);
+                    // FirebaseAuth.instance.currentUser.then((user){
+                    //
+                    //   //  Navigator.of(context).pop();
+                    //
+                    //
+                    // });
                     //signIn(smsOTP);print(authStatus);
 
 
@@ -250,7 +305,7 @@ bool isverifyPhoneNumbe=false;
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
-        child: Container(
+        child:DataSaprot==null?Center(child: Loading()):Container(
           margin: EdgeInsets.all(16),
           child: SingleChildScrollView(
             child: Column(
@@ -266,8 +321,8 @@ bool isverifyPhoneNumbe=false;
                     child:Column(
                   //   crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text(
-                       translator.translate("Welcome to Mahzoooz"),
+                        new Text(DataSaprot["login_title"],
+                     //  translator.translate("Welcome to Mahzoooz"),
                          // textAlign: TextAlign.right,
                           style: TextStyle(fontWeight: FontWeight.w700,
                             fontSize: 23,
@@ -275,7 +330,7 @@ bool isverifyPhoneNumbe=false;
                           ),
                         ),
                         SizedBox(height: 16,),
-                        new Text( translator.translate("Mahzoooz for"),
+                        new Text( DataSaprot["login_desc"],
                          // translator.translate("محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
                          textAlign: TextAlign.center,
                            overflow: TextOverflow.ellipsis,
@@ -361,6 +416,7 @@ bool isverifyPhoneNumbe=false;
                       isLouding?SizedBox(height: 22,): SizedBox(height: 16,),
                       isLouding?Loading(): InkWell( //networkRequest.Login(),
                         onTap: ()async{
+
                           //networkRequest.CategoriesGetPaged();
                         //  networkRequest.OffersGetPaged();
                           if(phoneNumber==null||phoneNumber.length<9){
@@ -493,13 +549,13 @@ bool isverifyPhoneNumbe=false;
                       context,
                       newLanguage: translator.currentLanguage == 'ar' ? 'en' : 'ar',
                       remember: true,
-
+                      restart: true,
                     );
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(builder: (_){
-                          return MyApp();
-                        }),(route)=> false
-                    );
+                    // Navigator.of(context).pushAndRemoveUntil(
+                    //     MaterialPageRoute(builder: (_){
+                    //       return MyApp();
+                    //     }),(route)=> false
+                    // );
                   },
                   child: Container(
                     height:MediaQuery.of(context).size.height*.1 ,
@@ -529,7 +585,71 @@ bool isverifyPhoneNumbe=false;
           ),
         ),
       ),
-    );
+    ):
+          Scaffold(
+              body: Container(
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.18),
+                height: MediaQuery.of(context).size.height*0.56                                                                                            ,
+                child: Center(
+                  child: Column(
+                    crossAxisAlignment:CrossAxisAlignment.center ,
+                    mainAxisAlignment:MainAxisAlignment.spaceBetween ,
+                    children: [
+
+                      Container(
+                        width: 260.0,
+                        height: 260.0,
+                        padding:EdgeInsets.all(45),
+                        decoration: new BoxDecoration(
+                          color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+                          shape: BoxShape.circle,
+                        ),
+                        child: Container(
+                          width: 120.0,
+                          height: 120.0,
+
+                          padding:EdgeInsets.all(50),
+                          decoration: new BoxDecoration(
+                            color: Color(0xffC5E696),// Color(0xffCEEAE7),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Container(
+                            width: 60.0,
+                            height: 60.0,
+                            decoration: new BoxDecoration(
+                              color:Color(0xff91B958),//Color(0xff029789),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Image.asset("Assets/sad.png") ,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 45,),
+
+                      new Text(
+                        translator.translate("تأكد من اتصال بالانترنت"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          color:Color(0xff91B958),
+                        ),
+                      ),
+                      // new Text(
+                      //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                      //   textAlign: TextAlign.center,
+                      //   style: TextStyle(
+                      //
+                      //     fontWeight: FontWeight.w700,
+                      //     fontSize: 16,
+                      //     color:Color(0xff029789),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+                ),
+              ));});
   }
   var url;
   getUserHasAccount() async {
@@ -563,7 +683,7 @@ bool isverifyPhoneNumbe=false;
       // });
     };
     final PhoneVerificationCompleted verifiedSuccess= (AuthCredential auth){};
-    final PhoneVerificationFailed verifyFailed= (AuthException e){
+    final PhoneVerificationFailed verifyFailed= (FirebaseAuthException e){
       print('${e.message}');
     };
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -576,13 +696,14 @@ bool isverifyPhoneNumbe=false;
 
     );
 
+
   }
   Future<void> verifyPhoneNumber2(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 15),
       verificationCompleted: (AuthCredential authCredential) {
-        FirebaseAuth.instance.signInWithCredential(authCredential).then((AuthResult result){
+        FirebaseAuth.instance.signInWithCredential(authCredential).then(( result){
 print(result);
 print("result");
           // Navigator.pushReplacement(context, MaterialPageRoute(
@@ -608,7 +729,7 @@ print("result");
         });
         print(authStatus);
       },
-      verificationFailed: (AuthException authException) {
+      verificationFailed: (FirebaseAuthException authException) {
         setState(() {
           authStatus = "Authentication failed";
         });
@@ -661,7 +782,7 @@ print("result");
     try
     {
       await FirebaseAuth.instance
-          .signInWithCredential(PhoneAuthProvider.getCredential(
+          .signInWithCredential(PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: otp,
       ));
@@ -679,7 +800,7 @@ print("result");
     }
   }
   Future<void> signIn2(String smsCode) async{
-    final AuthCredential credential = PhoneAuthProvider.getCredential(
+    final AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: smsCode,);
 

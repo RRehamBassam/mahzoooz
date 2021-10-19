@@ -8,6 +8,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Models/Luck.dart';
 import 'package:mahzoooz/Screen/RestaurantData.dart';
+import 'package:mahzoooz/Screen/bottomNavigationBar/noConnect.dart';
 import 'package:mahzoooz/Screen/mapLoc.dart';
 import 'package:mahzoooz/Widget/board_view.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
@@ -25,25 +26,39 @@ import 'package:mahzoooz/services/providerUser.dart';
 
 class homeWidget extends StatefulWidget {
   LatLng latLnglocation;
-
-  homeWidget(this.latLnglocation);
+var dataGet;
+  homeWidget(this.latLnglocation,this.dataGet);
 
   @override
-  _homeWidgetState createState() => _homeWidgetState(latLnglocation);
+  _homeWidgetState createState() => _homeWidgetState(latLnglocation,dataGet);
 }
 
 class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateMixin {
   LatLng latLnglocation;
-
-  _homeWidgetState(this.latLnglocation);
+  var dataGet;
+  _homeWidgetState(this.latLnglocation,this.dataGet);
 
   Future<void> share(text,text2) async {
     await FlutterShare.share(
         title: 'Example share',
-        text:translator.currentLanguage == 'ar' ?'$text $text2' +'حمل الآن تطبيق محظوووظ من الرابط'+'. http://onelink.to/mahzoooz':'$text $text2' +'Download now the Mahzoooz app from the link http://onelink.to/mahzoooz',
+        text:translator.currentLanguage == 'ar' ?'$text $text2' +'حمل الآن تطبيق محظوووظ من الرابط'+'. ${DataSaprot["apple_link"]}':'$text $text2' +'Download now the Mahzoooz app from the link ${DataSaprot["apple_link"]}}',
       //  linkUrl: 'https://flutter.dev/',
         chooserTitle: 'Example Chooser Title'
     );
+  }
+  var DataSaprot;
+  getDataSaprotState() async {
+
+    // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+        //    bytes = convert.base64.decode(value);
+      });
+
+
+    });
+  //  print("${valuekey}  keykeykey");
   }
   var AddressLocal;
   var AddressChang;
@@ -132,10 +147,12 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
   }
   void initState() {
     gettoken();
+    getRandom();
     getLatInState();
     select=false;
     getAddressLocalState();
     getAddressChangeState();
+    getDataSaprotState();
     //getSWData();
     open=true;
     // TODO: implement initState
@@ -143,6 +160,17 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
     var _duration = Duration(milliseconds: 5000);
     _ctrl = AnimationController(vsync: this, duration: _duration);
     _ani = CurvedAnimation(parent: _ctrl, curve: Curves.fastLinearToSlowEaseIn);
+  }
+  getRandom(){
+    if(_items.length==0)
+    {
+      for(int i=0;i<dataGet.length;i++){
+        Luck newluck=  new Luck(dataGet[i]['titeAr'],i%2==0?Color(0xff38056e):Color(0xff80AB40),dataGet[i]['titleEn'],dataGet[i],dataGet[i]['providerNameAr'],dataGet[i]['providerNameEn']);
+        _items.add(newluck);
+
+      }
+    }
+
   }
   var addressesList;
  var addresses;
@@ -152,19 +180,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
     // addressesList= Geocoder.local.findAddressesFromCoordinates(coordinates);
     // addresses='${addressesList.first.featureName} ${addressesList.first.addressLine}';
     return SafeArea(
-      child:FutureBuilder<dynamic>(
-        future: networkRequest.getLuck(latLnglocation),
-    builder: (context, snapshot) {
-    if (snapshot.hasData) {
-      if(_items.length==0)
-    {
-      for(int i=0;i<snapshot.data['data'].length;i++){
-        Luck newluck=  new Luck(snapshot.data['data'][i]['titeAr'],i%2==0?Color(0xff38056e):Color(0xff80AB40),snapshot.data['data'][i]['titleEn'],snapshot.data['data'][i],snapshot.data['data'][i]['providerNameAr'],snapshot.data['data'][i]['providerNameEn']);
-        _items.add(newluck);
-
-      }
-    }
-    return  Column(
+      child:Column(
         children: [
 
           //
@@ -176,7 +192,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                 animation: _ani,
                 builder: (context, child) {
                   final _value = _ani.value;
-                value=_ani.value;
+                  value=_ani.value;
 
 
 
@@ -185,403 +201,403 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                     alignment: Alignment.center,
                     children: <Widget>[
 
-                  Column(
-                  children: [
-                  Container(
-                      height: MediaQuery.of(context).size.height*0.2,
-                  child: Stack(
-                  children: [
-                  Column(
-                  children: [
-                  SizedBox(height: 16,),
-                  Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Image.asset("Assets/mohzoooz2.png",scale: 4.4,)
-                  ],
-                  ),
-                    SizedBox(height: 16,),
-                   Column(
+                      Column(
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height*0.2,
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: [
+                                      SizedBox(height: 16,),
+                                      Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset("Assets/mohzoooz2.png",scale: 4.4,)
+                                        ],
+                                      ),
+                                      SizedBox(height: 16,),
+                                      Column(
 
-                     children: [
-                       Container(
-                         height: 33,
-                         padding: EdgeInsets.all(8),
-                         width:MediaQuery.of(context).size.width*0.85,
-                         decoration: BoxDecoration(
-                           borderRadius: const BorderRadius.all(
-                             const Radius.circular(8),
-                           ),
-                           boxShadow: [
-                             BoxShadow(
-                               color: Colors.black12,
-                               offset: const Offset(
-                                 2.0,
-                                 2.0,
-                               ),
-                               blurRadius: 3.0,
-                               spreadRadius: 0.5,
-                             ), //BoxShadow
-                             BoxShadow(
-                               color: Colors.white,
-                               offset: const Offset(0.0, 0.0),
-                               blurRadius: 0.0,
-                               spreadRadius: 0.0,
-                             ), //BoxShadow
-                           ],
-                         ),
-                         child:         InkWell(
-                           onTap:(){
-                             Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
-                             },
-                           child: Row(children: [
-                             Icon(Icons.location_on,color: Color(0xff38056e),size: 18,),
-                             Container(
-                                 margin: EdgeInsets.only(top: 3),
-                                 child: Text(translator.translate("current location"),style: TextStyle(color: Color(0xff38056e),fontWeight:FontWeight.w500,fontSize:MediaQuery.of(context).size.height< 743.4285714285714?9: 12 ),)),
-                             SizedBox(width: 2,),
-                             Container(
-                                 width:MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.width*0.46:MediaQuery.of(context).size.width*0.5,
-                                 margin: EdgeInsets.only(top: 3),
-                                 child: Text(" $AddressChang", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40,),fontSize: 10),)),
-                             Spacer(),
-                             AddressChang!=null?   InkWell(
-                                 onTap: (){
-                                   setState(() {
-                                     select=!select;
-                                   });
-                                 },
-                                 child: Icon(Icons.arrow_drop_down,color: Colors.grey,)):Container()
+                                        children: [
+                                          Container(
+                                            height: 33,
+                                            padding: EdgeInsets.all(8),
+                                            width:MediaQuery.of(context).size.width*0.85,
+                                            decoration: BoxDecoration(
+                                              borderRadius: const BorderRadius.all(
+                                                const Radius.circular(8),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black12,
+                                                  offset: const Offset(
+                                                    2.0,
+                                                    2.0,
+                                                  ),
+                                                  blurRadius: 3.0,
+                                                  spreadRadius: 0.5,
+                                                ), //BoxShadow
+                                                BoxShadow(
+                                                  color: Colors.white,
+                                                  offset: const Offset(0.0, 0.0),
+                                                  blurRadius: 0.0,
+                                                  spreadRadius: 0.0,
+                                                ), //BoxShadow
+                                              ],
+                                            ),
+                                            child:         InkWell(
+                                              onTap:(){
+                                                Navigator.push(context, new MaterialPageRoute(builder: (context)=>new maps()));
+                                              },
+                                              child: Row(children: [
+                                                Icon(Icons.location_on,color: Color(0xff38056e),size: 18,),
+                                                Container(
+                                                    margin: EdgeInsets.only(top: 3),
+                                                    child: Text(translator.translate("current location"),style: TextStyle(color: Color(0xff38056e),fontWeight:FontWeight.w500,fontSize:MediaQuery.of(context).size.height< 743.4285714285714?9: 12 ),)),
+                                                SizedBox(width: 2,),
+                                                Container(
+                                                    width:MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.width*0.46:MediaQuery.of(context).size.width*0.5,
+                                                    margin: EdgeInsets.only(top: 3),
+                                                    child: Text(" $AddressChang", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40,),fontSize: 10),)),
+                                                Spacer(),
+                                                AddressChang!=null?   InkWell(
+                                                    onTap: (){
+                                                      setState(() {
+                                                        select=!select;
+                                                      });
+                                                    },
+                                                    child: Icon(Icons.arrow_drop_down,color: Colors.grey,)):Container()
 
-                           ],),
-                         ),
-                       ),
-                       SizedBox(height: 5,),
-                       AddressChang!=null? select?  InkWell(
-                         onTap:(){
-                           HelperFunctions.saveUserlocationLatSharedPreference(null);
-                           HelperFunctions.saveUserlocationlngSharedPreference(null);
-                           Navigator.of(context).pushAndRemoveUntil(
-                               MaterialPageRoute(builder: (_){
-                                 return MyApp();
-                               }),(route)=> false
-                           );
-                  },
-                         child: Container(
-                           height: 33,
-                           padding: EdgeInsets.all(8),
-                           width:MediaQuery.of(context).size.width*0.73,
-                           decoration: BoxDecoration(
-                             borderRadius: const BorderRadius.all(
-                               const Radius.circular(8),
-                             ),
-                             boxShadow: [
-                               BoxShadow(
-                                 color: Colors.black12,
-                                 offset: const Offset(
-                                   1.0,
-                                   1.0,
-                                 ),
-                                 blurRadius: 2.0,
-                                 spreadRadius: 0.5,
-                               ), //BoxShadow
-                               BoxShadow(
-                                 color: Colors.white,
-                                 offset: const Offset(0.0, 0.0),
-                                 blurRadius: 0.0,
-                                 spreadRadius: 0.0,
-                               ), //BoxShadow
-                             ],
-                           ),
-                           child:         Row(children: [
+                                              ],),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5,),
+                                          AddressChang!=null? select?  InkWell(
+                                            onTap:(){
+                                              HelperFunctions.saveUserlocationLatSharedPreference(null);
+                                              HelperFunctions.saveUserlocationlngSharedPreference(null);
+                                              Navigator.of(context).pushAndRemoveUntil(
+                                                  MaterialPageRoute(builder: (_){
+                                                    return MyApp();
+                                                  }),(route)=> false
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 33,
+                                              padding: EdgeInsets.all(8),
+                                              width:MediaQuery.of(context).size.width*0.73,
+                                              decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius.all(
+                                                  const Radius.circular(8),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.black12,
+                                                    offset: const Offset(
+                                                      1.0,
+                                                      1.0,
+                                                    ),
+                                                    blurRadius: 2.0,
+                                                    spreadRadius: 0.5,
+                                                  ), //BoxShadow
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    offset: const Offset(0.0, 0.0),
+                                                    blurRadius: 0.0,
+                                                    spreadRadius: 0.0,
+                                                  ), //BoxShadow
+                                                ],
+                                              ),
+                                              child:         Row(children: [
 
-                             // Container(
-                             //     margin: EdgeInsets.only(top: 3),
-                             //     child: Text("موقعك الحالي",style: TextStyle(color: Color(0xff38056e),fontWeight:FontWeight.w500 ),)),
-                             // SizedBox(width: 2,),
-                             Container(
-                                 margin: EdgeInsets.only(top: 3),
-                                 child: Text("تغيير الموقع الى الموقعك الان", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40),fontSize: 10),)),
-                             Spacer(),
+                                                // Container(
+                                                //     margin: EdgeInsets.only(top: 3),
+                                                //     child: Text("موقعك الحالي",style: TextStyle(color: Color(0xff38056e),fontWeight:FontWeight.w500 ),)),
+                                                // SizedBox(width: 2,),
+                                                Container(
+                                                    margin: EdgeInsets.only(top: 3),
+                                                    child: Text("تغيير الموقع الى الموقعك الان", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40),fontSize: 10),)),
+                                                Spacer(),
 
 
-                           ],),
-                         ),
-                       ):Container():Container()
-                     ],
-                   )
-                  ],
-                  ),
-                  // Positioned(
-                  // left: 40,
-                  // top: 42,
-                  // child: Row(
-                  //   children: [
-                  //     Container(
-                  //        // margin: EdgeInsets.only(top: 20),
-                  //         height: 32.00,
-                  //         width: 32.00,
-                  //         decoration: BoxDecoration(
-                  //           color: Color(0xfe38056e),borderRadius: BorderRadius.circular(25.00),
-                  //         ),child: Image.asset("Assets/Notification.png",color:Colors.white,scale: 1.2,)),
-                  //     SizedBox(width: 8,),
-                  //     Container(
-                  //         //margin: EdgeInsets.only(top: 20),
-                  //         height: 32.00,
-                  //         width: 32.00,
-                  //         decoration: BoxDecoration(
-                  //           color: Color(0xfe38056e),borderRadius: BorderRadius.circular(25.00),
-                  //         ),child: Image.asset("Assets/gift (1).png",color:Colors.white,scale: 1.2,)),
-                  //
-                  //
-                  //   ],
-                  // ),
-                  // )
-                  ],
-                  ),
-                  ),
+                                              ],),
+                                            ),
+                                          ):Container():Container()
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  // Positioned(
+                                  // left: 40,
+                                  // top: 42,
+                                  // child: Row(
+                                  //   children: [
+                                  //     Container(
+                                  //        // margin: EdgeInsets.only(top: 20),
+                                  //         height: 32.00,
+                                  //         width: 32.00,
+                                  //         decoration: BoxDecoration(
+                                  //           color: Color(0xfe38056e),borderRadius: BorderRadius.circular(25.00),
+                                  //         ),child: Image.asset("Assets/Notification.png",color:Colors.white,scale: 1.2,)),
+                                  //     SizedBox(width: 8,),
+                                  //     Container(
+                                  //         //margin: EdgeInsets.only(top: 20),
+                                  //         height: 32.00,
+                                  //         width: 32.00,
+                                  //         decoration: BoxDecoration(
+                                  //           color: Color(0xfe38056e),borderRadius: BorderRadius.circular(25.00),
+                                  //         ),child: Image.asset("Assets/gift (1).png",color:Colors.white,scale: 1.2,)),
+                                  //
+                                  //
+                                  //   ],
+                                  // ),
+                                  // )
+                                ],
+                              ),
+                            ),
 
-                  Container(
-              //    height:MediaQuery.of(context).size.height< 743.4285714285714?  MediaQuery.of(context).size.height*0.18: MediaQuery.of(context).size.height*0.23,
-                  child:win?Column(
-                  children: [
-                  new Text(
-                  translator.translate( "Congratulations you won"),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  fontSize:MediaQuery.of(context).size.height< 783.4285714285714?16 : 19,
-                  fontWeight:FontWeight.w700 ,
-                  color:Colors.black54,
-                  ),
-                  ),
-                    MediaQuery.of(context).size.height< 783.4285714285714?Container(): SizedBox(height: 2,),
-                  _buildResult(_value),
-                //  SizedBox(height: 2,),
-                   Center(
-                     child: Row(
-                       crossAxisAlignment: CrossAxisAlignment.center,
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       children: [
-                         InkWell(
-                           onTap:() async {
-                             if(token==null){
-                               Fluttertoast.showToast(
-                                   msg: "يجب عليك تسجيل الدخول",
-                                   toastLength: Toast.LENGTH_SHORT,
-                                   gravity: ToastGravity.BOTTOM,
-                                   timeInSecForIosWeb: 1,
-                                   backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                   textColor: Colors.white,
-                                   fontSize: 16.0
-                               );
-                             }else{
-                               await addFavourites(_items[_calIndex(_value * _angle + _current)].dataLuck['id']);
-                               if(message=="Data Inserted Successfully"){
-                                 Fluttertoast.showToast(
-                                     msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
-                                     toastLength: Toast.LENGTH_SHORT,
-                                     gravity: ToastGravity.BOTTOM,
-                                     timeInSecForIosWeb: 1,
-                                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                     textColor: Colors.white,
-                                     fontSize: 16.0
-                                 );
-                               }else{
-                                 Fluttertoast.showToast(
-                                     msg: message,
-                                     toastLength: Toast.LENGTH_SHORT,
-                                     gravity: ToastGravity.BOTTOM,
-                                     timeInSecForIosWeb: 1,
-                                     backgroundColor: Color(0xff38056e).withOpacity(0.9),
-                                     textColor: Colors.white,
-                                     fontSize: 16.0
-                                 );
+                            Container(
+                              //    height:MediaQuery.of(context).size.height< 743.4285714285714?  MediaQuery.of(context).size.height*0.18: MediaQuery.of(context).size.height*0.23,
+                              child:win?Column(
+                                children: [
+                                  new Text(
+                                    translator.translate( "Congratulations you won"),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize:MediaQuery.of(context).size.height< 783.4285714285714?16 : 19,
+                                      fontWeight:FontWeight.w700 ,
+                                      color:Colors.black54,
+                                    ),
+                                  ),
+                                  MediaQuery.of(context).size.height< 783.4285714285714?Container(): SizedBox(height: 2,),
+                                  _buildResult(_value),
+                                  //  SizedBox(height: 2,),
+                                  Center(
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap:() async {
+                                            if(token==null){
+                                              Fluttertoast.showToast(
+                                                  msg: "يجب عليك تسجيل الدخول",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0
+                                              );
+                                            }else{
+                                              await addFavourites(_items[_calIndex(_value * _angle + _current)].dataLuck['id']);
+                                              if(message=="Data Inserted Successfully"){
+                                                Fluttertoast.showToast(
+                                                    msg:translator.currentLanguage == 'ar' ?"تم إضافة للمفضلة بنجاح": message,
+                                                    toastLength: Toast.LENGTH_SHORT,
+                                                    gravity: ToastGravity.BOTTOM,
+                                                    timeInSecForIosWeb: 1,
+                                                    backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                                    textColor: Colors.white,
+                                                    fontSize: 16.0
+                                                );
+                                              }else{
+                                                Fluttertoast.showToast(
+                                                    msg: message,
+                                                    toastLength: Toast.LENGTH_SHORT,
+                                                    gravity: ToastGravity.BOTTOM,
+                                                    timeInSecForIosWeb: 1,
+                                                    backgroundColor: Color(0xff38056e).withOpacity(0.9),
+                                                    textColor: Colors.white,
+                                                    fontSize: 16.0
+                                                );
 
-                               }
-                             }
+                                              }
+                                            }
 
-                  },
-                           child: Container(
-                             margin: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
-                             height: 32.00,
-                             width: 32.00,
-                             decoration: BoxDecoration(
-                               color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                             ),child: Material(
-                               elevation: 4,borderRadius: BorderRadius.circular(25.00),
-                      child: Container(
-                                 //  margin: EdgeInsets.all( 10),
-                                  height: 32.00,
-                                width: 32.00,
-                                 decoration: BoxDecoration(
-                                     color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                 ),child: Icon(Icons.favorite_border,color:Colors.white,size: 20,)),
-                  ),
-                           ),
-                         ),
-                         InkWell(
-                          onTap:()=>share( translator.currentLanguage == 'ar' ?_items[_calIndex(_value * _angle + _current)].asset:_items[_calIndex(_value * _angle + _current)].assetEn, translator.currentLanguage == 'ar' ?"من ${_items[_calIndex(_value * _angle + _current)].NameReAr} ":"from ${_items[_calIndex(_value * _angle + _current)].NameReEn} "),
-                           child: Container(
-                             margin: EdgeInsets.all( 10),
-                             height: 32.00,
-                             width: 32.00,
-                             decoration: BoxDecoration(
-                               color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                             ),child: Material(
-                             elevation:4,
-                               borderRadius: BorderRadius.circular(25.00),
-                             child: Transform(
-                               alignment: Alignment.center,
-                               transform:   Matrix4.rotationY(math.pi),
-                               child: Container(
-                                //   margin: EdgeInsets.all( 10),
-                                   height: 32.00,
-                                   width: 32.00,
-                                   decoration: BoxDecoration(
-                                     color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                   ),child: Icon(Icons.reply_outlined,color:Colors.white,size: 20)),
-                             ))),
-                         ),
-                         InkWell(
-                           onTap:(){
-                             // Navigator.push(context,PageTransition(
-                             //   type: PageTransitionType.bottomToTop,
-                             //   duration: Duration(milliseconds: 550) ,
-                             //   reverseDuration: Duration(milliseconds: 700),
-                             //   child:ReservationService(data['bookingSettings'],data['offer']['id']),
-                             // ),);
-                           //  showDialog(snapshot.data['data'][0]['discount']);
-                            // print(_index +snapshot.data['data'][Provider.of<providerUser>(context, listen: true).RandomNum]['id']);
+                                          },
+                                          child: Container(
+                                            margin: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
+                                            height: 32.00,
+                                            width: 32.00,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                                            ),child: Material(
+                                            elevation: 4,borderRadius: BorderRadius.circular(25.00),
+                                            child: Container(
+                                              //  margin: EdgeInsets.all( 10),
+                                                height: 32.00,
+                                                width: 32.00,
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                                                ),child: Icon(Icons.favorite_border,color:Colors.white,size: 20,)),
+                                          ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap:()=>share( translator.currentLanguage == 'ar' ?_items[_calIndex(_value * _angle + _current)].asset:_items[_calIndex(_value * _angle + _current)].assetEn, translator.currentLanguage == 'ar' ?"من ${_items[_calIndex(_value * _angle + _current)].NameReAr} ":"from ${_items[_calIndex(_value * _angle + _current)].NameReEn} "),
+                                          child: Container(
+                                              margin: EdgeInsets.all( 10),
+                                              height: 32.00,
+                                              width: 32.00,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                                              ),child: Material(
+                                              elevation:4,
+                                              borderRadius: BorderRadius.circular(25.00),
+                                              child: Transform(
+                                                alignment: Alignment.center,
+                                                transform:   Matrix4.rotationY(math.pi),
+                                                child: Container(
+                                                  //   margin: EdgeInsets.all( 10),
+                                                    height: 32.00,
+                                                    width: 32.00,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                                                    ),child: Icon(Icons.reply_outlined,color:Colors.white,size: 20)),
+                                              ))),
+                                        ),
+                                        InkWell(
+                                          onTap:(){
+                                            // Navigator.push(context,PageTransition(
+                                            //   type: PageTransitionType.bottomToTop,
+                                            //   duration: Duration(milliseconds: 550) ,
+                                            //   reverseDuration: Duration(milliseconds: 700),
+                                            //   child:ReservationService(data['bookingSettings'],data['offer']['id']),
+                                            // ),);
+                                            //  showDialog(snapshot.data['data'][0]['discount']);
+                                            // print(_index +snapshot.data['data'][Provider.of<providerUser>(context, listen: true).RandomNum]['id']);
 
-                             print("rrrrrrrr");
-                             Navigator.push(context,PageTransition(
-                               type: PageTransitionType.leftToRight,
-                               duration: Duration(milliseconds: 550) ,
-                               reverseDuration: Duration(milliseconds: 700),
-                               child: RestaurantData(_items[_calIndex(_value * _angle + _current)].dataLuck),
-                             ),);
-                  },
-                           child: Container(
-                             margin: EdgeInsets.all( 10),
-                             height: 32.00,
-                             width: 32.00,
-                             decoration: BoxDecoration(
-                               color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                             ),child: Material(
-                               borderRadius: BorderRadius.circular(25.00),
-                             elevation: 4,
-                             child: Container(
-                               //  margin: EdgeInsets.all( 10),
-                                 height: 32.00,
-                                 width: 32.00,
-                                 decoration: BoxDecoration(
-                                   color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                 ),child: Icon(Icons.visibility_outlined,color:Colors.white,size: 20)))),
-                         )
-                       ],
-                     ),
-                   )
-                  // new Text(
-                  //   "دلوقتي تقدر تلعب انت و أصحابك",
-                  //   textAlign: TextAlign.center,
-                  //   style: TextStyle(
-                  //
-                  //     fontSize: 14,
-                  //     color:Color(0xffb4b9b9),
-                  //   ),
-                  // )
-                  ],
-                  ):open? Column(
-                  children: [
-                  new Text(
-                  translator.translate("Enjoy your time now" ),//  "السحب جاهز دلوقتي",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  fontSize:MediaQuery.of(context).size.width<350?16: 19,
-                  color:Colors.black54,
-                  ),
-                  ),
-                  SizedBox(height: 4,),
-                  new Text(
-                  translator.translate( "Click start playing"),  //"أضغط و استتمع",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize:MediaQuery.of(context).size.width<350?25:33,
-                  color:Color(0xff38056e),
-                  ),
-                  ),
-                  SizedBox(height: 4,),
-                  new Text(
-                  translator.translate("check your luck from hundreds of offers and discounts") ,//"دلوقتي تقدر تلعب انت و أصحابك",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+                                            print("rrrrrrrr");
+                                            Navigator.push(context,PageTransition(
+                                              type: PageTransitionType.leftToRight,
+                                              duration: Duration(milliseconds: 550) ,
+                                              reverseDuration: Duration(milliseconds: 700),
+                                              child: RestaurantData(_items[_calIndex(_value * _angle + _current)].dataLuck),
+                                            ),);
+                                          },
+                                          child: Container(
+                                              margin: EdgeInsets.all( 10),
+                                              height: 32.00,
+                                              width: 32.00,
+                                              decoration: BoxDecoration(
+                                                color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                                              ),child: Material(
+                                              borderRadius: BorderRadius.circular(25.00),
+                                              elevation: 4,
+                                              child: Container(
+                                                //  margin: EdgeInsets.all( 10),
+                                                  height: 32.00,
+                                                  width: 32.00,
+                                                  decoration: BoxDecoration(
+                                                    color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
+                                                  ),child: Icon(Icons.visibility_outlined,color:Colors.white,size: 20)))),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                  // new Text(
+                                  //   "دلوقتي تقدر تلعب انت و أصحابك",
+                                  //   textAlign: TextAlign.center,
+                                  //   style: TextStyle(
+                                  //
+                                  //     fontSize: 14,
+                                  //     color:Color(0xffb4b9b9),
+                                  //   ),
+                                  // )
+                                ],
+                              ):open? Column(
+                                children: [
+                                  new Text(
+                                    translator.translate("Enjoy your time now" ),//  "السحب جاهز دلوقتي",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize:MediaQuery.of(context).size.width<350?16: 19,
+                                      color:Colors.black54,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4,),
+                                  new Text(
+                                    translator.translate( "Click start playing"),  //"أضغط و استتمع",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize:MediaQuery.of(context).size.width<350?25:33,
+                                      color:Color(0xff38056e),
+                                    ),
+                                  ),
+                                  SizedBox(height: 4,),
+                                  new Text(
+                                    translator.translate("check your luck from hundreds of offers and discounts") ,//"دلوقتي تقدر تلعب انت و أصحابك",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
 
-                  fontSize:MediaQuery.of(context).size.width<350?12:14,
-                  color:Colors.black54,
-                  ),
-                  )
-                  ],
-                  ):
-                  Column(
-                  children: [
-                  new Text(
-                  "باقي علي فتح بوابه الحظ",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+                                      fontSize:MediaQuery.of(context).size.width<350?12:14,
+                                      color:Colors.black54,
+                                    ),
+                                  )
+                                ],
+                              ):
+                              Column(
+                                children: [
+                                  new Text(
+                                    "باقي علي فتح بوابه الحظ",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
 
-                  fontSize: 19,
-                  color:Color(0xffb4b9b9),
-                  ),
-                  ),
-                  SizedBox(height: 2,),
-                  new Text(
-                  "00:20:30",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 33,
-                  color:Color(0xff38056e),
-                  ),
-                  ),
-                  SizedBox(height: 2,),
-                  new Text(
-                  "دلوقتي تقدر تلعب انت و أصحابك",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
+                                      fontSize: 19,
+                                      color:Color(0xffb4b9b9),
+                                    ),
+                                  ),
+                                  SizedBox(height: 2,),
+                                  new Text(
+                                    "00:20:30",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 33,
+                                      color:Color(0xff38056e),
+                                    ),
+                                  ),
+                                  SizedBox(height: 2,),
+                                  new Text(
+                                    "دلوقتي تقدر تلعب انت و أصحابك",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
 
-                  fontSize: 14,
-                  color:Color(0xffb4b9b9),
-                  ),
-                  )
-                  ],
-                  ),
-                  ),]),
+                                      fontSize: 14,
+                                      color:Color(0xffb4b9b9),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),]),
 
                       Positioned(
-                        top:MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height< 603.4285714285714?215:265:330,//250
-                         // right:MediaQuery.of(context).size.height<800?0:2,
+                          top:MediaQuery.of(context).size.height< 743.4285714285714?MediaQuery.of(context).size.height< 603.4285714285714?215:265:330,//250
+                          // right:MediaQuery.of(context).size.height<800?0:2,
                           child: Container(
-                  alignment:Alignment.center,
+                            alignment:Alignment.center,
                             width:MediaQuery.of(context).size.width * 0.75,
                             height:MediaQuery.of(context).size.width * 0.75,
                             child: Stack(
                               children: [
                                 BoardView(items: _items, current: _current, angle: _angle),
-                            Positioned(
-                              top:MediaQuery.of(context).size.width * 0.294,
-                                left:MediaQuery.of(context).size.height< 603.4285714285714?MediaQuery.of(context).size.width * 0.2915:MediaQuery.of(context).size.width * 0.294,
-                                child: _buildGo())
+                                Positioned(
+                                    top:MediaQuery.of(context).size.width * 0.294,
+                                    left:MediaQuery.of(context).size.height< 603.4285714285714?MediaQuery.of(context).size.width * 0.2915:MediaQuery.of(context).size.width * 0.294,
+                                    child: _buildGo())
                               ],
                             ),
                           )
 
                       ),
-               //    Positioned(
-               // // top:MediaQuery.of(context).size.height< 743.4285714285714?350:430,
-               //   // child: _buildGo()
-               //    ),
+                      //    Positioned(
+                      // // top:MediaQuery.of(context).size.height< 743.4285714285714?350:430,
+                      //   // child: _buildGo()
+                      //    ),
                       //
                     ],
                   );
@@ -591,28 +607,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
 
         ],
 
-    );}
-    else if (snapshot.hasError) {
-    return Center(child: Text("تأكد من إتصال بالإنرنت"));
-    }
-    // By default, show a loading spinner.
-    return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-    SizedBox(height: 30,),
-    // CategoriesLoud(snapshot.data,true),
-    // CategoriesLoud(snapshot.data,true),
-    // CategoriesLoud(snapshot.data,true),
-    //  CategoriesLoud(snapshot.data,true),
-    Loading(),
-    // Center(
-    //   child: PixLoader(
-    //       loaderType: LoaderType.Spinner, faceColor: Color(0xfff99b1d)),
-    // )
-    //CircularProgressIndicator(valueColor: new AlwaysStoppedAnimation<Color>(Color(0xfff99b1d) ),)
-    ],
-    );}));
+      ));
   }
   var value;
   _buildGo() {
@@ -663,7 +658,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
 
   _buildResult(_value) {
     var  _index = _calIndex(_value * _angle + _current);
-   context.read<providerUser>().updateRandomNum(_value);
+//   context.read<providerUser>().updateRandomNum(_value);
     String _asset = translator.currentLanguage == 'ar' ? _items[_index].asset:_items[_index].assetEn;// _items[_calIndex(_value * _angle + _current)].asset
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 3.0),
@@ -675,7 +670,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
             children: [
               Container(
                 width: MediaQuery.of(context).size.width*0.78,
-                height:42,// MediaQuery.of(context).size.height*0.062,//38,
+              //  height:42,// MediaQuery.of(context).size.height*0.062,//38,
                 child: Center(
                   child: RichText(
                     textAlign: TextAlign.center,

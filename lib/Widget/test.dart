@@ -137,9 +137,10 @@ class _CameraConnectState extends State<test> {
               )
                   : userImage==null?   imageback!=null?Container(
                 decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black12),
                   borderRadius: BorderRadius.circular(8.00),
                     image: DecorationImage(
-                      image: NetworkImage("$imageback"),//MemoryImage(bytes),
+                      image:imageback==null||imageback=="http://ahmed453160-001-site1.etempurl.com/Files/UsersImage/User-96e66ce1-9dd6-423f-8ba2-29e91d180b56.jpg"?AssetImage("Assets/editPrifile.jpeg",): NetworkImage("$imageback"),//MemoryImage(bytes),
                       fit: BoxFit.cover,
                     )
                //   image:  NetworkImage("$imageback"),
@@ -155,8 +156,8 @@ class _CameraConnectState extends State<test> {
                       Row(
                         children: [
                        ClipRRect(
-                            borderRadius: BorderRadius.circular(16.00),
-                            child:Image.asset("Assets/profileImage.png",fit: BoxFit.fitWidth,height: 80.0,width: 80.0,),
+                            borderRadius: BorderRadius.circular(16.00),//profileImage.png
+                            child:Image.asset("Assets/editPrifile.jpeg",fit: BoxFit.fitWidth,height: 80.0,width: 80.0,),
                           ),
                           // new Container(
                           //   height: 60.00,
@@ -173,15 +174,15 @@ class _CameraConnectState extends State<test> {
                       )
                     ],),
                   ),
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: CircleAvatar(
-                      radius: 11.0,
-                      backgroundColor:Color(0xff38056e).withOpacity(0.8),
-                      child: Center(child: Icon(Icons.edit_outlined,color: Colors.white,size: 15,)),
-                    ),
-                  )
+                  // Positioned(
+                  //   top: 0,
+                  //   right: 0,
+                  //   child: CircleAvatar(
+                  //     radius: 11.0,
+                  //     backgroundColor:Color(0xff38056e).withOpacity(0.8),
+                  //     child: Center(child: Icon(Icons.edit_outlined,color: Colors.white,size: 15,)),
+                  //   ),
+                  // )
                 ],
               ):ClipRRect(
                 borderRadius: BorderRadius.circular(6.00),

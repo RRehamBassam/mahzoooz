@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mahzoooz/Screen/bottomNavigationBar/noConnect.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Widget/loading.dart';
@@ -124,6 +125,12 @@ class _FavouritesState extends State<Favourites> {
                       ),
                     ); }
                 else if (snapshot.hasError) {
+                  Navigator.pushReplacement(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => NoConnect(
+
+                          )));
                   return Center(child: Text("تأكد من إتصال بالإنرنت"));
                 }
                 // By default, show a loading spinner.

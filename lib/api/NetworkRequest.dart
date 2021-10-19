@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/api/ServerAddresses.dart';
 import 'dart:convert';
 import 'dart:ui';
@@ -196,14 +197,16 @@ class NetworkRequest{
     }
   }
 
-  Future<dynamic> Login(String phone,String pass) async {
+  Future<dynamic> Login(String phone,String pass,token) async {
+    print(" $token token token token");
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Accounts/Login';
 
     Map map ={
     "phone": phone,
-    "password": pass
+    "password": pass,
+      "token":token
     };
     var itemCount ;
     try {
@@ -291,6 +294,7 @@ class NetworkRequest{
     print(email);
     print(name);
 
+
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Accounts/Register';
@@ -305,7 +309,7 @@ class NetworkRequest{
       "gender": gender,
       "birthDate": birthDate,
       "countryId": countryId,
-      "imageName": '$base64Image',
+      "imageName":base64Image== "data:image/jpeg;base64,null"?null:'$base64Image',
       "generatedCode": generatedCode
     };
     var itemCount ;
@@ -402,6 +406,24 @@ class NetworkRequest{
 
     return jsonResponse['data'];
   }
+  Future<dynamic> SettingsGetAll() async {
+    HttpClient client = new HttpClient();
+    client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
+    String url ='http://ahmed453160-001-site1.etempurl.com/Settings/GetAll';
+
+    var itemCount ;
+    HttpClientRequest request = await client.getUrl(Uri.parse(url));
+    request.headers.set('content-type', 'application/json');
+    request.headers.set('lang', '${translator.currentLanguage}');
+    // request.add(convert.utf8.encode(convert.json.encode(map)));
+    HttpClientResponse response = await request.close();
+    String reply = await response.transform(convert.utf8.decoder).join();
+    print(response.statusCode);
+    print(reply);
+    var jsonResponse = convert.jsonDecode(reply);
+
+    return jsonResponse['data'];
+  }
   Future<dynamic> Copy(id) async {
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -432,7 +454,7 @@ class NetworkRequest{
       "pageSize": 10,
       "filter": {
         "searchText": "",
-        "isSpecial": isSpecial,
+        "isSpecial": null,
         "latitude": "24.75007441712588",
         "longitude": "46.775951958232405"
       }
@@ -661,7 +683,23 @@ print(colId);print(colId);
     return jsonResponse['data']['data'];
 
   }
-  Future<dynamic> subCategoriesGetPaged(id) async {
+  double lat;
+  double lng;
+  Future<dynamic> subCategoriesGetPaged(id,latLnglocation) async {
+
+    await HelperFunctions.getUserLatInSharedPreference().then((value){
+
+        lat  = value;
+
+    });
+    await HelperFunctions.getUserLngSharedPreference().then((value){
+
+        lng  = value;
+        //latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
+
+    });
+print(id);
+print("ppp");
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -671,7 +709,10 @@ print(colId);print(colId);
       "pageNumber": 1,
       "pageSize": 10,
       "filter": {
-        "categoryId": id
+        "categoryId": id,
+        "latitude":lat,
+        "longitude":lng
+
       },
 
 
@@ -683,8 +724,8 @@ print(colId);print(colId);
     HttpClientResponse response = await request.close();
     String reply = await response.transform(convert.utf8.decoder).join();
     var jsonResponse = convert.jsonDecode(reply);
-
-
+print("pp");
+print(response.statusCode);
     return jsonResponse['data'];
 
   }
@@ -771,7 +812,7 @@ print(colId);print(colId);
 
       var jsonResponse = convert.jsonDecode(reply);
       if(jsonResponse['status']=="OK"){
-       // print(jsonResponse['status']);
+        print(jsonResponse['data']);
         return jsonResponse['data'];
       }else {
        // print(jsonResponse['status']);
@@ -810,7 +851,7 @@ print(colId);print(colId);
       token  = value ;
     });
 
-    //print(" $bookingTime, $dayDate,$numberOfPerson ,$occasion,$SpecialRequest");
+   print(" ${latLnglocation.latitude}  yyyyyyyy ${latLnglocation.longitude}");
 
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
@@ -825,13 +866,16 @@ print(colId);print(colId);
 
       HttpClientRequest request = await client.postUrl(Uri.parse(url));
       request.headers.set('content-type', 'application/json');
+    request.headers.set('lang', '${translator.currentLanguage}');
       request.headers.set('Authorization', 'Bearer $token');
+
       request.add(convert.utf8.encode(convert.json.encode(map)));
       HttpClientResponse response = await request.close();
       String reply = await response.transform(convert.utf8.decoder).join();
       print(reply);
       var jsonResponse = convert.jsonDecode(reply);
       if(jsonResponse['status']=="OK"){
+        print(" ${jsonResponse['data']} qwqwqqqqqqq");
         print(jsonResponse['status']);
         return jsonResponse['data'];
       }else {

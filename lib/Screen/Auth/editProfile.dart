@@ -78,6 +78,11 @@ class _editProfileState extends State<editProfile> {
   }
 
   final String url = "http://ahmed453160-001-site1.etempurl.com/Countries/GetAll";
+  String emailRegExp =
+      "[a-z0-9!#\$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#\$%&'*+\/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9][a-zA-Z0-9-]{0,253}\.)*[a-zA-Z0-9][a-zA-Z0-9-]{0,253}\.[a-zA-Z0-9]{2,}\$";
+  String passwordRegExp = "[a-z0-9_@-A-Z]{6,16}\$";
+  String nameRegExp = "^[a-zA-Z]{2,16}[\\s\\\][a-zA-Z]{2,16}\$";
+  String phoneRegExp = "^(009665|9665|05|5)(5|0|3|6|4|9|1|8|7)([0-9]{7})\$";
 
   List data =[]; //edited line
   List dataG =["ذكر","أنثى"];
@@ -164,12 +169,12 @@ class _editProfileState extends State<editProfile> {
         init=true;
       });
     }
-    String nameUser =
-        Provider.of<providerUser>(context, listen: true).name;
+    // String nameUser =
+    //     Provider.of<providerUser>(context, listen: true).name;
     // String mobileUser =
     //     Provider.of<providerUser>(context, listen: true).mobile;
-    String emailUser =
-        Provider.of<providerUser>(context, listen: true).email;
+    // String emailUser =
+    //     Provider.of<providerUser>(context, listen: true).email;
     return Scaffold(
      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
@@ -405,7 +410,12 @@ class _editProfileState extends State<editProfile> {
               ),
             );}
         },
-        validator:text=="كلمة المرور"|| text=="تأكيد كلمة المرور"? FieldValidator.password(
+        validator:text=="تأكيد كلمة المرور"?(value){
+          if(value==password){
+            return null;
+          }else
+            return translator.translate("يجب ان تتطابق مع كلمة المرور");
+        }:text=="كلمة المرور"|| text=="تأكيد كلمة المرور"? FieldValidator.password(
           minLength: 6,
           // shouldContainNumber: true,
           // shouldContainCapitalLetter: true,
@@ -415,7 +425,19 @@ class _editProfileState extends State<editProfile> {
           // onSpecialCharsNotPresent: () { return "$text must contain special characters"; },
           // onCapitalLetterNotPresent: () { return "$text must contain capital letters"; }
 
-        ):(value) {
+        ):text=="البريد الإلكتروني"?
+            (value){ value = value.trim();
+        RegExp regExp2 = new RegExp(emailRegExp);
+        if (value.isEmpty) {
+          // The form is empty
+          return translator.translate("please enter email");
+        }
+        if (regExp2.hasMatch(value)) {
+          // So, the email is valid
+          return null;
+        }
+        // The pattern of the email didn't match the regex above.
+        return translator.translate( "email incorrect");}:(value) {
           if (value.isEmpty) {
             setState(() {
               if(text=="الإسم"){eeName=true;}

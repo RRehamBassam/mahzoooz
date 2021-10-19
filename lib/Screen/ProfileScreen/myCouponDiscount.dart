@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:mahzoooz/Screen/bottomNavigationBar/noConnect.dart';
 import 'package:mahzoooz/Widget/SingleItemReservationSchool.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
@@ -105,6 +106,12 @@ SizedBox(height: 22,),
                               return    SingleItemReservationSchool(snapshot.data[index]); }),
                       ); }
                     else if (snapshot.hasError) {
+                      Navigator.pushReplacement(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => NoConnect(
+
+                              )));
                       return Center(child: Text("تأكد من إتصال بالإنرنت"));
                     }
                     // By default, show a loading spinner.

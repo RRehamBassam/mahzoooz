@@ -24,7 +24,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
     // Uint8List bytes= convert.base64.decode(data['offerImages'][0]['imageName'].split(',').last);
     return   Stack(
       children: [
-        data['offerImages'][0]['imageName']==null?Container():  Container(
+        data==null?Container():  data['offerImages'][0]['imageName']==null?Container():  Container(
           margin: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
@@ -55,14 +55,18 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    new Text(
-                      data['providerNameAr']==null? "":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
-                      textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                      //  fontFamily: 'Nimbus',
-                        fontSize: 13,
-                        color:Color(0xffffffff),
+                    Container(
+                      width:MediaQuery.of(context).size.width*0.52,
+                      child: new Text(
+                        data==null?"":  data['providerNameAr']==null? "":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                        textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          overflow: TextOverflow.ellipsis ,
+                        //  fontFamily: 'Nimbus',
+                          fontSize: 13,
+                          color:Color(0xffffffff),
+                        ),
                       ),
                     ),
                     Container(
@@ -70,7 +74,7 @@ class _ItemCarouselSliderState extends State<ItemCarouselSlider> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: new Text(
-                          translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
+                          data==null?"":  translator.currentLanguage == 'ar' ? data['titeAr']:data['titleEn'],//"خصم ١٠٠ ريال سعودي",
                           textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                           style: TextStyle(
 

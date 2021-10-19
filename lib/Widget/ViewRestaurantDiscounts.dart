@@ -37,10 +37,28 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
       _counter++;
     });
   }
+  var DataSaprot;
+  var valuekey;
+
+  NetworkRequest networkRequest=new NetworkRequest();
+  getDataSaprotState() async {
+
+    // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+        //    bytes = convert.base64.decode(value);
+      });
+
+
+    });
+    print("${valuekey}  keykeykey");
+  }
+
   Future<void> share() async {
     await FlutterShare.share(
-        title:  translator.currentLanguage == 'ar' ?" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط http://onelink.to/mahzoooz ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahoooz app from the link http://onelink.to/mahzoooz ",
-        text:  translator.currentLanguage == 'ar' ?" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط http://onelink.to/mahzoooz ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahoooz app from the link http://onelink.to/mahzoooz ",
+        title:  translator.currentLanguage == 'ar' ?" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط${DataSaprot["apple_link"]}  ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahoooz app from the link ${DataSaprot["apple_link"]}  ",
+        text:  translator.currentLanguage == 'ar' ?" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} للتفاصيل  حمل تطبيق محظوووظ من الرابط ${DataSaprot["apple_link"]} ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahoooz app from the link ${DataSaprot["apple_link"]}   ",
         linkUrl: data['webSite'],
         chooserTitle: 'لتفاصيل');
   }
@@ -65,7 +83,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
       _bool = newValue;
     });
   }
-  NetworkRequest networkRequest=new NetworkRequest();
+ // NetworkRequest networkRequest=new NetworkRequest();
   getLoggedInState() async {
     await networkRequest.Copy(data['id']).then((value){
 
@@ -85,6 +103,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
   }
   @override
   void initState() {
+    getDataSaprotState();
     gettoken();
        //  if(data['providerLogo']!= null)
        // {bytes= convert.base64.decode(data['providerLogo'].split(',').last);}

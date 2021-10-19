@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:international_phone_input/international_phone_input.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
@@ -105,6 +106,16 @@ bool isverifyPhoneNumbe=false;
         centerTitle: true,
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
+        leading:  InkWell(
+          onTap:(){
+          setState(() {
+            codeScreen=false;
+          });
+          },
+          child: Container(
+            // margin: EdgeInsets.all(8),
+              child: Icon(Icons.arrow_back_ios,color: Color(0xff38056e),)),
+        ),
         title: new Text(
           translator.translate('كود التأكيد'),
           textAlign: TextAlign.center,
@@ -203,14 +214,14 @@ bool isverifyPhoneNumbe=false;
                 //     builder: (context) =>  login(phoneNumber, false,true,code: code)));
 
                 if(smsOTP!=null)
-                  FirebaseAuth.instance.currentUser().then((user){
+                  // FirebaseAuth.instance.currentUser().then((user){
+                  //
+                  //     //  Navigator.of(context).pop();
+                  //
+                  //
+                  // });
 
-                      //  Navigator.of(context).pop();
-                      signIn2(smsOTP);
-
-                  });
-
-
+                  signIn2(smsOTP);
                     // Navigator.push(
                     //     context,
                     //     new MaterialPageRoute(
@@ -241,17 +252,40 @@ bool isverifyPhoneNumbe=false;
         ),
       ),
     ): Scaffold(
+      appBar: AppBar(
+        
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Color(0xFFFEFEFE).withOpacity(0.0),
+        leading:  InkWell(
+          onTap:(){
+          Navigator.pop(context);
+          },
+          child: Container(
+            margin: EdgeInsets.all(8),
+              child: Icon(Icons.arrow_back_ios,color: Color(0xff38056e),)),
+        ),
+        title: new Text(
+         "",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color:Color(0xff747474),
+          ),
+        ),
+      ),
       body: Container(
         margin: EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             children: [
               Container(
-                  height: MediaQuery.of(context).size.height*.3,
+                  height: MediaQuery.of(context).size.height*.22,
                   child:Center(child:  Image.asset('Assets/logoSmail.png'),)
               ),
               Container(
-                  height: MediaQuery.of(context).size.height*.25,
+                  height: MediaQuery.of(context).size.height*.22,
                   width:MediaQuery.of(context).size.width ,
                   margin: EdgeInsets.only(right: 16,left: 16),
                   child:Column(
@@ -297,7 +331,7 @@ bool isverifyPhoneNumbe=false;
                   )),
 
               Container(
-                height: MediaQuery.of(context).size.height*.25,
+                height: MediaQuery.of(context).size.height*.23,
                 child:Column(
                   children: [
                   //   Container(
@@ -563,7 +597,7 @@ bool isverifyPhoneNumbe=false;
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 15),
       verificationCompleted: (AuthCredential authCredential) {
-        FirebaseAuth.instance.signInWithCredential(authCredential).then((AuthResult result){
+        FirebaseAuth.instance.signInWithCredential(authCredential).then(( result){
 
           Navigator.pushReplacement(context, MaterialPageRoute(
               builder: (context) =>  login(phoneNumber, false,true,code: code)));
@@ -587,7 +621,7 @@ bool isverifyPhoneNumbe=false;
           authStatus = "Your account is successfully verified";
         });
       },
-      verificationFailed: (AuthException authException) {
+      verificationFailed: (FirebaseAuthException authException) {
         setState(() {
           authStatus = "Authentication failed";
         });
@@ -636,7 +670,7 @@ bool isverifyPhoneNumbe=false;
     try
     {
       await FirebaseAuth.instance
-          .signInWithCredential(PhoneAuthProvider.getCredential(
+          .signInWithCredential(PhoneAuthProvider.credential(
         verificationId: verificationId,
         smsCode: otp,
       ));
@@ -659,9 +693,12 @@ bool isverifyPhoneNumbe=false;
     };
     final PhoneCodeSent smsCodeSent= (String verId, [int forceCodeResent]) {
       this.verificationId = verId;
+
+
+
       setState(() {
-        codeScreen=true;
         isLouding=false;
+        codeScreen=true;
         //  authStatus = "OTP has been successfully send";
       });
       // smsCodeDialoge(context).then((value){
@@ -669,7 +706,7 @@ bool isverifyPhoneNumbe=false;
       // });
     };
     final PhoneVerificationCompleted verifiedSuccess= (AuthCredential auth){};
-    final PhoneVerificationFailed verifyFailed= (AuthException e){
+    final PhoneVerificationFailed verifyFailed= (FirebaseAuthException e){
       print('${e.message}');
     };
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -692,7 +729,7 @@ bool isverifyPhoneNumbe=false;
     });
   }
   Future<void> signIn2(String smsCode) async{
-    final AuthCredential credential = PhoneAuthProvider.getCredential(
+    final AuthCredential credential = PhoneAuthProvider.credential(
       verificationId: verificationId,
       smsCode: smsCode,);
 

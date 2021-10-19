@@ -11,6 +11,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 
+import 'bottomNavigationBar/noConnect.dart';
+
 class SearchScreen extends StatefulWidget {
   LatLng latLnglocation;
 
@@ -384,6 +386,12 @@ class _SearchState extends State<SearchScreen> {
                       ),
                     ); }
                 else if (snapshot.hasError) {
+                  Navigator.pushReplacement(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => NoConnect(
+
+                          )));
                   return Center(child: Text("تأكد من إتصال بالإنرنت"));
                 }
                 // By default, show a loading spinner.

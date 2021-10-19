@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Models/category.dart';
+import 'package:mahzoooz/Screen/bottomNavigationBar/noConnect.dart';
 import 'package:mahzoooz/Widget/ScolBottomDiscounts.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscounts.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscountsLoud.dart';
@@ -33,6 +34,7 @@ class _DiscountsState extends State<Discounts> {
   bool closeTopContainer = false;
   double topContainer = 0;
   NetworkRequest networkRequest=new NetworkRequest();
+
   @override
   void initState() {
     super.initState();
@@ -90,7 +92,8 @@ class _DiscountsState extends State<Discounts> {
                                     enableInfiniteScroll: true,
                                     autoPlayAnimationDuration: Duration(milliseconds: 1000),
                                     viewportFraction: 0.8,
-                                    height: 140.0, autoPlayCurve: Curves.fastOutSlowIn,
+                                    height: 140.0,
+                                    autoPlayCurve: Curves.fastOutSlowIn,
                                     autoPlay: true,
                                     aspectRatio:  10 / 9,
                                     enlargeCenterPage: true,
@@ -108,6 +111,7 @@ class _DiscountsState extends State<Discounts> {
                                     // ItemCarouselSlider(),
                                   )]) ;}
                                           else if (snapshot.hasError) {
+
                                           return Center(child: Text("تأكد من إتصال بالإنرنت"));
                                           }
                                           // By default, show a loading spinner.
@@ -166,6 +170,12 @@ class _DiscountsState extends State<Discounts> {
                                                           return Categories(snapshot.data[index],false);}),
                                                         );}
                                                         else if (snapshot.hasError) {
+                                                          Navigator.pushReplacement(
+                                                              context,
+                                                              new MaterialPageRoute(
+                                                                  builder: (context) => NoConnect(
+
+                                                                  )));
                                                           return Center(child: Text("تأكد من إتصال بالإنرنت"));
                                                         }
                                                         // By default, show a loading spinner.

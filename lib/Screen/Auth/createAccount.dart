@@ -54,6 +54,7 @@ bool eeName=false;
   bool eeCpass=false;
   bool eepass=false;
   bool eeG=false;
+
   Future<void> verifyPhoneNumber(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
@@ -89,6 +90,7 @@ bool eeName=false;
 
   List data =[]; //edited line
   List dataG =["ذكر","أنثى"];
+
   Future<String> getSWData() async {
     var res = await http
         .get(Uri.parse(Uri.encodeFull(url)), headers: {"Accept": "application/json"});
@@ -122,6 +124,14 @@ bool eeName=false;
     return Scaffold(
      // resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        leading:  InkWell(
+          onTap:(){
+            Navigator.pop(context);
+          },
+          child: Container(
+            // margin: EdgeInsets.all(8),
+              child: Icon(Icons.arrow_back_ios,color: Colors.black,)),
+        ),
         centerTitle: true,
         elevation: 1,
         backgroundColor: Color(0xFFFEFEFE),
@@ -250,6 +260,8 @@ bool eeName=false;
       ),
     );
   }
+
+
   Widget textFiled(String text,onChanged, TextEditingController controller){
     bool init=false;  bool error;
     if(init==false){
@@ -258,7 +270,7 @@ bool eeName=false;
 print(error);
     return Container(
       width:error?MediaQuery.of(context).size.width*0.965: MediaQuery.of(context).size.width*0.815,
-      height:eeCpass? MediaQuery.of(context).size.height*0.108:ee? MediaQuery.of(context).size.height*0.108: MediaQuery.of(context).size.height*0.062,
+      height:ee||eeName||eepass||eeEmail||eeCpass? MediaQuery.of(context).size.height*0.108: MediaQuery.of(context).size.height*0.062,
       child: TextFormField(//onChanged: (val)=>setState((){searchWord=val;}),
         cursorColor: Color(0xff38056e),
         keyboardType:TextInputType.text,
@@ -298,7 +310,32 @@ print(error);
           );}
         },
 
-        validator:text=="كلمة المرور"|| text=="تأكيد كلمة المرور"? FieldValidator.password(
+        validator:text=="تأكيد كلمة المرور"?(value){
+          if(value==password){
+            return null;
+          }else
+            return translator.translate("يجب ان تتطابق مع كلمة المرور");
+          }: text=="البريد الإلكتروني"?
+            (value){ value = value.trim();
+          RegExp regExp2 = new RegExp(emailRegExp);
+        if (value.isEmpty) {
+        // The form is empty
+        return translator.translate("please enter email");
+        }
+        if (regExp2.hasMatch(value)) {
+          eeEmail=false;
+          setState(() {
+
+          });
+        // So, the email is valid
+        return null;
+        }
+            eeEmail=true;
+        setState(() {
+
+        });
+        // The pattern of the email didn't match the regex above.
+        return translator.translate( "email incorrect");}:text=="كلمة المرور"||text=="تأكيد كلمة المرور"? FieldValidator.password(
           minLength: 6,
           // shouldContainNumber: true,
           // shouldContainCapitalLetter: true,
@@ -632,14 +669,14 @@ print(error);
                     //  itemExtent: 40,
                     useMagnifier: true,
                     onSelectedItemChanged: (int){
-                      {setState(()=>{_controllerG.text=dataG[int],gender=int+1});}
+                      {setState(()=>{_controllerG.text=translator.translate(dataG[int]),gender=int+1});}
                        },
                     // diameterRatio: 1.6,
                     children: <Widget>[
                       ...dataG.map<Widget>((name) {
                       //  print(name['nameAr']);
                         return InkWell(
-                        onTap: ()=>{setState(()=>{_controllerG.text=name}),},
+                        onTap: ()=>{setState(()=>{_controllerG.text=translator.translate(name)}),},
                           child: Container(
                             width: double.infinity,
 
@@ -798,6 +835,7 @@ print(error);
       );
   }
   getUserHasAccount() async {
+
     await  networkRequest.Register( name, password, confirmPassword, email, phoneNumber,
         gender, birthDate, generatedCode,base64Image,countryId).then((value){
       setState(() {

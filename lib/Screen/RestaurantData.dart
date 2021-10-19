@@ -25,6 +25,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:mahzoooz/Screen/CouponDiscount.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_share/flutter_share.dart';
+
+import 'bottomNavigationBar/noConnect.dart';
 class RestaurantData extends StatefulWidget {
   var data;
   @override
@@ -58,13 +60,29 @@ var data;
   @override
   void initState() {
     gettoken();
-
+    getDataSaprotState();
     initPage=false;
     // TODO: implement initState
     super.initState();
   }
 List dataS =[]; //edited line
+var DataSaprot;
+var valuekey;
 
+//NetworkRequest networkRequest=new NetworkRequest();
+getDataSaprotState() async {
+
+  // NetworkRequest networkRequest=new NetworkRequest();
+  await networkRequest.SettingsGetAll().then((value){
+    setState(() {
+      DataSaprot=value;
+      //    bytes = convert.base64.decode(value);
+    });
+
+
+  });
+  print("${valuekey}  keykeykey");
+}
 Future<String> getSWData(id) async {
   await HelperFunctions.getUserEmailSharedPreference().then((value){
     token  = value ;
@@ -100,8 +118,8 @@ Future<String> getSWData(id) async {
 bool initPage;
 Future<void> share() async {
   await FlutterShare.share(
-      title: translator.currentLanguage == 'ar' ? " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} ${"للتفاصيل  حمل تطبيق محظوووظ من الرابط"} http://onelink.to/mahzoooz":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahzoooz app from the link http://onelink.to/mahzoooz",
-      text: translator.currentLanguage == 'ar' ? " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} ${"للتفاصيل  حمل تطبيق محظوووظ من الرابط"} http://onelink.to/mahzoooz":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahzoooz app from the link http://onelink.to/mahzoooz",
+      title: translator.currentLanguage == 'ar' ? " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} ${"للتفاصيل  حمل تطبيق محظوووظ من الرابط"} ${DataSaprot["apple_link"]}  ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahzoooz app from the link ${DataSaprot["apple_link"]}  ",
+      text: translator.currentLanguage == 'ar' ? " ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} ${"للتفاصيل  حمل تطبيق محظوووظ من الرابط"} ${DataSaprot["apple_link"]} ":" ${translator.currentLanguage == 'ar' ?data['titeAr']:data['titleEn']} من ${translator.currentLanguage == 'ar' ?data['providerNameAr']:data['providerNameEn']} For details, download the Mahzoooz app from the link ${DataSaprot["apple_link"]}  ",
       linkUrl: data['webSite'],
       chooserTitle: 'لتفاصيل');
 }
@@ -867,6 +885,12 @@ Future<void> share() async {
         ),
     )]);}
     else if (snapshot.hasError) {
+      Navigator.pushReplacement(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => NoConnect(
+
+              )));
       return Center(child: Text("تأكد من إتصال بالإنرنت"));
     }
     return RestaurantDataLoud();}),
@@ -1551,7 +1575,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
             textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         ),
         SizedBox(height: 6,),
-        Row(children: [
+        data['contacts'][0]['mobile']==null?Container():   Row(children: [
           Text(
             data['contacts'].length==0?'' :'${data['contacts'][0]['mobile'].toString()}  '.toString(),
             style: TextStyle(
@@ -1586,7 +1610,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         ],),
 
         SizedBox(height: 6,),
-        Row(children: [
+        data['contacts'][0]['phone']==null?Container():   Row(children: [
           Text(
             data['contacts'].length==0?'' : '${data['contacts'][0]['phone'].toString()}'.toString(),
             style: TextStyle(
@@ -1621,7 +1645,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
 //           )
         ],),
 
-        Text(
+        data['contacts'][0]['email']==null? Container(): Text(
     translator.translate('او عبر إيميل التالى'),
           style: TextStyle(
             fontSize: 17,
@@ -1631,7 +1655,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           ),
             textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         ),
-      Row(
+        data['contacts'][0]['email']==null? Container():  Row(
         children: [
           Text(
             data['contacts'].length==0?'' : '${data['contacts'][0]['email'].toString()}'.toString(),

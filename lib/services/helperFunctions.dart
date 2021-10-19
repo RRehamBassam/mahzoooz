@@ -4,7 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperFunctions{
   static String sharedPreferenceUserLoggedInKey = "ISLOGGEDIN";
+  static String sharedPreferenceEmptyDataInKey = "EmptyData";
   static String sharedPreferenceUserNameKey = "USERNAMEKEY";
+  static String sharedPreferenceUsertokenFcmKey="TOkENFCM";
   static String sharedPreferenceUserAddressKey = "USERAddressKEY";
   static String sharedPreferenceUserAddressLocalKey = "USERAddresslKEY";
   static String sharedPreferenceUserAddressChangeKey = "USERAddressChKEY";
@@ -23,6 +25,10 @@ class HelperFunctions{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setBool(sharedPreferenceUserLoggedInKey, isUserLoggedIn);
   }
+  static Future<bool> saveEmptyDataSharedPreference(bool isUserLoggedIn) async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool(sharedPreferenceEmptyDataInKey, isUserLoggedIn);
+  }
   static Future<bool> saveDataEmptyInSharedPreference(bool isUserLoggedIn) async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setBool(sharedPreferenceDataEmptyKey, isUserLoggedIn);
@@ -35,6 +41,10 @@ class HelperFunctions{
   static Future<bool> saveUserNameSharedPreference(String userName) async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.setString(sharedPreferenceUserNameKey, userName);
+  }
+  static Future<bool> saveUsertokenFcmSharedPreference(String userName) async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setString(sharedPreferenceUsertokenFcmKey, userName);
   }
   static Future<bool> saveUserlocationLatSharedPreference( double Lat) async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -91,6 +101,10 @@ class HelperFunctions{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.getBool(sharedPreferenceUserLoggedInKey);
   }
+  static Future<bool> getUserEmptyDataSharedPreference() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.getBool(sharedPreferenceEmptyDataInKey);
+  }
   static Future<bool> getDataEmptyInSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.getBool(sharedPreferenceDataEmptyKey);
@@ -116,6 +130,9 @@ class HelperFunctions{
   static Future<String> getUserNameSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return await preferences.getString(sharedPreferenceUserNameKey);
+  }static Future<String> getUserTokenFvmSharedPreference() async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.getString(sharedPreferenceUsertokenFcmKey);
   }
   static Future<String> getUserAddressSharedPreference() async{
     SharedPreferences preferences = await SharedPreferences.getInstance();

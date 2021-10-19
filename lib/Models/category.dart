@@ -41,11 +41,11 @@ final trainCategory5 = Category(
   name: 'Top Rate',
 );
 
-final categories = [
-  trainCategory,
-  busCategory,
-  planeCategory,
-  trainCategory1,
-
-
-];
+// final categories = [
+//   trainCategory,
+//   busCategory,
+//   planeCategory,
+//   trainCategory1,
+//
+//
+// ];

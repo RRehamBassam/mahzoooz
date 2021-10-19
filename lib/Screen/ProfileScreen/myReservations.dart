@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
+import 'package:mahzoooz/Screen/bottomNavigationBar/noConnect.dart';
 import 'package:mahzoooz/Widget/SingleItemReservation.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
@@ -103,6 +104,12 @@ class _myReservationsState extends State<myReservations> {
                       return    SingleItemReservation(snapshot.data[index]); }),
                   ); }
                   else if (snapshot.hasError) {
+                    Navigator.pushReplacement(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => NoConnect(
+
+                            )));
                     return Center(child: Text("تأكد من إتصال بالإنرنت"));
                   }
                   // By default, show a loading spinner.

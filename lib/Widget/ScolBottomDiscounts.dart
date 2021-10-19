@@ -29,8 +29,41 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
   int isSelected;
   var ListData;
   bool loud;
+  var DataSaprot;
+  var valuekey;
+  var categories ;
+  getDataSaprotState() async {
+
+    // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+        categories=[Category(
+          categoryId: 0,
+          name: DataSaprot["Filter1"],
+        ),Category(
+          categoryId: 1,
+          name:  DataSaprot["Filter2"],
+        ),Category(
+          categoryId: 2,
+          name: DataSaprot["Filter3"],
+        ),Category(
+          categoryId: 3,
+          name: DataSaprot["Filter4"],
+        ),];
+        //    bytes = convert.base64.decode(value);
+      });
+
+
+    });
+    print("${valuekey}  keykeykey");
+  }
+
+
   @override
   void initState() {
+    getDataSaprotState();
+    categories=[];
     loud=false;
     isSelected=0;
     ListData=[];

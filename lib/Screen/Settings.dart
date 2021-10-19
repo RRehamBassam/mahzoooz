@@ -23,8 +23,7 @@ class _SettingsState extends State<Settings> {
           onTap:(){
             Navigator.pop(context);
           },
-          child: Container(
-             // margin: EdgeInsets.all(8),
+          child: Container(margin: EdgeInsets.all(8),
               child: Icon(Icons.arrow_back_ios,color: Colors.black,)),
         ),
         backgroundColor: Colors.white,

@@ -1,6 +1,12 @@
 import 'dart:io';
 import 'dart:convert' as convert;
+import 'package:connectivity/connectivity.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +17,8 @@ import 'package:mahzoooz/Screen/bottomNavigationBar/Discounts.dart';
 import 'package:mahzoooz/Screen/bottomNavigationBar/Profile.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
+import 'package:mahzoooz/main.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
@@ -55,7 +63,7 @@ class _HomeState extends State<Home> {
       }
     });
   }
-var addresses;
+  var addresses;
   m(lat,lng) async {
     try
     {
@@ -69,12 +77,14 @@ var addresses;
       print(e);
     }
   }
+
   var DataEmapty2;//             "latitude": "24.75007441712588",
 //             "longitude": "46.775951958232405"
   getDataRandom() async {
     print(latLnglocation.longitude);
     print(latLnglocation.latitude);
     await m(latLnglocation.latitude,latLnglocation.longitude);
+    await getAddressChangeState();
     print("rrrrrrr $AddressChangموقعك  ");
     await networkRequest.getLuck(latLnglocation).then((value){
       try {
@@ -95,6 +105,38 @@ var addresses;
     });
   }
   var AddressChang;
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  Future<dynamic> myBackgroundMessageHandlerAndroid(RemoteMessage message) async {
+    if (message.data['title'] == 'Call Ended') {
+      final data = message.data;
+      flutterLocalNotificationsPlugin..cancelAll();
+      final titleMultilang = data['titleMultilang'];
+      final bodyMultilang = data['bodyMultilang'];
+
+    } else {
+      if (message.data['title'] == 'You have new message(s)' ||
+          message.data['title'] == 'New message in Group') {
+        //-- need not to do anythig for these message type as it will be automatically popped up.
+      } else if (message.data['title'] == 'Incoming Audio Call...' ||
+          message.data['title'] == 'Incoming Video Call...') {
+        // ignore: unnecessary_null_comparison
+        if (message.data != null) {
+          final data = message.data;
+
+          final title = data['title'];
+          final body = data['body'];
+          final titleMultilang = data['titleMultilang'];
+          final bodyMultilang = data['bodyMultilang'];
+
+          // await _showNotificationWithDefaultSound(
+          //     title, body, titleMultilang, bodyMultilang);
+        }
+      }
+    }
+
+    return Future<void>.value();
+  }
 
   getAddressChangeState() async {
     await HelperFunctions.getUserAddressChangeSharedPreference().then((value){
@@ -115,12 +157,224 @@ var addresses;
       });
     });
     getDataRandom();
-   // await checkLocationServicesInDevice();
+    // await checkLocationServicesInDevice();
   }
   getLngInState() async {
 
   }
+  FirebaseMessaging _firebaseMessaging =FirebaseMessaging.instance;
+  void getNotification()async{
+    await HelperFunctions.getUserEmailSharedPreference().then((value){
+      print("$value value value");
+      if(value!=null ||value!=false){
+        print("$value value value");
+        _firebaseMessaging.subscribeToTopic('SendRegistered');
+      }else{
+        print("$value valuekkkk value");
+         _firebaseMessaging.subscribeToTopic('SendUnRegistered');
+      }
+      void listenToNotification() async {
+        //FOR ANDROID  background notification is handled here whereas for iOS it is handled at the very top of main.dart ------
+        if (Platform.isAndroid) {
+          //   await _showNotificationWithDefaultSound("", "", "", "");
 
+          FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandlerAndroid);
+        }
+        //ANDROID & iOS  OnMessage callback
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+          // ignore: unnecessary_null_comparison
+          if (message.data != null) {
+            if (message.data['title'] != 'Call Ended' &&
+                message.data['title'] != 'You have new message(s)' &&
+                message.data['title'] != 'Incoming Video Call...' &&
+                message.data['title'] != 'Incoming Audio Call...' &&
+                message.data['title'] != 'Incoming Call ended' &&
+                message.data['title'] != 'New message in Group') {
+              //Olichat.toast(getTranslated(this.context, 'newnotifications'));
+            } else {
+              if (message.data['title'] == 'New message in Group') {
+                //   var currentpeer =
+                //  Provider.of<CurrentChatPeer>(this.context, listen: false);
+                if (1 != 2) {
+                  flutterLocalNotificationsPlugin..cancelAll();
+
+                  showOverlayNotification((context) {
+                    return Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      child: SafeArea(
+                        child: ListTile(
+                          title: Text(message.data['titleMultilang']),
+                          subtitle: Text(message.data['bodyMultilang']),
+                          trailing: IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () {
+                                OverlaySupportEntry.of(context).dismiss();
+                              }),
+                        ),
+                      ),
+                    );
+                  }, duration: Duration(milliseconds: 2000));
+                }
+              } else if (message.data['title'] == 'Call Ended') {
+                flutterLocalNotificationsPlugin..cancelAll();
+              } else {
+                if (message.data['title'] == 'Incoming Audio Call...' ||
+                    message.data['title'] == 'Incoming Video Call...') {
+                  // ignore: unnecessary_null_comparison
+                  if (message.data != null) {
+                    final data = message.data;
+                    print("yyyyyyyyyy11");
+                    final title = data['title'];
+                    final body = data['body'];
+                    final titleMultilang = data['titleMultilang'];
+                    final bodyMultilang = data['bodyMultilang'];
+
+                    // await _showNotificationWithDefaultSound(
+                    //     title, body, titleMultilang, bodyMultilang);
+                  }
+                } else if (message.data['title'] == 'You have new message(s)') {
+                  final data = message.data;
+                  //  var currentpeer =
+                  // Provider.of<CurrentChatPeer>(this.context, listen: false);
+                  //  await _showNotificationWithDefaultSoundchat(
+                  //      data['title'],
+                  //      data['body'],
+                  //      message.data['titleMultilang'],
+                  //      message.data['bodyMultilang']);
+                  if (1 != 2) {
+                    FlutterRingtonePlayer.playNotification();
+                    showOverlayNotification((context) {
+                      return Card(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        child: SafeArea(
+                          child: ListTile(
+                            title: Text(message.data['titleMultilang']),
+                            subtitle: Text(message.data['bodyMultilang']),
+                            trailing: IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  OverlaySupportEntry.of(context).dismiss();
+                                }),
+                          ),
+                        ),
+                      );
+                    }, duration: Duration(milliseconds: 2000));
+                  }
+                } else {
+                  showOverlayNotification((context) {
+                    return Card(
+                      margin: const EdgeInsets.symmetric(horizontal: 4),
+                      child: SafeArea(
+                        child: ListTile(
+                          // leading: Image.network(
+                          //   message.data['image'],
+                          //   width: 50,
+                          //   height: 70,
+                          //   fit: BoxFit.cover,
+                          // ),
+                          title: Text(message.data['titleMultilang']),
+                          subtitle: Text(message.data['bodyMultilang']),
+                          trailing: IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () {
+                                OverlaySupportEntry.of(context).dismiss();
+                              }),
+                        ),
+                      ),
+                    );
+                  }, duration: Duration(milliseconds: 2000));
+                }
+              }
+            }
+          }
+        });
+        //ANDROID & iOS  onMessageOpenedApp callback
+        FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+          Map<String, dynamic> notificationData = message.data;
+          AndroidNotification android = message.notification?.android;
+          if (android != null) {
+            if (notificationData['title'] == 'Call Ended') {
+              flutterLocalNotificationsPlugin..cancelAll();
+            } else if (notificationData['title'] != 'Call Ended' &&
+                notificationData['title'] != 'You have new message(s)' &&
+                notificationData['title'] != 'Incoming Video Call...' &&
+                notificationData['title'] != 'Incoming Audio Call...' &&
+                notificationData['title'] != 'Incoming Call ended' &&
+                notificationData['title'] != 'New message in Group') {
+              flutterLocalNotificationsPlugin..cancelAll();
+
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => MyApp(
+
+                      )));
+            } else {
+              flutterLocalNotificationsPlugin..cancelAll();
+            }
+          }
+        });
+
+
+        Future<dynamic> myBackgroundMessageHandlerIos(RemoteMessage message) async {
+          await Firebase.initializeApp();
+          // ignore: unnecessary_null_comparison
+          if (message.data != null) {
+            if (message.data['title'] == 'Call Ended') {
+              final data = message.data;
+
+              final titleMultilang = data['titleMultilang'];
+              final bodyMultilang = data['bodyMultilang'];
+              flutterLocalNotificationsPlugin..cancelAll();
+              // await _showNotificationWithDefaultSound('Missed Call',
+              //     'You have Missed a Call', titleMultilang, bodyMultilang);
+            } else {
+              if (message.data['title'] == 'You have new message(s)') {
+              } else if (message.data['title'] == 'Incoming Audio Call...' ||
+                  message.data['title'] == 'Incoming Video Call...') {
+                // ignore: unnecessary_null_comparison
+                if (message.data != null) {
+                  final data = message.data;
+                  final title = data['title'];
+                  final body = data['body'];
+                  final titleMultilang = data['titleMultilang'];
+                  final bodyMultilang = data['bodyMultilang'];
+                  // await _showNotificationWithDefaultSound(
+                  //     title, body, titleMultilang, bodyMultilang);
+                }
+              }
+            }
+          }
+
+          return Future<void>.value();
+        }
+
+
+        FirebaseMessaging.instance.getInitialMessage().then((message) {
+          if (message != null) {
+            Map<String, dynamic> notificationData = message.data;
+            if (notificationData['title'] != 'Call Ended' &&
+                notificationData['title'] != 'You have new message(s)' &&
+                notificationData['title'] != 'Incoming Video Call...' &&
+                notificationData['title'] != 'Incoming Audio Call...' &&
+                notificationData['title'] != 'Incoming Call ended' &&
+                notificationData['title'] != 'New message in Group') {
+              flutterLocalNotificationsPlugin..cancelAll();
+
+              Navigator.push(
+                  context,
+                  new MaterialPageRoute(
+                      builder: (context) => MyApp(
+
+                      )));
+            }
+          }
+        });
+      }
+      // tokenApi  = value ;
+    });
+
+  }
 
   int _selectedIndex ;
 
@@ -135,7 +389,7 @@ var addresses;
     if(token==null){
       Fluttertoast.showToast(
           msg: " يجب عليك تسجيل دخول",
-          toastLength: Toast.LENGTH_SHORT,
+        //  toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Color(0xff38056e).withOpacity(0.9),
@@ -144,19 +398,19 @@ var addresses;
       );
       await getData();
 
-        if (!initSign){
-          Navigator.push(
-            context,
-            PageTransition(
-              type: PageTransitionType.leftToRight,
-              duration: Duration(milliseconds: 550),
-              reverseDuration: Duration(milliseconds: 700),
-              child:  welcome(true), //welcome(true),
-            ),
-          );
-          setState(() {
-            initSign=true;
-          });
+      if (!initSign){
+        Navigator.push(
+          context,
+          PageTransition(
+            type: PageTransitionType.leftToRight,
+            duration: Duration(milliseconds: 550),
+            reverseDuration: Duration(milliseconds: 700),
+            child:  welcome(true), //welcome(true),
+          ),
+        );
+        setState(() {
+          initSign=true;
+        });
       }
     }
 
@@ -186,7 +440,7 @@ var addresses;
           ),
         ),
       );
-     // FlutterOpenWhatsapp.sendSingleMessage("+9665665151191", "Hello");//+972598390185
+      // FlutterOpenWhatsapp.sendSingleMessage("+9665665151191", "Hello");//+972598390185
     }else  if(index==2){
       print("pp $index");
       if(token==null) {
@@ -228,9 +482,27 @@ var addresses;
       });
     });
   }
+  var DataSaprot;
+  var valuekey;
+  getDataSaprotState() async {
+
+   // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+        //    bytes = convert.base64.decode(value);
+      });
+
+
+    });
+    print("${valuekey}  keykeykey");
+  }
+  StreamSubscription subscription;
+  var conect;
   @override
   void initState() {
-  //  getImageInState();
+
+    //  getImageInState();
     gettoken();
     getProfileState();
     DataEmapty2="1";
@@ -242,8 +514,9 @@ var addresses;
     dataLocation=[];
     DataEmapty=true;
     initSign=false;
-
+    getNotification();
     loud=false;
+    getDataSaprotState();
     //checkLocationServicesInDevice();
     // TODO: implement initState
     super.initState();
@@ -252,23 +525,97 @@ var addresses;
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor( Color(0x00ffffff));
     List<Widget> _widgettajerAccount = <Widget>[
-      homeWidget(latLnglocation),
+      homeWidget(latLnglocation,DataEmapty2),
       Discounts(latLnglocation),
       Profile(),
 
-      homeWidget(latLnglocation),
+      homeWidget(latLnglocation,DataEmapty2),
 
     ];
     return  //dataLocation.isEmpty?
-      DataEmapty2=="1"?Scaffold(
+      OfflineBuilder(
+        child: Container(),
+        connectivityBuilder: (
+        BuildContext context,
+        ConnectivityResult connectivity,
+        Widget child,
+      ) {
+      final bool connected = connectivity != ConnectivityResult.none;
+      return connected?  DataEmapty2=="1"?Scaffold(
           body:Container(child: Loading())): DataEmapty2==null?Scaffold(
-      body:noDataLocation()):
-    Scaffold(
-      body: _widgettajerAccount.elementAt(_selectedIndex),
-      bottomNavigationBar: bottomNavigationBar(),
-    );
+          body:noDataLocation()):
+      Scaffold(
+        body: _widgettajerAccount.elementAt(_selectedIndex),
+        bottomNavigationBar: bottomNavigationBar(),
+      ):
+      Scaffold(
+          body: Container(
+            margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.18),
+        height: MediaQuery.of(context).size.height*0.56                                                                                            ,
+        child: Center(
+          child: Column(
+            crossAxisAlignment:CrossAxisAlignment.center ,
+            mainAxisAlignment:MainAxisAlignment.spaceBetween ,
+            children: [
+
+              Container(
+                width: 260.0,
+                height: 260.0,
+                padding:EdgeInsets.all(45),
+                decoration: new BoxDecoration(
+                  color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+                  shape: BoxShape.circle,
+                ),
+                child: Container(
+                  width: 120.0,
+                  height: 120.0,
+
+                  padding:EdgeInsets.all(50),
+                  decoration: new BoxDecoration(
+                    color: Color(0xffC5E696),// Color(0xffCEEAE7),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Container(
+                    width: 60.0,
+                    height: 60.0,
+                    decoration: new BoxDecoration(
+                      color:Color(0xff91B958),//Color(0xff029789),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Image.asset("Assets/sad.png") ,
+                  ),
+                ),
+              ),
+              SizedBox(height: 45,),
+
+              new Text(
+                translator.translate("تأكد من اتصال بالانترنت"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+
+                  fontWeight: FontWeight.w800,
+                  fontSize: 16,
+                  color:Color(0xff91B958),
+                ),
+              ),
+              // new Text(
+              //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+              //   textAlign: TextAlign.center,
+              //   style: TextStyle(
+              //
+              //     fontWeight: FontWeight.w700,
+              //     fontSize: 16,
+              //     color:Color(0xff029789),
+              //   ),
+              // ),
+            ],
+          ),
+        ),
+      ));
+    },
+     );
     //:Scaffold(
-     //   body:Loading());
+    //   body:Loading());
     // Container(
     //
     //
@@ -362,7 +709,7 @@ var addresses;
         items: [
           BottomNavigationBarItem(
             icon: Container(
-              margin:EdgeInsets.only(bottom: 6,top: 2) ,
+                margin:EdgeInsets.only(bottom: 6,top: 2) ,
                 child: Image.asset("Assets/Home.png",color: _selectedIndex==0?Color(0xff38056e):Color(0xFF748A9D),)),
             label: translator.translate('home'),
 
@@ -455,9 +802,9 @@ var addresses;
               ),
               GestureDetector(
                 onTap:()=> {
-                 dataProfile==null?launcvWh("+966566515191", " هلا فريق محظوووظ "):   launcvWh("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
+                  dataProfile==null?launcvWh("+${DataSaprot["support"]}", " هلا فريق محظوووظ "):   launcvWh("+${DataSaprot["support"]}", " هلا فريق محظوووظ انا${dataProfile['name']}"),
 
-                 // dataProfile==null? FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا"):FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
+                  // dataProfile==null? FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا"):FlutterOpenWhatsapp.sendSingleMessage("+966566515191", " هلا فريق محظوووظ انا${dataProfile['name']}"),
                   print("ooo"),
                   Navigator.pop(context)},
                 child: new Container(
@@ -468,26 +815,26 @@ var addresses;
                     color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                   ),
                   child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
 
-                        new Text(
-                    translator.translate( "Contact us via WhatsApp"),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color:Color(0xffffffff),
+                          new Text(
+                            translator.translate( "Contact us via WhatsApp"),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                              color:Color(0xffffffff),
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 5,),
-                        Container(
-                            margin:EdgeInsets.only(bottom: 5),
-                            child: Image.asset("Assets/whatsapp.png",width: 20,)),
-                      ],
-                    )
+                          SizedBox(width: 5,),
+                          Container(
+                              margin:EdgeInsets.only(bottom: 5),
+                              child: Image.asset("Assets/whatsapp.png",width: 20,)),
+                        ],
+                      )
                   ),
                 ),
               ),
@@ -498,43 +845,43 @@ var addresses;
       );
   }
 
-void launcvWh(@required num,@required mess) async{
- // String url="https://wa.me/phone=$num&text=$mess";
- //    String url="whatsapp://send?phone=$num&text=$mess";
- //    await canLaunch(url)?launch(url):  Fluttertoast.showToast(
- //        msg: "can’ open whatsapp",
- //        toastLength: Toast.LENGTH_SHORT,
- //        gravity: ToastGravity.BOTTOM,
- //        timeInSecForIosWeb: 1,
- //        backgroundColor: Color(0xff38056e).withOpacity(0.9),
- //        textColor: Colors.white,
- //        fontSize: 16.0
- //    );
+  void launcvWh(@required num,@required mess) async{
+    // String url="https://wa.me/phone=$num&text=$mess";
+    //    String url="whatsapp://send?phone=$num&text=$mess";
+    //    await canLaunch(url)?launch(url):  Fluttertoast.showToast(
+    //        msg: "can’ open whatsapp",
+    //        toastLength: Toast.LENGTH_SHORT,
+    //        gravity: ToastGravity.BOTTOM,
+    //        timeInSecForIosWeb: 1,
+    //        backgroundColor: Color(0xff38056e).withOpacity(0.9),
+    //        textColor: Colors.white,
+    //        fontSize: 16.0
+    //    );
 
-  var whatsappURl_android = "whatsapp://send?phone="+num+"&text=$mess";
-  var whatappURL_ios ="https://wa.me/$num?text=${Uri.parse("$mess")}";
-  if(Platform.isIOS){
-    // for iOS phone only
-    if( await canLaunch(whatappURL_ios)){
-      await launch(whatappURL_ios, forceSafariVC: false);
+    var whatsappURl_android = "whatsapp://send?phone="+num+"&text=$mess";
+    var whatappURL_ios ="https://wa.me/$num?text=${Uri.parse("$mess")}";
+    if(Platform.isIOS){
+      // for iOS phone only
+      if( await canLaunch(whatappURL_ios)){
+        await launch(whatappURL_ios, forceSafariVC: false);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp no installed")));
+
+      }
+
     }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: new Text("whatsapp no installed")));
+      // android , web
+      if( await canLaunch(whatsappURl_android)){
+        await launch(whatsappURl_android,);
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: new Text("whatsapp no installed")));
+
+      }
+
 
     }
-
-  }else{
-    // android , web
-    if( await canLaunch(whatsappURl_android)){
-      await launch(whatsappURl_android,);
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: new Text("whatsapp no installed")));
-
-    }
-
 
   }
-
-}
 }

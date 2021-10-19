@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_offline/flutter_offline.dart';
 
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -46,6 +47,8 @@ String Password;
   String otp, authStatus = "";
   @override
   void initState() {
+    getTokenFCMState();
+    getDataSaprotState();
     _obscureText = false;
   }
   getLoggedInState() async {
@@ -54,6 +57,20 @@ String Password;
       phoneNumber= value;
     });
     ;
+  }
+  var valuekey;
+  var DataSaprot;
+
+  getDataSaprotState() async {
+    // NetworkRequest networkRequest=new NetworkRequest();
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        DataSaprot=value;
+
+      });
+
+    });
+
   }
   var _otp;
   void generateOtp([int min = 1000, int max = 9999]) {
@@ -172,7 +189,38 @@ String Password;
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return OfflineBuilder(
+        child: Container(),
+        connectivityBuilder: (
+            BuildContext context,
+            ConnectivityResult connectivity,
+            Widget child,
+            ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected? Scaffold(
+      appBar: AppBar(
+
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Color(0xFFFEFEFE).withOpacity(0.0),
+        leading:  InkWell(
+          onTap:(){
+            Navigator.pop(context);
+          },
+          child: Container(
+              margin: EdgeInsets.all(8),
+              child: Icon(Icons.arrow_back_ios,color: Color(0xff38056e),)),
+        ),
+        title: new Text(
+          "",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 14,
+            color:Color(0xff747474),
+          ),
+        ),
+      ),
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -180,14 +228,14 @@ String Password;
         child: Container(
           margin: EdgeInsets.all(16),
           child: SingleChildScrollView(
-            child: Column(
+            child:DataSaprot==null?Center(child: Loading()): Column(
               children: [
                 Container(
-                    height: MediaQuery.of(context).size.height*.3,
+                    height: MediaQuery.of(context).size.height*.22,
                     child:Center(child:  Image.asset('Assets/logoSmail.png'),)
                 ),
                 Container(
-                    height: MediaQuery.of(context).size.height*.25,
+                    height: MediaQuery.of(context).size.height*.23,
                     width:MediaQuery.of(context).size.width ,
                     margin: EdgeInsets.only(right: 16,left: 16),
                     child:Column(
@@ -209,8 +257,8 @@ String Password;
                               ),
                             ),
                           ),
-                        ): new Text(
-                translator.translate(  "اهلاً بيك في محظوووظ"),
+                        ): new Text(DataSaprot["login_title"],
+               // translator.translate(  "اهلاً بيك في محظوووظ"),
                           // textAlign: TextAlign.right,gt3
                           style: TextStyle(fontWeight: FontWeight.w700,
                             fontSize: 23,
@@ -218,8 +266,8 @@ String Password;
                           ),
                         ),
                         SizedBox(height: 16,),
-                        setPass?Container(): new Text(
-                          translator.translate( "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
+                        setPass?Container(): new Text(DataSaprot["login_desc"],
+                         // translator.translate( "محظوووظ أول منصة ترفيهية \nتجمع لك جميع خصومات المتاجر\n في مكان واحد"),
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
@@ -233,7 +281,7 @@ String Password;
                     )),
 
                 Container(
-                  height: MediaQuery.of(context).size.height*.25,
+                  height: MediaQuery.of(context).size.height*.22,
                   child:Column(
                     children: [ Container(
                       width: MediaQuery.of(context).size.width*0.815,
@@ -284,7 +332,7 @@ String Password;
 
                       ),
                     ),
-                      isLouding?SizedBox(height: 22,): SizedBox(height: 16,),
+                      isLouding?SizedBox(height: 22,): SizedBox(height: 12,),
                       isLouding?Loading():  InkWell(
 
                         onTap: ()async {
@@ -312,7 +360,7 @@ String Password;
 
                                     await getUserHasAccount(
                                         phoneNumber, Password);
-                                    if (message == "OK") {
+                                    if (message == null) {
                                       if (isReservation) {
                                         Navigator.pop(context);
                                       } else {
@@ -399,7 +447,7 @@ String Password;
                         },
                         child: new Container(
                           width: MediaQuery.of(context).size.width*0.815,
-                          height: MediaQuery.of(context).size.height*0.065,
+                          height: MediaQuery.of(context).size.height*0.06,
                           decoration: BoxDecoration(
                             color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                           ),
@@ -448,7 +496,7 @@ String Password;
                     );
                   },
                   child: Container(
-                    height:MediaQuery.of(context).size.height*.2 ,
+                    height:MediaQuery.of(context).size.height*.15 ,
                     alignment: Alignment.bottomCenter,
                     child: Center(
                         child: Row(
@@ -474,11 +522,83 @@ String Password;
           ),
         ),
       ),
-    );
+    ):
+          Scaffold(
+          body: Container(
+          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.18),
+          height: MediaQuery.of(context).size.height*0.56                                                                                            ,
+          child: Center(
+          child: Column(
+          crossAxisAlignment:CrossAxisAlignment.center ,
+          mainAxisAlignment:MainAxisAlignment.spaceBetween ,
+          children: [
+
+          Container(
+          width: 260.0,
+          height: 260.0,
+          padding:EdgeInsets.all(45),
+          decoration: new BoxDecoration(
+          color:Color(0xffF3FDE5), // Color(0xffF0FAF9),C5E697
+          shape: BoxShape.circle,
+          ),
+          child: Container(
+          width: 120.0,
+          height: 120.0,
+
+          padding:EdgeInsets.all(50),
+          decoration: new BoxDecoration(
+          color: Color(0xffC5E696),// Color(0xffCEEAE7),
+          shape: BoxShape.circle,
+          ),
+          child: Container(
+          width: 60.0,
+          height: 60.0,
+          decoration: new BoxDecoration(
+          color:Color(0xff91B958),//Color(0xff029789),
+          shape: BoxShape.circle,
+          ),
+          child: Image.asset("Assets/sad.png") ,
+          ),
+          ),
+          ),
+          SizedBox(height: 45,),
+
+          new Text(
+          translator.translate("تأكد من اتصال بالانترنت"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+          textAlign: TextAlign.center,
+          style: TextStyle(
+
+          fontWeight: FontWeight.w800,
+          fontSize: 16,
+          color:Color(0xff91B958),
+          ),
+          ),
+          // new Text(
+          //   "لايوجد عروض متوفرة", //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
+          //   textAlign: TextAlign.center,
+          //   style: TextStyle(
+          //
+          //     fontWeight: FontWeight.w700,
+          //     fontSize: 16,
+          //     color:Color(0xff029789),
+          //   ),
+          // ),
+          ],
+          ),
+          ),
+          ));});
+  }
+  var tokenFCM;
+  getTokenFCMState() async {
+    await HelperFunctions.getUserTokenFvmSharedPreference().then((value){
+      setState(() {
+        tokenFCM  = value;
+      });
+    });
   }
   getUserHasAccount(String phone,String pass) async {
 
-    await   networkRequest.Login(phone,pass).then((value){
+    await   networkRequest.Login(phone,pass,tokenFCM).then((value){
       setState(() {
         message  = value['message'];
 

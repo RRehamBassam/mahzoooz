@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mahzoooz/Models/category.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscounts.dart';
 import 'package:mahzoooz/Widget/ViewRestaurantDiscountsLoud.dart';
@@ -6,11 +7,14 @@ import 'package:mahzoooz/Widget/tabs.dart';
 import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/Widget/loading.dart';
 import 'package:mahzoooz/services/appCategoris.dart';
+import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:provider/provider.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'dart:typed_data';
 import 'dart:convert' as convert;
+
+import 'bottomNavigationBar/noConnect.dart';
 class CountriesData extends StatefulWidget {
   var title;
   var id;
@@ -34,12 +38,32 @@ class _CountriesDataState extends State<CountriesData> {
   int count=1;
   bool init;
   bool loud;
+  LatLng latLnglocation;
+
+  double lat;
+  double lng;
+  getLatInState() async {
+    await HelperFunctions.getUserLatInSharedPreference().then((value){
+      setState(() {
+        lat  = value;
+      });
+    });
+    await HelperFunctions.getUserLngSharedPreference().then((value){
+      setState(() {
+        lng  = value;
+        latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
+      });
+    });
+  //  getDataRandom();
+    // await checkLocationServicesInDevice();
+  }
   @override
   void initState() {
     isEmpty=false;
     count=1;
     loud=false;
-   // bytesback= convert.base64.decode(data['imageName'].split(',').last);
+    getLatInState();
+    // bytesback= convert.base64.decode(data['imageName'].split(',').last);
     final dataCategory = Category(
       categoryId: 0,
       name: "مطاعم غربية",
@@ -106,9 +130,11 @@ class _CountriesDataState extends State<CountriesData> {
               builder: (context, appState, _) {
 
                 return     FutureBuilder<dynamic>(
-                    future:appState.id!=-1?networkRequest.subCategoriesGetPaged(appState.id):networkRequest.subCategoriesGetPaged(id),
+                    future:appState.id!=-1?networkRequest.subCategoriesGetPaged(appState.id,latLnglocation):networkRequest.subCategoriesGetPaged(id,latLnglocation),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
+                        if(snapshot.data==[])
+                          return Container();
                         if(appState.show){
                           subcategoriesData=snapshot.data['categories'];
                           appState.updateshowData();
@@ -388,6 +414,12 @@ class _CountriesDataState extends State<CountriesData> {
                         );
                       }
                       else if (snapshot.hasError) {
+                        Navigator.pushReplacement(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => NoConnect(
+
+                                )));
                         return Center(child: Text("تأكد من إتصال بالإنرنت"));
                       }
                       // By default, show a loading spinner.
