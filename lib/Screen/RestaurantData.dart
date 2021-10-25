@@ -250,7 +250,7 @@ Future<void> share() async {
                                SizedBox(width: 10,),
                                InkWell(
                                  onTap: ()async{
-                                   if(token==null){
+                                   if(token==null ||token==""){
                                      Fluttertoast.showToast(
                                          msg: translator.translate("عفوا سجل دخولك اولا"),
                                          toastLength: Toast.LENGTH_SHORT,
@@ -329,7 +329,7 @@ Future<void> share() async {
                                SizedBox(width: 10,),
                                InkWell(
                                  onTap: ()async{
-                                   if(token==null){
+                                   if(token==null ||token==""){
                                      Fluttertoast.showToast(
                                          msg: "عفوا سجل دخولك اولا",
                                          toastLength: Toast.LENGTH_SHORT,
@@ -1565,7 +1565,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-    translator.translate("يمكنك الاتصال بالرقم التالي"),
+    data['contacts'].length==0?"":   translator.translate("يمكنك الاتصال بالرقم التالي"),
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w600,
@@ -1575,7 +1575,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
             textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         ),
         SizedBox(height: 6,),
-        data['contacts'][0]['mobile']==null?Container():   Row(children: [
+        data['contacts'].length==0?Container() :data['contacts'][0]['mobile']==null?Container():   Row(children: [
           Text(
             data['contacts'].length==0?'' :'${data['contacts'][0]['mobile'].toString()}  '.toString(),
             style: TextStyle(
@@ -1610,7 +1610,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         ],),
 
         SizedBox(height: 6,),
-        data['contacts'][0]['phone']==null?Container():   Row(children: [
+        data['contacts'].length==0?Container():  data['contacts'][0]['phone']==null?Container():   Row(children: [
           Text(
             data['contacts'].length==0?'' : '${data['contacts'][0]['phone'].toString()}'.toString(),
             style: TextStyle(
@@ -1645,7 +1645,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
 //           )
         ],),
 
-        data['contacts'][0]['email']==null? Container(): Text(
+        data['contacts'].length==0?Container():  data['contacts'][0]['email']==null? Container(): Text(
     translator.translate('او عبر إيميل التالى'),
           style: TextStyle(
             fontSize: 17,
@@ -1655,7 +1655,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           ),
             textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left
         ),
-        data['contacts'][0]['email']==null? Container():  Row(
+        data['contacts'].length==0?Container(): data['contacts'][0]['email']==null? Container():  Row(
         children: [
           Text(
             data['contacts'].length==0?'' : '${data['contacts'][0]['email'].toString()}'.toString(),

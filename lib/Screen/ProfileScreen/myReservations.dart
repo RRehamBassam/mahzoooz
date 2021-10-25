@@ -62,7 +62,7 @@ class _myReservationsState extends State<myReservations> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 68,),
+                          MediaQuery.of(context).size.height<600 ?SizedBox(height: 2,):    SizedBox(height: 68,),
 
                           new Text(
                             translator.translate("لايوجد بيانات"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],

@@ -37,7 +37,7 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
     return Container(
 
       margin: EdgeInsets.symmetric(vertical: 8),
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.all( MediaQuery.of(context).size.height<600 ?6:12),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
@@ -50,7 +50,7 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
         borderRadius: BorderRadius.circular(8.0),
         color: const Color(0xffffffff),
       ),
-      height: MediaQuery.of(context).size.height*0.18,
+     // height: MediaQuery.of(context).size.height*0.18,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -60,7 +60,8 @@ class _SingleItemReservationState extends State<SingleItemReservation> {
               children: [
                Row(children: [
                  Container(
-                   height: 72.0,width: 65.0,
+                   height: MediaQuery.of(context).size.height<600 ?65.0: 72.0
+                   ,width: 65.0,
                    // margin: EdgeInsets.all(16.0),
                    decoration: BoxDecoration(
                      borderRadius: BorderRadius.circular(10.0),
@@ -131,7 +132,7 @@ Spacer(),
           ),
           Container(height: 1,width: MediaQuery.of(context).size.width*0.84,color: Colors.grey.withOpacity(0.2),),
           Container(
-            height: MediaQuery.of(context).size.height*0.055,
+         //   height: MediaQuery.of(context).size.height*0.055,
 
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

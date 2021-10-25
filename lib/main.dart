@@ -351,6 +351,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         userIsLoggedIn  = value;
       });
+      print("$userIsLoggedIn kkkkkk");
     });
   }
   void showConnectivitySnackBar(ConnectivityResult result) {
@@ -377,7 +378,7 @@ var _token;
     userIsLoggedIn=false;
     // _getPosition();
     //_getCurrentLocation();
-    _getPosition();
+  //  _getPosition();
     //  checkLocationServicesInDevice();
     // getcheckLocationInState();
     //getLoggedInState();

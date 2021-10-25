@@ -80,7 +80,7 @@ class _SettingsState extends State<Settings> {
             },
             child: Container(
               width: MediaQuery.of(context).size.width*0.85,
-              height: MediaQuery.of(context).size.height*0.08,
+             // height: MediaQuery.of(context).size.height*0.08,
               margin: EdgeInsets.symmetric(vertical:8),
               padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: 12) ,
               decoration: BoxDecoration(
@@ -108,7 +108,7 @@ class _SettingsState extends State<Settings> {
                     textAlign: TextAlign.right,
                   ),
                 ),
-                SizedBox(height: 8,),// Adobe XD layer: 'text' (text)
+                SizedBox(height:  MediaQuery.of(context).size.height<600? 2: 8,),// Adobe XD layer: 'text' (text)
                 SizedBox(
                   width: 66.0,
                   child: Text(
@@ -149,9 +149,9 @@ class _SettingsState extends State<Settings> {
           ),
               Container(
                 width: MediaQuery.of(context).size.width*0.85,
-                height: MediaQuery.of(context).size.height*0.08,
+               // height: MediaQuery.of(context).size.height*0.08,
                 margin: EdgeInsets.symmetric(vertical:8),
-                padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: 12) ,
+                padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: MediaQuery.of(context).size.height<600? 4: 12) ,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(28.0),
                   color: const Color(0xfff8f8f8),
@@ -176,7 +176,7 @@ class _SettingsState extends State<Settings> {
                               textAlign: TextAlign.right,
                             ),
                           ),
-                          SizedBox(height: 8,),// Adobe XD layer: 'text' (text)
+                          SizedBox(height: MediaQuery.of(context).size.height<600? 2: 8,),// Adobe XD layer: 'text' (text)
                           SizedBox(
                             width: 66.0,
                             child: Text(
@@ -220,9 +220,9 @@ class _SettingsState extends State<Settings> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width*0.85,
-                  height: MediaQuery.of(context).size.height*0.08,
+                //  height: MediaQuery.of(context).size.height*0.08,
                   margin: EdgeInsets.symmetric(vertical:8),
-                  padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: 12) ,
+                  padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: MediaQuery.of(context).size.height<600? 4: 12) ,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(28.0),
                     color: const Color(0xfff8f8f8),
@@ -248,7 +248,7 @@ class _SettingsState extends State<Settings> {
                                 textAlign:translator.currentLanguage == 'ar' ? TextAlign.right:TextAlign.left,
                               ),
                             ),
-                            SizedBox(height: 8,),// Adobe XD layer: 'text' (text)
+                            SizedBox(height: MediaQuery.of(context).size.height<600? 2: 8,),// Adobe XD layer: 'text' (text)
                             SizedBox(
                               width:translator.currentLanguage == 'ar' ?66 :110.0,
                               child: Text(
@@ -290,9 +290,9 @@ class _SettingsState extends State<Settings> {
           // Adobe XD layer: 'Bg' (shape)
               Container(
                 width: MediaQuery.of(context).size.width*0.85,
-                height: MediaQuery.of(context).size.height*0.08,
+               // height: MediaQuery.of(context).size.height*0.08,
                 margin: EdgeInsets.symmetric(vertical:8),
-                padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: 9) ,
+                padding:EdgeInsets.only(top: 16,left: 16,right: 16,bottom: MediaQuery.of(context).size.height<600? 2: 9) ,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(28.0),
                   color: const Color(0xfff8f8f8),
@@ -342,18 +342,22 @@ class _SettingsState extends State<Settings> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            CustomSwitch(
-                              activeColor: Color(0xff38056e),
+                            SizedBox(
+                              height:MediaQuery.of(context).size.height<600?30:35,
+                              child: CustomSwitch(
 
-                              value: status,
-                              onChanged: (value) {
-                              //  print("VALUE : $value");
-                                setState(() {
-                                  status = value;
-                                });
-                              },
+                                activeColor: Color(0xff38056e),
+
+                                value: status,
+                                onChanged: (value) {
+                                //  print("VALUE : $value");
+                                  setState(() {
+                                    status = value;
+                                  });
+                                },
+                              ),
                             ),
-                            SizedBox(height: 4.0,),
+                            MediaQuery.of(context).size.height<600?   SizedBox(height: 2.0,):  SizedBox(height: 4.0,),
                             // Text('Value : $status', style: TextStyle(
                             //     color: Colors.black,
                             //     fontSize: 20.0

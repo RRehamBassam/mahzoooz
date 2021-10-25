@@ -5,7 +5,7 @@ import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mahzoooz/Screen/Auth/createAccount.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+
 class ActivateCode extends StatefulWidget {
   String smsOTP;
    String phoneNumber;
@@ -32,7 +32,7 @@ class _ActivateCodeState extends State<ActivateCode> {
 
   @override
   void dispose() {
-    SmsAutoFill().unregisterListener();
+  //  SmsAutoFill().unregisterListener();
     super.dispose();
   }
   // Future<void> signIn(String smsOTP) async {

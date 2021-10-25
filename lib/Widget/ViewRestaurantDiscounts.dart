@@ -188,7 +188,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                               SizedBox(width: 10,),
                               InkWell(
                                 onTap: ()async{
-                                  if(token==null){
+                                  if(token==null ||token==""){
                                     Fluttertoast.showToast(
                                         msg: "عفوا سجل دخولك اولا",
                                         toastLength: Toast.LENGTH_SHORT,
@@ -301,7 +301,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                              SizedBox(width: 10,),
                              InkWell(
                                onTap: ()async{
-                                 if(token==null){
+                                 if(token==null ||token==""){
                                    Fluttertoast.showToast(
                                        msg: "عفوا سجل دخولك اولا",
                                        toastLength: Toast.LENGTH_SHORT,
@@ -390,7 +390,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                         left: 0,
                         child:Container(
                           width:MediaQuery.of(context).size.width*0.6,
-                          height: 160,
+                          height: 161,
                           padding:EdgeInsets.all(16.0) ,
                           // margin: EdgeInsets.all(5.0),
                           decoration: BoxDecoration(
@@ -407,7 +407,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(height:16,),
+                              SizedBox(height:12,),
                              Row(
                                children: [
                                  SizedBox(width: 4,),
@@ -487,8 +487,8 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(width: 14,)  ,
-                                  Row(
+                                SizedBox(width:MediaQuery.of(context).size.height<600?4: 14,)  ,
+                                  MediaQuery.of(context).size.height<600?Container():   Row(
                                     children: [
                                       new Text(//{data['lastDate'].toString().split('T')[1]}
                                         translator.translate( "استعمل مؤخراً منذ"),
@@ -521,7 +521,29 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                                   //   ),
                                   // )
                                 ],
-                              ),
+                              ), MediaQuery.of(context).size.height<600?Row(
+                                children: [
+                                  new Text(//{data['lastDate'].toString().split('T')[1]}
+                                    translator.translate( "استعمل مؤخراً منذ"),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: MediaQuery.of(context).size.height<600 ?6:10,
+                                      color:Color(0xff909090),
+                                    ),
+                                  ),
+                                  new Text(//{data['lastDate'].toString().split('T')[1]}
+                                    " ${timeago.format(time)}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize:  MediaQuery.of(context).size.height<600 ?6:10,
+                                      color:Color(0xff909090),
+                                    ),
+                                  ),
+
+                                ],
+                              ) :Container() ,
                              // SizedBox(height: 20,),
                               Row(
                                 children: [
@@ -844,7 +866,7 @@ class _ViewRestaurantDiscountsState extends State<ViewRestaurantDiscounts> {
                       onTap:()async { Navigator.pop(context);
                         if(rate!=null)
                           {
-                          if(token==null){
+                          if(token==null ||token==""){
                           Fluttertoast.showToast(
                           msg: "عفوا سجل دخولك اولا",
                           toastLength: Toast.LENGTH_SHORT,

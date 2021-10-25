@@ -378,7 +378,7 @@ setState(() {
                     },
                             child: Container(
                               width: MediaQuery.of(context).size.width*0.1,
-                            child:Platform.isIOS?Icon(Icons.arrow_back_ios,size: 18,):Icon(Icons.arrow_forward_ios,size: 18,),
+                            child:Platform.isIOS?Icon(Icons.arrow_back_ios,size: 18,):Icon(Icons.arrow_back_ios_outlined,size: 18,),
                       ),
                           ),
                           Container(

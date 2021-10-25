@@ -81,11 +81,28 @@ class _HomeState extends State<Home> {
   var DataEmapty2;//             "latitude": "24.75007441712588",
 //             "longitude": "46.775951958232405"
   getDataRandom() async {
+
+    await HelperFunctions.getUserLatInSharedPreference().then((value){
+      setState(() {
+        lat  = value;
+      });
+    });
+    await HelperFunctions.getUserLngSharedPreference().then((value){
+      setState(() {
+        lng  = value;
+        latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
+
+      });
+    });
+
+
     print(latLnglocation.longitude);
     print(latLnglocation.latitude);
+    print("ppkkkkkkkp");
     await m(latLnglocation.latitude,latLnglocation.longitude);
     await getAddressChangeState();
     print("rrrrrrr $AddressChangموقعك  ");
+
     await networkRequest.getLuck(latLnglocation).then((value){
       try {
         DataEmapty2 = null;
@@ -106,7 +123,7 @@ class _HomeState extends State<Home> {
   }
   var AddressChang;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-
+var _location;
   Future<dynamic> myBackgroundMessageHandlerAndroid(RemoteMessage message) async {
     if (message.data['title'] == 'Call Ended') {
       final data = message.data;
@@ -120,7 +137,7 @@ class _HomeState extends State<Home> {
         //-- need not to do anythig for these message type as it will be automatically popped up.
       } else if (message.data['title'] == 'Incoming Audio Call...' ||
           message.data['title'] == 'Incoming Video Call...') {
-        // ignore: unnecessary_null_comparison
+        // ignore: 
         if (message.data != null) {
           final data = message.data;
 
@@ -154,9 +171,106 @@ class _HomeState extends State<Home> {
       setState(() {
         lng  = value;
         latLnglocation=LatLng(lat ==null?1:lat,lng==null?1:lng);
+
       });
     });
-    getDataRandom();
+    if(lat==null){
+     // await getLatInState();
+      // "latitude": "24.75007441712588",
+      // "longitude": "46.775951958232405"
+      Location location = new Location();
+
+      _serviceEnabled = await location.serviceEnabled();
+      _serviceEnabled = await location.requestService();
+
+      if(_serviceEnabled)
+      {
+        _permissionGranted = await location.hasPermission();
+
+        if(_permissionGranted == PermissionStatus.granted)
+        {
+
+          print('user allowed before');
+
+        }else{
+          _permissionGranted = await location.requestPermission();
+          if(_permissionGranted == PermissionStatus.granted)
+          {
+            print('user allowed');
+          }else{
+//   SystemNavigator.pop();
+          }}
+      }else{
+
+//  SystemNavigator.pop();
+
+      }
+
+      if(_serviceEnabled)
+      {
+
+        _permissionGranted = await location.hasPermission();
+
+        if(_permissionGranted == PermissionStatus.granted)
+        {  print("EE");
+
+        _location = await location.getLocation();
+        if(lat==null) {
+          print(_location.latitude.toString() + " " + _location.longitude.toString());
+          HelperFunctions.saveUserlocationLatSharedPreference(_location.latitude);
+          HelperFunctions.saveUserlocationlngSharedPreference(_location.longitude);
+        }
+        }else{
+
+          _permissionGranted = await location.requestPermission();
+          if(_permissionGranted == PermissionStatus.granted)
+          {
+            print('user allowed');
+          }else{
+            //   SystemNavigator.pop();
+          }
+
+        }
+
+      }else{
+
+
+
+      }
+      if(lat==null) {
+        // HelperFunctions.saveUserlocationLatSharedPreference(
+        //     24.75007441712588);
+        // HelperFunctions.saveUserlocationlngSharedPreference(
+        //     46.775951958232405);
+      }
+      try {
+        // await Geolocator.requestPermission().then((value) async {
+        //   await Geolocator.getCurrentPosition().then((value) async{
+        //     currentPosition = value;
+        //     if(lat==null) {
+        //       HelperFunctions.saveUserlocationLatSharedPreference(
+        //           currentPosition.latitude);
+        //       HelperFunctions.saveUserlocationlngSharedPreference(
+        //           currentPosition.longitude);
+        //     }
+        //
+        //     print(currentPosition.latitude.toString());
+        //   });
+        // });
+        //
+        // await getLatInState();
+        //
+        // await  m(lat,lng);
+        // print("$lat  kdkdkdkdk $lng");
+
+      } catch (error) {
+        print(error.toString());
+      }
+
+
+    getDataRandom();}else{
+      getDataRandom();
+    }
     // await checkLocationServicesInDevice();
   }
   getLngInState() async {
@@ -386,7 +500,7 @@ class _HomeState extends State<Home> {
   }
   getDatatoken()async{
     await gettoken();
-    if(token==null){
+    if(token==null ||token==""){
       Fluttertoast.showToast(
           msg: " يجب عليك تسجيل دخول",
         //  toastLength: Toast.LENGTH_SHORT,
@@ -443,7 +557,7 @@ class _HomeState extends State<Home> {
       // FlutterOpenWhatsapp.sendSingleMessage("+9665665151191", "Hello");//+972598390185
     }else  if(index==2){
       print("pp $index");
-      if(token==null) {
+      if(token==null ||token=="") {
         print("pp1 $index");
         getDatatoken();
       }else{
@@ -472,7 +586,7 @@ class _HomeState extends State<Home> {
   //   await launch('$link');
   // }
   bool loud;
-  var dataProfile;
+ var dataProfile;
   getProfileState() async {
     NetworkRequest networkRequest=new NetworkRequest();
     await networkRequest.getProfile().then((value){
@@ -504,7 +618,7 @@ class _HomeState extends State<Home> {
 
     //  getImageInState();
     gettoken();
-    getProfileState();
+
     DataEmapty2="1";
     getDataEmptyState();
     getAddressChangeState();
@@ -517,6 +631,7 @@ class _HomeState extends State<Home> {
     getNotification();
     loud=false;
     getDataSaprotState();
+    getProfileState();
     //checkLocationServicesInDevice();
     // TODO: implement initState
     super.initState();

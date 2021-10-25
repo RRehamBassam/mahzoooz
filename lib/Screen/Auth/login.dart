@@ -228,7 +228,12 @@ String Password;
         child: Container(
           margin: EdgeInsets.all(16),
           child: SingleChildScrollView(
-            child:DataSaprot==null?Center(child: Loading()): Column(
+            child:DataSaprot==null?Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              Loading()
+            ],): Column(
               children: [
                 Container(
                     height: MediaQuery.of(context).size.height*.22,

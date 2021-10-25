@@ -59,7 +59,7 @@ class _ProfileState extends State<Profile> {
   }
   getDatatoken()async{
     await gettoken();
-    if(token==null){
+    if(token==null ||token==""){
       Fluttertoast.showToast(
           msg: " يجب عليك تسجيل دخول",
           toastLength: Toast.LENGTH_SHORT,
@@ -439,9 +439,12 @@ bool initData;
               new MaterialPageRoute(builder: (context) => new myReservations())),
         }
         else if(text=="خروج"){
+            HelperFunctions.saveUserEmailSharedPreference(""),
+
           print('mm'),
-    HelperFunctions.saveUserEmailSharedPreference(null),
+
           HelperFunctions.saveUserLoggedInSharedPreference(false),
+
     Navigator.of(context).pushAndRemoveUntil(
     MaterialPageRoute(builder: (_){
     return MyApp();
@@ -675,7 +678,7 @@ bool initData;
                       onTap:()async { Navigator.pop(context);
                       if(rate!=null)
                       {
-                        if(token==null){
+                        if(token==null ||token==""){
                           Fluttertoast.showToast(
                               msg: "عفوا سجل دخولك اولا",
                               toastLength: Toast.LENGTH_SHORT,

@@ -12,7 +12,7 @@ import 'package:mahzoooz/Screen/Home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';

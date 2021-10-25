@@ -88,7 +88,7 @@ class _FavouritesState extends State<Favourites> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 45,),
+                            MediaQuery.of(context).size.height<600 ?SizedBox(height: 2,):  SizedBox(height: 45,),
                             new Text(
                               translator.translate("لايوجد بيانات"), //data['providerNameAr'] ==null? "مطاعم البيك السعودية":translator.currentLanguage == 'ar' ? data['providerNameAr']:data['providerNameEn'],
                               textAlign: TextAlign.center,

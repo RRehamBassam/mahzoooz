@@ -381,7 +381,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                       children: [
                                         InkWell(
                                           onTap:() async {
-                                            if(token==null){
+                                            if(token==null ||token==""){
                                               Fluttertoast.showToast(
                                                   msg: "يجب عليك تسجيل الدخول",
                                                   toastLength: Toast.LENGTH_SHORT,
