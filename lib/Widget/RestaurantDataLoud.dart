@@ -302,7 +302,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
                     text=="ساعات العمل"?Text(
                       'يعمل الفرع في الاولاوقات التالية',
                       style: TextStyle(
-                        fontFamily: 'DIN Next LT Arabic',
+
                         fontSize: 13,
                         color: const Color(0xffc8c7cc),
                       ),
@@ -310,7 +310,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
                     ): Text(
                       '',
                       style: TextStyle(
-                        fontFamily: 'DIN Next LT Arabic',
+
                         fontSize: 13,
                         color: const Color(0xffc8c7cc),
                       ),
@@ -319,7 +319,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
                     text=="ساعات العمل"? Text(
                       'يوميا من${data['to']} مساءا حتي ${data['from']} صباحا',
                       style: TextStyle(
-                        fontFamily: 'DIN Next LT Arabic',
+
                         fontSize: 15,
                         color: const Color(0xff242e42),
                         fontWeight: FontWeight.w700,
@@ -328,7 +328,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
                     ):Text(
                       '',
                       style: TextStyle(
-                        fontFamily: 'DIN Next LT Arabic',
+
                         fontSize: 15,
                         color: const Color(0xff242e42),
                         fontWeight: FontWeight.w700,
@@ -396,7 +396,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           'يعمل الفرع في الاولاوقات التالية',
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 13,
             color: const Color(0xffc8c7cc),
           ),
@@ -406,7 +406,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           'يوميا من${data['workHours'][0]['to'].toString()} مساءا حتي ${data['workHours'][0]['from'].toString()} صباحا'.toString(),
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 15,
             color: const Color(0xff242e42),
             fontWeight: FontWeight.w700,
@@ -423,7 +423,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           "يمكنك الاتصال بالرقم التالي",
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 15,
             color: const Color(0xffa9a7aa),
           ),
@@ -433,7 +433,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           '${data['contacts'][0]['mobile'].toString()}  '.toString(),
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 15,
             color: const Color(0xff242e42),
             fontWeight: FontWeight.w700,
@@ -444,7 +444,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           '${data['contacts'][0]['phone'].toString()}'.toString(),
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 15,
             color: const Color(0xff242e42),
             fontWeight: FontWeight.w700,
@@ -454,7 +454,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           'او عبر إيميل التالى',
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 15,
             color: const Color(0xff242e42),
             fontWeight: FontWeight.w700,
@@ -464,7 +464,7 @@ class _RestaurantDataState extends State<RestaurantDataLoud> {
         Text(
           '${data['contacts'][0]['email'].toString()}'.toString(),
           style: TextStyle(
-            fontFamily: 'DIN Next LT Arabic',
+
             fontSize: 15,
             color: const Color(0xff242e42),
             fontWeight: FontWeight.w700,

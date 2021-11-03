@@ -327,7 +327,7 @@ bool initData;
                         //           Text(
                         //             'طلب',
                         //             style: TextStyle(
-                        //               fontFamily: 'DIN Next LT Arabic',
+                        //
                         //               fontSize: 13,
                         //               color: const Color(0xffc8c7cc),
                         //             ),
@@ -338,7 +338,7 @@ bool initData;
                         //           Text(
                         //             '0.0',
                         //             style: TextStyle(
-                        //               fontFamily: 'DIN Next LT Arabic',
+                        //
                         //               fontSize: 15,
                         //               color: const Color(0xff242e42),
                         //               fontWeight: FontWeight.w700,
@@ -450,12 +450,12 @@ bool initData;
     return MyApp();
     }),(route)=> false
     ),
-            translator.setNewLanguage(
-              context,
-            //  newLanguage:appState.selectedCategory==1? 'ar':'en',
-              remember: true,
-
-            ),
+            // translator.setNewLanguage(
+            //   context,
+            // //  newLanguage:appState.selectedCategory==1? 'ar':'en',
+            //   remember: true,
+            //
+            // ),
 
 
     }else if(text=="المفضلة"){
@@ -597,7 +597,7 @@ bool initData;
                     Text(
                       'ساعدنا على تقييم منتجاتنا برجاء تقييم عروضنا و مقدمينها .. و شكرا',
                       style: TextStyle(
-                        fontFamily: 'DIN Next LT Arabic',
+
                         fontSize: 17,
                         color: const Color(0xff8a8a8f),
                         letterSpacing: 0.41000000190734864,

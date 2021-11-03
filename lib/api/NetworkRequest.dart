@@ -408,6 +408,7 @@ class NetworkRequest{
   }
   Future<dynamic> SettingsGetAll() async {
     HttpClient client = new HttpClient();
+    print("${translator.currentLanguage} lololololo");
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Settings/GetAll';
 

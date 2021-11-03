@@ -376,7 +376,7 @@ var _token;
     getLoctoinState();
     listenToNotification();
     userIsLoggedIn=false;
-    // _getPosition();
+    _getPosition();
     //_getCurrentLocation();
   //  _getPosition();
     //  checkLocationServicesInDevice();

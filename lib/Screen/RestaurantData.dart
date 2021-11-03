@@ -906,7 +906,7 @@ Future<void> share() async {
           await gettoken();
 
           if(text=="احجز طاولة"){
-            if(token!=null){
+            if(token!=null || token!=""){
             print("${data['offer']['id']}  id");
             Navigator.push(context,PageTransition(
               type: PageTransitionType.bottomToTop,
@@ -936,7 +936,7 @@ Future<void> share() async {
             }
           } else  if(text=="كوبون الخصم للمدرسة"){
             await gettoken();
-            if(token!=null){
+            if(token!=null ||token!=""){
             print("${data['offer']['id']}  id");
             Navigator.push(context,PageTransition(
               type: PageTransitionType.bottomToTop,
@@ -1256,7 +1256,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               //      text=="ساعات العمل"?Text(
               //  'يعمل الفرع في الاولاوقات التالية',
               //    style: TextStyle(
-              //      fontFamily: 'DIN Next LT Arabic',
+              //
               //      fontSize: 13,
               //      color: const Color(0xffc8c7cc),
               //    ),
@@ -1264,16 +1264,16 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               //  ): Text(
               //   '',
               //   style: TextStyle(
-              //     fontFamily: 'DIN Next LT Arabic',
+              //
               //     fontSize: 13,
               //     color: const Color(0xffc8c7cc),
               //   ),
               //   textAlign: TextAlign.right,
               // ),
           text=="ساعات العمل"? Text(
-            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['to']} مساءا حتي ${data['from']} صباحا':' from ${data['to']} P.m to ${data['from']} A.m',
+            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['to']}  حتي ${data['from']} ':' from ${data['to']}  to ${data['from']} ',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xff242e42),
               fontWeight: FontWeight.w700,
@@ -1304,7 +1304,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         // Text(
         //   'يعمل الفرع في الاولاوقات التالية',
         //   style: TextStyle(
-        //     fontFamily: 'DIN Next LT Arabic',
+        //
         //     fontSize: 13,
         //     color: const Color(0xffc8c7cc),
         //   ),
@@ -1312,7 +1312,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         // ),
         // SizedBox(height: 6,),
         Text(
-    data['workHours'].length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['workHours'][0]['to']} مساءا حتي ${data['workHours'][0]['from']} صباحا':' From ${data['workHours'][0]['to']} P.m to ${data['workHours'][0]['from']} A.m',//' from ${data['to']} P.m to ${data['from']} A.m'
+    data['workHours'].length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['workHours'][0]['to']}  حتي ${data['workHours'][0]['from']} ':' From ${data['workHours'][0]['to']}  to ${data['workHours'][0]['from']} ',//' from ${data['to']} P.m to ${data['from']} A.m'
           style: TextStyle(
             fontSize: 15,
             color: const Color(0xff242e42),
@@ -1332,7 +1332,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             data['branches'][0]['nameAr'],
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1364,7 +1364,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             'فيس بوك',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1379,7 +1379,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               Text(
                 data['branches'].length==0?'' :'${data['branches'][0]['facebook'].toString()}  '.toString(),
                 style: TextStyle(
-                  fontFamily: 'DIN Next LT Arabic',
+
                   fontSize: 15,
                   color: const Color(0xff242e42),
                   fontWeight: FontWeight.w700,
@@ -1394,7 +1394,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             'تويتر',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1422,7 +1422,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             'إنستجرام',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1449,7 +1449,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             'سناب شات',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1477,7 +1477,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
           Text(
             ' تيك توك',
             style: TextStyle(
-              fontFamily: 'DIN Next LT Arabic',
+
               fontSize: 15,
               color: const Color(0xffa9a7aa),
             ),
@@ -1746,7 +1746,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         // Text(
         //   'مراحل',
         //   style: TextStyle(
-        //     fontFamily: 'DIN Next LT Arabic',
+        //
         //     fontSize: 13,
         //     color: const Color(0xffc8c7cc),
         //   ),
@@ -1756,7 +1756,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         // Text(
         //   '${data['branches'][0]['schoolStages']}',
         //     style: TextStyle(
-        //     fontFamily: 'DIN Next LT Arabic',
+        //
         //     fontSize: 15,
         //     color: const Color(0xff242e42),
         //     fontWeight: FontWeight.w700,

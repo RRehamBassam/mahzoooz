@@ -174,103 +174,103 @@ var _location;
 
       });
     });
-    if(lat==null){
-     // await getLatInState();
-      // "latitude": "24.75007441712588",
-      // "longitude": "46.775951958232405"
-      Location location = new Location();
-
-      _serviceEnabled = await location.serviceEnabled();
-      _serviceEnabled = await location.requestService();
-
-      if(_serviceEnabled)
-      {
-        _permissionGranted = await location.hasPermission();
-
-        if(_permissionGranted == PermissionStatus.granted)
-        {
-
-          print('user allowed before');
-
-        }else{
-          _permissionGranted = await location.requestPermission();
-          if(_permissionGranted == PermissionStatus.granted)
-          {
-            print('user allowed');
-          }else{
-//   SystemNavigator.pop();
-          }}
-      }else{
-
-//  SystemNavigator.pop();
-
-      }
-
-      if(_serviceEnabled)
-      {
-
-        _permissionGranted = await location.hasPermission();
-
-        if(_permissionGranted == PermissionStatus.granted)
-        {  print("EE");
-
-        _location = await location.getLocation();
-        if(lat==null) {
-          print(_location.latitude.toString() + " " + _location.longitude.toString());
-          HelperFunctions.saveUserlocationLatSharedPreference(_location.latitude);
-          HelperFunctions.saveUserlocationlngSharedPreference(_location.longitude);
-        }
-        }else{
-
-          _permissionGranted = await location.requestPermission();
-          if(_permissionGranted == PermissionStatus.granted)
-          {
-            print('user allowed');
-          }else{
-            //   SystemNavigator.pop();
-          }
-
-        }
-
-      }else{
-
-
-
-      }
-      if(lat==null) {
-        // HelperFunctions.saveUserlocationLatSharedPreference(
-        //     24.75007441712588);
-        // HelperFunctions.saveUserlocationlngSharedPreference(
-        //     46.775951958232405);
-      }
-      try {
-        // await Geolocator.requestPermission().then((value) async {
-        //   await Geolocator.getCurrentPosition().then((value) async{
-        //     currentPosition = value;
-        //     if(lat==null) {
-        //       HelperFunctions.saveUserlocationLatSharedPreference(
-        //           currentPosition.latitude);
-        //       HelperFunctions.saveUserlocationlngSharedPreference(
-        //           currentPosition.longitude);
-        //     }
-        //
-        //     print(currentPosition.latitude.toString());
-        //   });
-        // });
-        //
-        // await getLatInState();
-        //
-        // await  m(lat,lng);
-        // print("$lat  kdkdkdkdk $lng");
-
-      } catch (error) {
-        print(error.toString());
-      }
-
-
-    getDataRandom();}else{
+//     if(lat==null){
+//      // await getLatInState();
+//       // "latitude": "24.75007441712588",
+//       // "longitude": "46.775951958232405"
+//       Location location = new Location();
+//
+//       _serviceEnabled = await location.serviceEnabled();
+//       _serviceEnabled = await location.requestService();
+//
+//       if(_serviceEnabled)
+//       {
+//         _permissionGranted = await location.hasPermission();
+//
+//         if(_permissionGranted == PermissionStatus.granted)
+//         {
+//
+//           print('user allowed before');
+//
+//         }else{
+//           _permissionGranted = await location.requestPermission();
+//           if(_permissionGranted == PermissionStatus.granted)
+//           {
+//             print('user allowed');
+//           }else{
+// //   SystemNavigator.pop();
+//           }}
+//       }else{
+//
+// //  SystemNavigator.pop();
+//
+//       }
+//
+//       if(_serviceEnabled)
+//       {
+//
+//         _permissionGranted = await location.hasPermission();
+//
+//         if(_permissionGranted == PermissionStatus.granted)
+//         {  print("EE");
+//
+//         _location = await location.getLocation();
+//         if(lat==null) {
+//           print(_location.latitude.toString() + " " + _location.longitude.toString());
+//           HelperFunctions.saveUserlocationLatSharedPreference(_location.latitude);
+//           HelperFunctions.saveUserlocationlngSharedPreference(_location.longitude);
+//         }
+//         }else{
+//
+//           _permissionGranted = await location.requestPermission();
+//           if(_permissionGranted == PermissionStatus.granted)
+//           {
+//             print('user allowed');
+//           }else{
+//             //   SystemNavigator.pop();
+//           }
+//
+//         }
+//
+//       }else{
+//
+//
+//
+//       }
+//       if(lat==null) {
+//         // HelperFunctions.saveUserlocationLatSharedPreference(
+//         //     24.75007441712588);
+//         // HelperFunctions.saveUserlocationlngSharedPreference(
+//         //     46.775951958232405);
+//       }
+//       try {
+//         // await Geolocator.requestPermission().then((value) async {
+//         //   await Geolocator.getCurrentPosition().then((value) async{
+//         //     currentPosition = value;
+//         //     if(lat==null) {
+//         //       HelperFunctions.saveUserlocationLatSharedPreference(
+//         //           currentPosition.latitude);
+//         //       HelperFunctions.saveUserlocationlngSharedPreference(
+//         //           currentPosition.longitude);
+//         //     }
+//         //
+//         //     print(currentPosition.latitude.toString());
+//         //   });
+//         // });
+//         //
+//         // await getLatInState();
+//         //
+//         // await  m(lat,lng);
+//         // print("$lat  kdkdkdkdk $lng");
+//
+//       } catch (error) {
+//         print(error.toString());
+//       }
+//
+//
+//     getDataRandom();}else{
       getDataRandom();
-    }
+  //  }
     // await checkLocationServicesInDevice();
   }
   getLngInState() async {

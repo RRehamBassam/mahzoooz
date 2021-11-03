@@ -432,7 +432,7 @@ class _SettingsState extends State<Settings> {
                           child: Text(
                             'اللغة العربية',
                             style: TextStyle(
-                              fontFamily: 'DIN Next LT Arabic',
+
                               fontSize: 14,
                               color: appState.selectedCategory==1?Colors.white: const Color(0xff909090),
                               fontWeight: FontWeight.w500,
