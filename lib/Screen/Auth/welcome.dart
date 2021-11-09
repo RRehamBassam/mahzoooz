@@ -18,17 +18,18 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
 class welcome extends StatefulWidget {
   bool isReservation;
-
-  welcome(this.isReservation);
+  var SettingsGetAll;
+  welcome(this.isReservation,this.SettingsGetAll);
 
   @override
-  _welcomeState createState() => _welcomeState(isReservation);
+  _welcomeState createState() => _welcomeState(isReservation,SettingsGetAll);
 }
 
 class _welcomeState extends State<welcome> {
   bool isReservation;
 
-  _welcomeState(this.isReservation);
+  _welcomeState(this.isReservation,this.SettingsGetAll);
+  var SettingsGetAll;
 bool codeScreen;
   String phoneNumber;
   String phoneIsoCode;
@@ -42,11 +43,11 @@ bool isLouding=false;
 bool isverifyPhoneNumbe=false;
   String otp, authStatus = "";
   bool setPass=false;
-  var SettingsGetAll;
+ // var SettingsGetAll;
   void SettingsGet()async{
     await networkRequest.SettingsGetAll().then((value){
       setState(() {
-        SettingsGetAll  = value ;
+     //   SettingsGetAll  = value ;
       });
 
     });
@@ -118,7 +119,7 @@ bool isverifyPhoneNumbe=false;
   }
   @override
   void initState() {
-    SettingsGet();
+   // SettingsGet();
     getTokenFCMState();
     codeScreen =false;
 

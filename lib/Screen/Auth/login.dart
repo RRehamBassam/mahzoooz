@@ -49,6 +49,7 @@ String Password;
   void initState() {
     getTokenFCMState();
     getDataSaprotState();
+    SettingsGet();
     _obscureText = false;
   }
   getLoggedInState() async {
@@ -77,6 +78,17 @@ String Password;
     //Generates four digit OTP by default
 
     _otp = 1000 + Random().nextInt(9999 - 1000);
+  }
+  var SettingsGetAll;
+ // NetworkRequest networkRequest=new NetworkRequest();
+
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        SettingsGetAll  = value ;
+      });
+
+    });
   }
   void sendOtp(String phoneNumber,
       [String messageText,
@@ -408,7 +420,7 @@ String Password;
                                 } else {
                                   Navigator.of(context).pushAndRemoveUntil(
                                       MaterialPageRoute(builder: (_){
-                                        return  welcome(false);
+                                        return  welcome(false,SettingsGetAll);
                                       }),(route)=> false
                                   );
                                   // Navigator.pushReplacement(context, MaterialPageRoute(

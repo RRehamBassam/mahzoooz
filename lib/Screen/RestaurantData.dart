@@ -56,12 +56,24 @@ var data;
     });
   }
  // Uint8List bytes; Uint8List bytesback;Uint8List bytesMenu;
+var SettingsGetAll;
+//NetworkRequest networkRequest=new NetworkRequest();
 
+void SettingsGet()async{
+  await networkRequest.SettingsGetAll().then((value){
+    setState(() {
+      SettingsGetAll  = value ;
+    });
+
+  });
+}
   @override
   void initState() {
+
     gettoken();
     getDataSaprotState();
     initPage=false;
+    SettingsGet();
     // TODO: implement initState
     super.initState();
   }
@@ -929,7 +941,7 @@ Future<void> share() async {
                 type: PageTransitionType.leftToRight,
                 duration: Duration(milliseconds: 550) ,
                 reverseDuration: Duration(milliseconds: 700),
-                child: welcome(true),
+                child: welcome(true,SettingsGetAll),
               ),);
 
 
@@ -959,7 +971,7 @@ Future<void> share() async {
                 type: PageTransitionType.leftToRight,
                 duration: Duration(milliseconds: 550) ,
                 reverseDuration: Duration(milliseconds: 700),
-                child: welcome(true),
+                child: welcome(true,SettingsGetAll),
               ),);
 
 
@@ -1271,7 +1283,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
               //   textAlign: TextAlign.right,
               // ),
           text=="ساعات العمل"? Text(
-            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['to']}  حتي ${data['from']} ':' from ${data['to']}  to ${data['from']} ',
+            data.length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['from']}  حتي ${data['to']} ':' from ${data['from']}  to ${data['to']} ',
             style: TextStyle(
 
               fontSize: 15,
@@ -1312,7 +1324,7 @@ BottomSheetExampleRate(context,String text,data,dataoffer){
         // ),
         // SizedBox(height: 6,),
         Text(
-    data['workHours'].length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['workHours'][0]['to']}  حتي ${data['workHours'][0]['from']} ':' From ${data['workHours'][0]['to']}  to ${data['workHours'][0]['from']} ',//' from ${data['to']} P.m to ${data['from']} A.m'
+    data['workHours'].length==0?'' :  translator.currentLanguage == 'ar' ? 'يوميا من${data['workHours'][0]['from'].split(':')[0] +":"+ data['workHours'][0]['from'].split(':')[1].split(':')[0]}  حتي ${data['workHours'][0]['to'].split(':')[0] +":"+ data['workHours'][0]['to'].split(':')[1].split(':')[0]} ':' From ${data['workHours'][0]['from'].split(':')[0] +":"+ data['workHours'][0]['from'].split(':')[1].split(':')[0]}  to ${data['workHours'][0]['to'].split(':')[0] +":"+ data['workHours'][0]['to'].split(':')[1].split(':')[0]} ',//' from ${data['to']} P.m to ${data['from']} A.m'
           style: TextStyle(
             fontSize: 15,
             color: const Color(0xff242e42),

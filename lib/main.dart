@@ -6,6 +6,7 @@ import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:mahzoooz/Widget/utils.dart';
+import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:mahzoooz/services/helperFunctions.dart';
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
@@ -345,7 +346,17 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
   }
+  var SettingsGetAll;
+  NetworkRequest networkRequest=new NetworkRequest();
 
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        SettingsGetAll  = value ;
+      });
+
+    });
+  }
   getLoctoinState() async {
     await HelperFunctions.getUserLoggedInSharedPreference().then((value){
       setState(() {
@@ -383,6 +394,7 @@ var _token;
     // getcheckLocationInState();
     //getLoggedInState();
     getLoggedInState();
+    SettingsGet();
     super.initState();
 
 
@@ -768,7 +780,7 @@ getToken() async {
     return Timer(const Duration(seconds: 3), (){
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_){
-            return userIsLoggedIn != null ?  userIsLoggedIn ? Home() :  welcome(false): welcome(false);;//;//
+            return userIsLoggedIn != null ?  userIsLoggedIn ? Home() :  welcome(false,SettingsGetAll): welcome(false,SettingsGetAll);;//;//
           })
       );
     }) ;

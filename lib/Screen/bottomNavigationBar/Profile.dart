@@ -57,6 +57,17 @@ class _ProfileState extends State<Profile> {
     });
     print("${valuekey}  keykeykey");
   }
+  var SettingsGetAll;
+ // NetworkRequest networkRequest=new NetworkRequest();
+
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        SettingsGetAll  = value ;
+      });
+
+    });
+  }
   getDatatoken()async{
     await gettoken();
     if(token==null ||token==""){
@@ -74,7 +85,7 @@ class _ProfileState extends State<Profile> {
         type: PageTransitionType.leftToRight,
         duration: Duration(milliseconds: 550) ,
         reverseDuration: Duration(milliseconds: 700),
-        child: welcome(true),
+        child: welcome(true,SettingsGetAll),
       ),);
     }
   }
@@ -117,6 +128,7 @@ bool initData;
     initData=true;
     getDatatoken();
     getDataSaprotState();
+    SettingsGet();
 
     // TODO: implement initState
     super.initState();
@@ -445,11 +457,11 @@ bool initData;
 
           HelperFunctions.saveUserLoggedInSharedPreference(false),
 
-    Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: (_){
-    return MyApp();
-    }),(route)=> false
-    ),
+        Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_){
+        return MyApp();
+        }),(route)=> false
+        ),
             // translator.setNewLanguage(
             //   context,
             // //  newLanguage:appState.selectedCategory==1? 'ar':'en',

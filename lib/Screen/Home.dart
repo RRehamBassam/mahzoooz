@@ -52,6 +52,17 @@ class _HomeState extends State<Home> {
   double lat;
   double lng;
   bool DataEmapty;
+  var SettingsGetAll;
+ // NetworkRequest networkRequest=new NetworkRequest();
+
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        SettingsGetAll  = value ;
+      });
+
+    });
+  }
   getDataEmptyState() async {
     await HelperFunctions.getDataEmptyInSharedPreference().then((value){
       if(value!=null) {
@@ -519,7 +530,7 @@ var _location;
             type: PageTransitionType.leftToRight,
             duration: Duration(milliseconds: 550),
             reverseDuration: Duration(milliseconds: 700),
-            child:  welcome(true), //welcome(true),
+            child:  welcome(true,SettingsGetAll), //welcome(true),
           ),
         );
         setState(() {
@@ -632,6 +643,7 @@ var _location;
     loud=false;
     getDataSaprotState();
     getProfileState();
+    SettingsGet();
     //checkLocationServicesInDevice();
     // TODO: implement initState
     super.initState();

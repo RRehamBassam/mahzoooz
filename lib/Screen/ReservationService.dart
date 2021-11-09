@@ -37,6 +37,17 @@ class _ReservationServiceState extends State<ReservationService> {
   token  = value ;
   });
   }
+  var SettingsGetAll;
+ // NetworkRequest networkRequest=new NetworkRequest();
+
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+        SettingsGetAll  = value ;
+      });
+
+    });
+  }
   @override
   void initState() {
     SpecialRequest="";
@@ -47,6 +58,7 @@ class _ReservationServiceState extends State<ReservationService> {
     selectDay=0;
     Count=1;
     ShowCount=false;
+    SettingsGet();
     // TODO: implement initState
     super.initState();
   }
@@ -529,7 +541,7 @@ class _ReservationServiceState extends State<ReservationService> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 550) ,
                         reverseDuration: Duration(milliseconds: 700),
-                        child: welcome(true),
+                        child: welcome(true,SettingsGetAll),
                       ),);
                        // Navigator.push(
                        //   context,

@@ -437,19 +437,21 @@ setState(() {
 
     return   InkWell(
       onTap:(){
-
+        //latLng==null;
         HelperFunctions.saveUserlocationLatSharedPreference(lat);
         HelperFunctions.saveUserlocationlngSharedPreference(lng);
-        if(latLng==null){
-          print("3");
-          setState(() {
-            latLng=latLnglocation;
-          });
-        }else{
+
+        print("$lat yyyy $lng");
+        // if(latLng==null){
+        //   print("3");
+        //   setState(() {
+        //     latLng=latLnglocation;
+        //   });
+        // }else{
           print("4");
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (_){
-                return MyApp();
+                return Home();
               }),(route)=> false
           );
           // Navigator.of(context).pushReplacement(
@@ -473,7 +475,7 @@ setState(() {
           // );
           // serverAddresses.addAddress(userId,"${latLng.longitude}","${latLng.latitude}");
           // Navigator.push(context, new MaterialPageRoute(builder: (context)=>new Payment(req,"$add1 / $add2")));
-        }
+
         //Navigator.popAndPushNamed(context, '/activateCode');
       } ,
       child: new Container(

@@ -782,8 +782,8 @@ print(error);
                 margin: EdgeInsets.only(top: 16, bottom: 16),
                 child: CupertinoDatePicker(
                   
-                  maximumDate:DateTime(2021, 1, 1) ,
-                  minimumDate:DateTime(1950, 1, 1) ,
+                  maximumDate:DateTime(DateTime.now().year, 12, 30) ,
+                  minimumDate:DateTime(1960, 1, 1) ,
                   mode: CupertinoDatePickerMode.date,
                   initialDateTime: DateTime(2021, 1, 1),
                   onDateTimeChanged: (DateTime newDateTime) {
