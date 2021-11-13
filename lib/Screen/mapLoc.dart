@@ -334,7 +334,7 @@ setState(() {
                     onTap: _handel,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(lat,lng),//LatLng(latLnglocation.latitude, latLnglocation.longitude),
-                      zoom: 8.0,
+                      zoom:8.0,
                     ) ,
                   ),
                 ),

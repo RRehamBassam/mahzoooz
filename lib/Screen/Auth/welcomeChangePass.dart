@@ -39,7 +39,15 @@ class _welcomeState extends State<welcomeChangePass> {
 bool isLouding=false;
 bool isverifyPhoneNumbe=false;
   String otp, authStatus = "";
+   var SettingsGetAll;
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+          SettingsGetAll  = value ;
+      });
 
+    });
+  }
   Future<void> verifyPhoneNumber(BuildContext context) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
 
@@ -50,7 +58,7 @@ bool isverifyPhoneNumbe=false;
           authStatus = "Your account is successfully verified";
         });
         Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (context) =>  login(phoneNumber, false,true,code: smsOTP)));
+            builder: (context) =>  login(phoneNumber, false,true,SettingsGetAll,code: smsOTP)));
       },
       // verificationFailed: (AuthException authException) {
       //   setState(() {
@@ -95,6 +103,7 @@ bool isverifyPhoneNumbe=false;
   void initState() {
     LoginCode=false;
     codeScreen =false;
+    SettingsGet();
     super.initState();
   }
 
@@ -600,7 +609,7 @@ bool isverifyPhoneNumbe=false;
         FirebaseAuth.instance.signInWithCredential(authCredential).then(( result){
 
           Navigator.pushReplacement(context, MaterialPageRoute(
-              builder: (context) =>  login(phoneNumber, false,true,code: code)));
+              builder: (context) =>  login(phoneNumber, false,true,SettingsGetAll,code: code)));
         }).catchError((e) {
           Fluttertoast.showToast(
               msg: "Authentication failed",
@@ -722,7 +731,7 @@ bool isverifyPhoneNumbe=false;
   }
   s(){
     Navigator.push(context, MaterialPageRoute(
-      builder: (context) => login(phoneNumber, false,true,code: code),),
+      builder: (context) => login(phoneNumber, false,true,SettingsGetAll,code: code),),
     );
     setState(() {
       LoginCode=true;

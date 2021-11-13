@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:mahzoooz/Screen/Auth/login.dart';
+import 'package:mahzoooz/api/NetworkRequest.dart';
 import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 import 'package:mahzoooz/Screen/Home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,6 +36,12 @@ class _ActivateCodeState extends State<ActivateCode> {
   //  SmsAutoFill().unregisterListener();
     super.dispose();
   }
+  @override
+  void initState() {
+    SettingsGet();
+
+    super.initState();
+  }
   // Future<void> signIn(String smsOTP) async {
   //   await FirebaseAuth.instance
   //       .signInWithCredential(PhoneAuthProvider.getCredential(
@@ -42,6 +49,18 @@ class _ActivateCodeState extends State<ActivateCode> {
   //     smsCode: smsOTP,
   //   ));
   // }
+   var SettingsGetAll;
+  NetworkRequest networkRequest=new NetworkRequest();
+
+  void SettingsGet()async{
+    await networkRequest.SettingsGetAll().then((value){
+      setState(() {
+          SettingsGetAll  = value ;
+      });
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,7 +164,7 @@ class _ActivateCodeState extends State<ActivateCode> {
                           builder: (context) =>
                               CreateAccount(phoneNumber, code)));
                 }else{
-                       Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,code: code,)));
+                       Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,SettingsGetAll,code: code,)));
 
                   }
               },

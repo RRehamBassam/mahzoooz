@@ -20,15 +20,18 @@ import 'package:mahzoooz/services/helperFunctions.dart';
 import 'dart:math';
 import '../../main.dart';
 class login extends StatefulWidget {
+
   String phoneNo;
   bool isReservation;
   bool setPass;
+  var SettingsGetAll;
   var code;
 
-  login(this.phoneNo,this.isReservation,this.setPass,{this.code});
+
+  login(this.phoneNo,this.isReservation,this.setPass,this.SettingsGetAll,{this.code});
 
   @override
-  _loginState createState() => _loginState(phoneNo,isReservation,setPass,code: code);
+  _loginState createState() => _loginState(phoneNo,isReservation,setPass,SettingsGetAll,code: code);
 }
 
 class _loginState extends State<login> {
@@ -36,7 +39,8 @@ class _loginState extends State<login> {
   bool isReservation;
   bool setPass;
   var code;
-  _loginState(this.phoneNumber,this.isReservation,this.setPass,{this.code});
+
+  _loginState(this.phoneNumber,this.isReservation,this.setPass,this.SettingsGetAll,{this.code});
   bool  _obscureText;
   String smsOTP;
   String verificationId;
@@ -49,7 +53,7 @@ String Password;
   void initState() {
     getTokenFCMState();
     getDataSaprotState();
-    SettingsGet();
+  SettingsGet();
     _obscureText = false;
   }
   getLoggedInState() async {
@@ -242,12 +246,7 @@ String Password;
           child: SingleChildScrollView(
             child:DataSaprot==null?Container(
               height: MediaQuery.of(context).size.height*.7,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                Loading()
-              ],),
+              child:  Center(child: Loading()),
             ): Column(
               children: [
                 Container(
@@ -310,6 +309,7 @@ String Password;
                         cursorColor: Color(0xff38056e),
                         keyboardType:TextInputType.text,
                         autofocus: false,
+
                         obscureText: !_obscureText,
                         textAlign: TextAlign.right,
                         //  onChanged: (val)=>setState(()=>Name=val),
@@ -322,6 +322,13 @@ String Password;
                         },
 
                         decoration: InputDecoration(
+                            // enabledBorder: const OutlineInputBorder(
+                            //   borderSide: const BorderSide(color: Colors.grey, width: 0.0),
+                            // ),
+                            focusedBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                              borderSide: const BorderSide(color: Color(0xff38056e), width: 1.4),
+                            ),
                             suffixIcon:  new InkWell(
                               onTap: () {
                                 setState(() {
@@ -330,7 +337,7 @@ String Password;
                               },
                               child: Container(
                                 margin:EdgeInsets.symmetric(horizontal: 5) ,
-                                  child: Icon(_obscureText? Icons.visibility : Icons.visibility_off))),
+                                  child: Icon(_obscureText? Icons.visibility : Icons.visibility_off,color:Color(0xff38056e).withOpacity(0.8)))),
                             contentPadding: EdgeInsets.symmetric(vertical: 8,horizontal: 16),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(30)),

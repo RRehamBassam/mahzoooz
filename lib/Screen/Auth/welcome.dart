@@ -275,7 +275,7 @@ var tokenFCM;
 
 
                   }else{
-                    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,code: code,)));
+                    Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,false,true,SettingsGetAll,code: code,)));
 
                   }
               },
@@ -491,7 +491,7 @@ var tokenFCM;
                              // url ='sms:+972594102511?body=2222';
                              // await launch(url);
                              await HelperFunctions.saveUserMobileSharedPreference(phoneNumber);
-                             await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation,false)));
+                             await   Navigator.push(context, new MaterialPageRoute(builder: (context)=>  login(phoneNumber,isReservation,false,SettingsGetAll)));
 
                            }
                          }
