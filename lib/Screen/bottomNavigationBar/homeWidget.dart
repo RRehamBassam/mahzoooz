@@ -209,7 +209,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                 children: [
                                   Column(
                                     children: [
-                                      SizedBox(height: 16,),
+                                      SizedBox(height:MediaQuery.of(context).size.height<600?10: 16,),
                                       Row(
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -217,12 +217,12 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                           Image.asset("Assets/mohzoooz2.png",scale: 4.4,)
                                         ],
                                       ),
-                                      SizedBox(height: 16,),
+                                      SizedBox(height:MediaQuery.of(context).size.height<600?10: 16,),
                                       Column(
 
                                         children: [
                                           Container(
-                                            height: 33,
+                                            height:MediaQuery.of(context).size.height<600?30: 33,
                                             padding: EdgeInsets.all(8),
                                             width:MediaQuery.of(context).size.width*0.85,
                                             decoration: BoxDecoration(
@@ -262,7 +262,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                                     margin: EdgeInsets.only(top: 3),
                                                     child: Text(" $AddressChang", overflow: TextOverflow.ellipsis,style: TextStyle(color:Color(0xff80AB40,),fontSize: 10),)),
                                                 Spacer(),
-                                                AddressChang!=null?   InkWell(
+                                                AddressChang!=null?  MediaQuery.of(context).size.height<600?Container(): InkWell(
                                                     onTap: (){
                                                       setState(() {
                                                         select=!select;
@@ -420,19 +420,19 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                           },
                                           child: Container(
                                             margin: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
-                                            height: 32.00,
-                                            width: 32.00,
+                                            height: MediaQuery.of(context).size.height<600?28:32.00,
+                                            width:MediaQuery.of(context).size.height<600?28: 32.00,
                                             decoration: BoxDecoration(
                                               color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                                             ),child: Material(
                                             elevation: 4,borderRadius: BorderRadius.circular(25.00),
                                             child: Container(
                                               //  margin: EdgeInsets.all( 10),
-                                                height: 32.00,
-                                                width: 32.00,
+                                                height: MediaQuery.of(context).size.height<600?28:32.00,
+                                                width: MediaQuery.of(context).size.height<600?28:32.00,
                                                 decoration: BoxDecoration(
                                                   color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                                ),child: Icon(Icons.favorite_border,color:Colors.white,size: 20,)),
+                                                ),child: Icon(Icons.favorite_border,color:Colors.white,size:MediaQuery.of(context).size.height<600?18: 20,)),
                                           ),
                                           ),
                                         ),
@@ -440,8 +440,8 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                           onTap:()=>share( translator.currentLanguage == 'ar' ?_items[_calIndex(_value * _angle + _current)].asset:_items[_calIndex(_value * _angle + _current)].assetEn, translator.currentLanguage == 'ar' ?"من ${_items[_calIndex(_value * _angle + _current)].NameReAr} ":"from ${_items[_calIndex(_value * _angle + _current)].NameReEn} "),
                                           child: Container(
                                               margin: EdgeInsets.all( 10),
-                                              height: 32.00,
-                                              width: 32.00,
+                                              height:MediaQuery.of(context).size.height<600?28: 32.00,
+                                              width:MediaQuery.of(context).size.height<600?28: 32.00,
                                               decoration: BoxDecoration(
                                                 color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                                               ),child: Material(
@@ -452,11 +452,11 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                                 transform:   Matrix4.rotationY(math.pi),
                                                 child: Container(
                                                   //   margin: EdgeInsets.all( 10),
-                                                    height: 32.00,
-                                                    width: 32.00,
+                                                    height:MediaQuery.of(context).size.height<600?28: 32.00,
+                                                    width:MediaQuery.of(context).size.height<600?28: 32.00,
                                                     decoration: BoxDecoration(
                                                       color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                                    ),child: Icon(Icons.reply_outlined,color:Colors.white,size: 20)),
+                                                    ),child: Icon(Icons.reply_outlined,color:Colors.white,size:MediaQuery.of(context).size.height<600?18: 20)),
                                               ))),
                                         ),
                                         InkWell(
@@ -480,8 +480,8 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                           },
                                           child: Container(
                                               margin: EdgeInsets.all( 10),
-                                              height: 32.00,
-                                              width: 32.00,
+                                              height:MediaQuery.of(context).size.height<600?28: 32.00,
+                                              width:MediaQuery.of(context).size.height<600?28: 32.00,
                                               decoration: BoxDecoration(
                                                 color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
                                               ),child: Material(
@@ -489,11 +489,11 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                                               elevation: 4,
                                               child: Container(
                                                 //  margin: EdgeInsets.all( 10),
-                                                  height: 32.00,
-                                                  width: 32.00,
+                                                  height:MediaQuery.of(context).size.height<600?28: 28.00,
+                                                  width: MediaQuery.of(context).size.height<600?28:28.00,
                                                   decoration: BoxDecoration(
                                                     color: Color(0xff38056e),borderRadius: BorderRadius.circular(25.00),
-                                                  ),child: Icon(Icons.visibility_outlined,color:Colors.white,size: 20)))),
+                                                  ),child: Icon(Icons.visibility_outlined,color:Colors.white,size:MediaQuery.of(context).size.height<600?18: 20)))),
                                         )
                                       ],
                                     ),
@@ -679,7 +679,7 @@ class _homeWidgetState extends State<homeWidget> with SingleTickerProviderStateM
                       style:  TextStyle(
                         fontWeight: FontWeight.w700,
                         fontFamily:'Tajawal',
-                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?16:16: MediaQuery.of(context).size.height< 783.4285714285714?18:18,
+                        fontSize:_asset.length>10?MediaQuery.of(context).size.height< 783.4285714285714?_asset.length>30?11:14:16: MediaQuery.of(context).size.height< 783.4285714285714?16:18,
                         color:Color(0xff38056e),
                       ),
                       children: <TextSpan>[

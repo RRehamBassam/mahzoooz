@@ -918,14 +918,16 @@ Future<void> share() async {
           await gettoken();
 
           if(text=="احجز طاولة"){
-            if(token!=null || token!=""){
+            if(token!=null && token!=""){
             print("${data['offer']['id']}  id");
             Navigator.push(context,PageTransition(
               type: PageTransitionType.bottomToTop,
               duration: Duration(milliseconds: 550) ,
               reverseDuration: Duration(milliseconds: 700),
               child:ReservationService(data['bookingSettings'],data['offer']['id'],dataRestaurantData),
-            ),);}else
+            ),);
+
+            }else
             {
               Fluttertoast.showToast(
                   msg: "لإتمام عملية الحجز يجب عليك تسجيل دخول",
@@ -948,7 +950,7 @@ Future<void> share() async {
             }
           } else  if(text=="كوبون الخصم للمدرسة"){
             await gettoken();
-            if(token!=null ||token!=""){
+            if(token!=null && token!=""){
             print("${data['offer']['id']}  id");
             Navigator.push(context,PageTransition(
               type: PageTransitionType.bottomToTop,

@@ -441,7 +441,7 @@ class _ReservationServiceState extends State<ReservationService> {
                       }
 
                       await gettoken();
-                     if(token!=null || token!=""){
+                     if(token!=null && token!=""){
                        if(data[selectDay]['details'][select]['isBooking']){
                          Fluttertoast.showToast(
                              msg:translator.translate( "هذا الوقت محجوز "),

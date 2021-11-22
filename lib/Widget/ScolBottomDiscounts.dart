@@ -82,14 +82,6 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
         minChildSize:MediaQuery.of(context).size.height< 663.4285714285714?0.42: MediaQuery.of(context).size.height< 743.4285714285714? 0.48:0.57,
         initialChildSize:MediaQuery.of(context).size.height< 663.4285714285714?0.42: MediaQuery.of(context).size.height< 743.4285714285714?0.48:0.57 ,
         builder: (BuildContext context, ScrollController scrolController){
-          if(appState.count==0)
-            appState.updateColId("IsBestOffer");
-          else if(appState.count==1)
-            appState.updateColId("1");
-          else if(appState.count==2)
-            appState.updateColId("CreatedDate");
-          else if(appState.count==3)
-            appState.updateColId("AverageRate");
           return Stack(
             children: [
               // Positioned(
@@ -122,7 +114,7 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
 
 
                             // appState.updateColId("AverageRate");
-                              future: networkRequest.OffersGetPaged(false,"",latLnglocation.latitude,latLnglocation.longitude,appState.colId),//:networkRequest.OffersGetPaged(false,"",latLnglocation.latitude,latLnglocation.longitude,"CreatedDate"),
+                              future: networkRequest.OffersGetPaged(false,"",latLnglocation.latitude,latLnglocation.longitude,appState.count==0?"IsBestOffer":appState.colId),//:networkRequest.OffersGetPaged(false,"",latLnglocation.latitude,latLnglocation.longitude,"CreatedDate"),
                               builder: (context, snapshot) {
                                 ListData=[];
 
@@ -211,6 +203,15 @@ class _ScolBottomDiscountsState extends State<ScolBottomDiscounts> {
           });
 
           appState.updateCount(index);
+
+          if(appState.count==0)
+            appState.updateColId("IsBestOffer");
+          else if(appState.count==1)
+            appState.updateColId("1");
+          else if(appState.count==2)
+            appState.updateColId("CreatedDate");
+          else if(appState.count==3)
+            appState.updateColId("AverageRate");
             print(appState.count);
           await getData();
           },

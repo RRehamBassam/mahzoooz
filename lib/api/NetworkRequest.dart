@@ -475,7 +475,8 @@ class NetworkRequest{
 
   Future<dynamic> OffersGetPaged(bool isSpecial,String searchText,lat,long,colId) async {
 print(colId);
-print(colId);print(colId);
+
+print('ppp2 ${colId}');
     HttpClient client = new HttpClient();
     client.badCertificateCallback = ((X509Certificate cert, String host, int port) => true);
     String url ='http://ahmed453160-001-site1.etempurl.com/Offers/GetPaged';
